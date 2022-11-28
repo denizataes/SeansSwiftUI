@@ -8,14 +8,50 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        ZStack{
+            MainTabView()
         }
-        .padding()
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Seans")
+        .toolbar{
+//            ToolbarItem(placement: .navigationBarLeading)
+//            {
+//                NavigationLink {
+//                    withAnimation(.easeInOut){
+//                       ProfileView()
+//
+//                    }
+//                } label: {
+//
+//                    //KFImage(URL(string: user.profileImageUrl))
+//                    Image("profile")
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(width: 32, height: 32)
+//                        .clipShape(Circle())
+//
+//
+//                }
+//            }
+           
+//            ToolbarItem(placement: .navigationBarTrailing)
+//            {
+//                NavigationLink {
+//                    withAnimation(.easeInOut){
+//                       MessagesView()
+//                    }
+//                } label: {
+//                    Image(systemName: "message")
+//                        .foregroundColor(.gray)
+//
+//                }
+//            }
+
+        }
+        
     }
 }
 
