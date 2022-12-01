@@ -14,6 +14,7 @@ struct SeansApp: App {
             NavigationView{
                 ContentView()
             }
+            
            // .environmentObject(viewModel)
         }
     }

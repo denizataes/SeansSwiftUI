@@ -187,6 +187,7 @@ extension PostRowView{
         
         VStack(alignment: .leading){
             HStack{
+                
                 NavigationLink {
                     ProfileView()
                         
@@ -209,6 +210,7 @@ extension PostRowView{
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)
+                
 
                 Spacer()
                 Text("2sa")

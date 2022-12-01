@@ -47,6 +47,7 @@ struct MainTabView: View {
 
             
                 ProfileView()
+                
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
