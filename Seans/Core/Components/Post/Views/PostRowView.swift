@@ -140,7 +140,7 @@ extension PostRowView{
             
             VStack(alignment: .leading){
                 NavigationLink {
-                    FilmView()
+                    FilmInfoView()
                     
                 } label: {
                     Image("joker")

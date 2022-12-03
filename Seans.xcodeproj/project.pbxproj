@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A00612A1293A698B00BB3413 /* FilmRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612A0293A698B00BB3413 /* FilmRowView.swift */; };
+		A00612A3293B807500BB3413 /* FilmSecondRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612A2293B807500BB3413 /* FilmSecondRowView.swift */; };
+		A00612A6293B870200BB3413 /* FriendsWatchRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612A5293B870200BB3413 /* FriendsWatchRowView.swift */; };
+		A00612A8293B8BD200BB3413 /* FilmInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612A7293B8BD200BB3413 /* FilmInfoView.swift */; };
+		A00612AA293B913F00BB3413 /* FilmGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612A9293B913F00BB3413 /* FilmGridView.swift */; };
 		A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF2C293676CA00443F95 /* CircularLayout.swift */; };
 		A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF302939615000443F95 /* TweetFilterViewModel.swift */; };
 		A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD910C2932224F00ECE810 /* SeansApp.swift */; };
@@ -28,6 +33,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A00612A0293A698B00BB3413 /* FilmRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmRowView.swift; sourceTree = "<group>"; };
+		A00612A2293B807500BB3413 /* FilmSecondRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmSecondRowView.swift; sourceTree = "<group>"; };
+		A00612A5293B870200BB3413 /* FriendsWatchRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsWatchRowView.swift; sourceTree = "<group>"; };
+		A00612A7293B8BD200BB3413 /* FilmInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmInfoView.swift; sourceTree = "<group>"; };
+		A00612A9293B913F00BB3413 /* FilmGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmGridView.swift; sourceTree = "<group>"; };
 		A02AEF2C293676CA00443F95 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
 		A02AEF302939615000443F95 /* TweetFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetFilterViewModel.swift; sourceTree = "<group>"; };
 		A0DD91092932224F00ECE810 /* Seans.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seans.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +70,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A006129F293A697400BB3413 /* Film */ = {
+			isa = PBXGroup;
+			children = (
+				A00612A0293A698B00BB3413 /* FilmRowView.swift */,
+				A00612A2293B807500BB3413 /* FilmSecondRowView.swift */,
+			);
+			path = Film;
+			sourceTree = "<group>";
+		};
+		A00612A4293B86EC00BB3413 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				A00612A5293B870200BB3413 /* FriendsWatchRowView.swift */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
 		A0DD91002932224F00ECE810 = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +219,8 @@
 		A0DD9126293223F600ECE810 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A00612A4293B86EC00BB3413 /* Friends */,
+				A006129F293A697400BB3413 /* Film */,
 				A0DD914D29335DF500ECE810 /* Post */,
 				A0DD915229337DE300ECE810 /* TextArea.swift */,
 			);
@@ -260,6 +289,8 @@
 			isa = PBXGroup;
 			children = (
 				A0DD913B29322D7700ECE810 /* FilmView.swift */,
+				A00612A7293B8BD200BB3413 /* FilmInfoView.swift */,
+				A00612A9293B913F00BB3413 /* FilmGridView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -459,16 +490,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A00612A8293B8BD200BB3413 /* FilmInfoView.swift in Sources */,
 				A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */,
 				A0DD914C2932330200ECE810 /* ExploreView.swift in Sources */,
 				A0DD915329337DE300ECE810 /* TextArea.swift in Sources */,
+				A00612A6293B870200BB3413 /* FriendsWatchRowView.swift in Sources */,
 				A0DD913E29322D8600ECE810 /* ProfileView.swift in Sources */,
 				A0DD91422932322900ECE810 /* FeedView.swift in Sources */,
+				A00612AA293B913F00BB3413 /* FilmGridView.swift in Sources */,
 				A0DD913C29322D7700ECE810 /* FilmView.swift in Sources */,
 				A0DD913129322C6600ECE810 /* MessagesView.swift in Sources */,
 				A0DD912D2932249300ECE810 /* ImagePicker.swift in Sources */,
+				A00612A1293A698B00BB3413 /* FilmRowView.swift in Sources */,
 				A0DD910F2932224F00ECE810 /* ContentView.swift in Sources */,
 				A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */,
+				A00612A3293B807500BB3413 /* FilmSecondRowView.swift in Sources */,
 				A0DD912F2932250900ECE810 /* MainTabView.swift in Sources */,
 				A0DD915129335E0D00ECE810 /* PostRowView.swift in Sources */,
 				A0DD9148293232C400ECE810 /* PostView.swift in Sources */,
