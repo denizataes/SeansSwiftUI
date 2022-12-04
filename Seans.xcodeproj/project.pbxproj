@@ -14,6 +14,7 @@
 		A00612AA293B913F00BB3413 /* FilmGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612A9293B913F00BB3413 /* FilmGridView.swift */; };
 		A00612AC293BE45100BB3413 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612AB293BE45100BB3413 /* UIImage+Extension.swift */; };
 		A00612AE293BEA6500BB3413 /* FilmCategoryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612AD293BEA6500BB3413 /* FilmCategoryButton.swift */; };
+		A00612B1293CF13200BB3413 /* ActorRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612B0293CF13200BB3413 /* ActorRowView.swift */; };
 		A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF2C293676CA00443F95 /* CircularLayout.swift */; };
 		A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF302939615000443F95 /* TweetFilterViewModel.swift */; };
 		A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD910C2932224F00ECE810 /* SeansApp.swift */; };
@@ -42,6 +43,7 @@
 		A00612A9293B913F00BB3413 /* FilmGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmGridView.swift; sourceTree = "<group>"; };
 		A00612AB293BE45100BB3413 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		A00612AD293BEA6500BB3413 /* FilmCategoryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmCategoryButton.swift; sourceTree = "<group>"; };
+		A00612B0293CF13200BB3413 /* ActorRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorRowView.swift; sourceTree = "<group>"; };
 		A02AEF2C293676CA00443F95 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
 		A02AEF302939615000443F95 /* TweetFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetFilterViewModel.swift; sourceTree = "<group>"; };
 		A0DD91092932224F00ECE810 /* Seans.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seans.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +92,14 @@
 				A00612A5293B870200BB3413 /* FriendsWatchRowView.swift */,
 			);
 			path = Friends;
+			sourceTree = "<group>";
+		};
+		A00612AF293CF12300BB3413 /* Actor */ = {
+			isa = PBXGroup;
+			children = (
+				A00612B0293CF13200BB3413 /* ActorRowView.swift */,
+			);
+			path = Actor;
 			sourceTree = "<group>";
 		};
 		A0DD91002932224F00ECE810 = {
@@ -225,6 +235,7 @@
 		A0DD9126293223F600ECE810 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				A00612AF293CF12300BB3413 /* Actor */,
 				A00612A4293B86EC00BB3413 /* Friends */,
 				A006129F293A697400BB3413 /* Film */,
 				A0DD914D29335DF500ECE810 /* Post */,
@@ -497,6 +508,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A00612A8293B8BD200BB3413 /* FilmInfoView.swift in Sources */,
+				A00612B1293CF13200BB3413 /* ActorRowView.swift in Sources */,
 				A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */,
 				A0DD914C2932330200ECE810 /* ExploreView.swift in Sources */,
 				A0DD915329337DE300ECE810 /* TextArea.swift in Sources */,
