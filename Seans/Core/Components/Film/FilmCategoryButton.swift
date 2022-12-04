@@ -14,8 +14,8 @@ struct FilmCategoryButton: View {
             Text(buttonName)
                 .font(.system(size: 9)).bold()
                 .frame(width: 60,height: 32)
-                .foregroundColor(.gray)
-                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.purple, lineWidth: 2))
+                .foregroundColor(.black)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.black, lineWidth: 2))
         }
             
     }

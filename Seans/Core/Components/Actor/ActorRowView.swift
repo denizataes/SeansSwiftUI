@@ -9,22 +9,26 @@ import SwiftUI
 
 struct ActorRowView: View {
     var body: some View {
-        VStack{
-            Image("alpacino")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 80,height: 80)
-                .clipShape(Circle())
-            Text("Al Pacino")
-                .font(.system(size: 16))
-                .foregroundColor(.white)
-            Text("82 Yaşında")
-                .font(.system(size: 10))
-                .foregroundColor(.white)
-            
-                
-        }
+        NavigationLink {
         
+        } label: {
+            VStack{
+                Image("alpacino")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80,height: 80)
+                    .clipShape(Circle())
+                Text("Al Pacino")
+                    .font(.system(size: 16))
+                    .foregroundColor(.white)
+                Text("82 Yaşında")
+                    .font(.system(size: 10))
+                    .foregroundColor(.white)
+                
+                    
+            }
+            
+        }
     }
 }
 
