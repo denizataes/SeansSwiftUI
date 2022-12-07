@@ -16,6 +16,9 @@
 		A00612AE293BEA6500BB3413 /* FilmCategoryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612AD293BEA6500BB3413 /* FilmCategoryButton.swift */; };
 		A00612B1293CF13200BB3413 /* ActorRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612B0293CF13200BB3413 /* ActorRowView.swift */; };
 		A00612B4293D084C00BB3413 /* ReviewRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612B3293D084C00BB3413 /* ReviewRowView.swift */; };
+		A00612B8293FB3E200BB3413 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612B7293FB3E200BB3413 /* Movie.swift */; };
+		A00612BA293FB52A00BB3413 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612B9293FB52A00BB3413 /* Home.swift */; };
+		A00612BE293FD1A100BB3413 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612BD293FD1A100BB3413 /* Tab.swift */; };
 		A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF2C293676CA00443F95 /* CircularLayout.swift */; };
 		A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF302939615000443F95 /* TweetFilterViewModel.swift */; };
 		A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD910C2932224F00ECE810 /* SeansApp.swift */; };
@@ -34,6 +37,9 @@
 		A0DD915129335E0D00ECE810 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD915029335E0D00ECE810 /* PostRowView.swift */; };
 		A0DD915329337DE300ECE810 /* TextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD915229337DE300ECE810 /* TextArea.swift */; };
 		A0DD91582933A14000ECE810 /* ActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD91572933A14000ECE810 /* ActorView.swift */; };
+		A0F5CA2C29411BD8007E5F91 /* SnapCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F5CA2B29411BD8007E5F91 /* SnapCarousel.swift */; };
+		A0F5CA2E29411BE8007E5F91 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F5CA2D29411BE8007E5F91 /* DetailView.swift */; };
+		A0F5CA3029411BFA007E5F91 /* OffsetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F5CA2F29411BFA007E5F91 /* OffsetModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +52,9 @@
 		A00612AD293BEA6500BB3413 /* FilmCategoryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmCategoryButton.swift; sourceTree = "<group>"; };
 		A00612B0293CF13200BB3413 /* ActorRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorRowView.swift; sourceTree = "<group>"; };
 		A00612B3293D084C00BB3413 /* ReviewRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRowView.swift; sourceTree = "<group>"; };
+		A00612B7293FB3E200BB3413 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		A00612B9293FB52A00BB3413 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
+		A00612BD293FD1A100BB3413 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		A02AEF2C293676CA00443F95 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
 		A02AEF302939615000443F95 /* TweetFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetFilterViewModel.swift; sourceTree = "<group>"; };
 		A0DD91092932224F00ECE810 /* Seans.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seans.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +74,9 @@
 		A0DD915029335E0D00ECE810 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
 		A0DD915229337DE300ECE810 /* TextArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextArea.swift; sourceTree = "<group>"; };
 		A0DD91572933A14000ECE810 /* ActorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorView.swift; sourceTree = "<group>"; };
+		A0F5CA2B29411BD8007E5F91 /* SnapCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapCarousel.swift; sourceTree = "<group>"; };
+		A0F5CA2D29411BE8007E5F91 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		A0F5CA2F29411BFA007E5F91 /* OffsetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +97,10 @@
 				A00612A0293A698B00BB3413 /* FilmRowView.swift */,
 				A00612A2293B807500BB3413 /* FilmSecondRowView.swift */,
 				A00612AD293BEA6500BB3413 /* FilmCategoryButton.swift */,
+				A00612B9293FB52A00BB3413 /* Home.swift */,
+				A0F5CA2B29411BD8007E5F91 /* SnapCarousel.swift */,
+				A0F5CA2D29411BE8007E5F91 /* DetailView.swift */,
+				A0F5CA2F29411BFA007E5F91 /* OffsetModifier.swift */,
 			);
 			path = Film;
 			sourceTree = "<group>";
@@ -180,6 +196,8 @@
 		A0DD911E2932234400ECE810 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A00612B7293FB3E200BB3413 /* Movie.swift */,
+				A00612BD293FD1A100BB3413 /* Tab.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -518,21 +536,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0F5CA3029411BFA007E5F91 /* OffsetModifier.swift in Sources */,
 				A00612B4293D084C00BB3413 /* ReviewRowView.swift in Sources */,
 				A00612A8293B8BD200BB3413 /* FilmInfoView.swift in Sources */,
 				A00612B1293CF13200BB3413 /* ActorRowView.swift in Sources */,
 				A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */,
 				A0DD914C2932330200ECE810 /* ExploreView.swift in Sources */,
 				A0DD915329337DE300ECE810 /* TextArea.swift in Sources */,
+				A0F5CA2C29411BD8007E5F91 /* SnapCarousel.swift in Sources */,
+				A00612BA293FB52A00BB3413 /* Home.swift in Sources */,
 				A00612A6293B870200BB3413 /* FriendsWatchRowView.swift in Sources */,
 				A0DD913E29322D8600ECE810 /* ProfileView.swift in Sources */,
 				A0DD91422932322900ECE810 /* FeedView.swift in Sources */,
 				A00612AA293B913F00BB3413 /* FilmGridView.swift in Sources */,
 				A0DD913C29322D7700ECE810 /* FilmView.swift in Sources */,
+				A0F5CA2E29411BE8007E5F91 /* DetailView.swift in Sources */,
 				A00612AC293BE45100BB3413 /* UIImage+Extension.swift in Sources */,
 				A0DD913129322C6600ECE810 /* MessagesView.swift in Sources */,
 				A00612AE293BEA6500BB3413 /* FilmCategoryButton.swift in Sources */,
 				A0DD912D2932249300ECE810 /* ImagePicker.swift in Sources */,
+				A00612B8293FB3E200BB3413 /* Movie.swift in Sources */,
 				A00612A1293A698B00BB3413 /* FilmRowView.swift in Sources */,
 				A0DD910F2932224F00ECE810 /* ContentView.swift in Sources */,
 				A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */,
@@ -541,6 +564,7 @@
 				A0DD915129335E0D00ECE810 /* PostRowView.swift in Sources */,
 				A0DD9148293232C400ECE810 /* PostView.swift in Sources */,
 				A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */,
+				A00612BE293FD1A100BB3413 /* Tab.swift in Sources */,
 				A0DD91582933A14000ECE810 /* ActorView.swift in Sources */,
 				A0DD913329322C7600ECE810 /* NotificationView.swift in Sources */,
 			);

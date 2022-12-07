@@ -14,13 +14,15 @@ struct FilmRowView: View {
                 NavigationLink {
                     FilmInfoView()
                 } label: {
-                    Image("godfather")
+                    Image("joker")
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 200,height: 300)
+                        .frame(width: 240,height: 320)
                         .cornerRadius(15)
                         .shadow(radius: 5)
-                        .padding()
+                       
+                        
+                     
                     
                 }
 
@@ -92,6 +94,13 @@ struct FilmRowView: View {
                             
                     }
                     .padding()
+                    NavigationLink {
+                        FilmInfoView()
+                    } label: {
+                        Text("Filme git").bold().foregroundColor(.blue)
+                            .font(.caption)
+                    }
+
                     
 
 //
