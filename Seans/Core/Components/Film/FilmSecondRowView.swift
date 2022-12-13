@@ -8,39 +8,42 @@
 import SwiftUI
 
 struct FilmSecondRowView: View {
+    var title: String
+    //    var movie: [Movie]
     var body: some View {
-        ZStack{
-            VStack(alignment: .leading){
-                NavigationLink {
-                    FilmInfoView()
-                } label: {
-                    Image("joker")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 90,height: 120)
-                        .cornerRadius(15)
-                }
+        VStack(alignment: .leading){
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 15){
+                    ForEach((1...10), id: \.self){movie in
+                        NavigationLink {
+                            FilmInfoView()
+                            
+                        } label: {
+                            Image("joker")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 100, height: 130)
+                                .cornerRadius(15)
+                        }
 
-             
-                
-                    VStack(alignment: .leading){
-                        Text("Joker")
-                            .font(.subheadline)
-                            .bold()
-                    
                         
-                        Text("Suç")
-                            .font(.system(size: 8))
-                            .foregroundColor(.gray)
                     
+                    }
                 }
+          
             }
         }
+        .padding()
     }
 }
 
 struct FilmSecondRowView_Previews: PreviewProvider {
     static var previews: some View {
-        FilmSecondRowView()
+        FilmSecondRowView(title: "Kategoriler")
+            .background(.black)
     }
 }

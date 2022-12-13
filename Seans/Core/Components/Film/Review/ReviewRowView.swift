@@ -24,12 +24,12 @@ struct ReviewRowView: View {
                             .clipShape(Circle())
                         VStack(alignment: .leading){
                             Text("İdil GÜL")
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .font(.callout)
                                 .bold()
                             Text("@zidilgul")
                                 .font(.caption2)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .bold()
                             
                         }
@@ -48,13 +48,13 @@ struct ReviewRowView: View {
             Text("Açıkçası filme karşı ön yargılıydım. Sevgilimin tavsiyesi ile başladım ve gerçekten bayıldım. Bu zamana kadar izlemediğim için biraz da pişmanım. Ancak filmin uzunluğu ...")
                 .frame(width: 300, alignment: .leading)
                 .font(.footnote)
-                .foregroundColor(.black)
+                .foregroundColor(.white)
                 .bold()
         }
         .padding()
-        .background(.purple.opacity(0.9))
+        .background(.purple.opacity(0.5))
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(radius:10)
+      //  .shadow(radius:10)
     }
     
     

@@ -10,15 +10,18 @@ import SwiftUI
 struct PostRowView: View {
     @State private var isLiked = false
     var body: some View {
-        VStack(alignment: .leading){
-            HStack{
-                leftSide
-                profilSection
+     //   ZStack{
+           // background
+            VStack(alignment: .leading){
+                HStack{
+                    leftSide
+                    profilSection
+                }
+                buttons
             }
-            buttons
-        }
-        .frame(maxWidth: .infinity, maxHeight: 200)
-        Divider()
+           
+            Divider()
+        //}.frame(maxWidth: .infinity, maxHeight: 200)
     }
 }
 
@@ -31,6 +34,32 @@ struct PostRowView_Previews: PreviewProvider {
 }
 
 extension PostRowView{
+    
+    var background: some View{
+        GeometryReader{proxy in
+            let size = proxy.size
+            
+            Image("joker")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: size.width, height: size.height)
+                .clipped()
+               // .tag(index)
+            
+            
+            let color: Color = .black
+            // Custom Gradient
+            LinearGradient(colors: [
+                .black.opacity(0.1)
+      
+            ], startPoint: .top, endPoint: .bottom)
+            
+            // Blurred Overlay
+            Rectangle()
+                .fill(.ultraThinMaterial.opacity(0.99))
+        }
+        .ignoresSafeArea()
+    }
     
     var leftSide: some View{
         

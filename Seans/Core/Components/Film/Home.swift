@@ -96,11 +96,12 @@ struct Home: View {
                     Spacer()
                     
                     NavigationLink {
+                        FilmGridView()
                         
                     } label: {
-                        Button("Daha Fazlası"){}
+                        Text("Tüm Filmler")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(.purple.opacity(0.9))
                     }
 
                   
@@ -111,11 +112,16 @@ struct Home: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 15){
                         ForEach(movies){movie in
-                            Image(movie.artwork)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 100, height: 120)
-                                .cornerRadius(15)
+                            NavigationLink {
+                                FilmInfoView()
+                            } label: {
+                                Image(movie.artwork)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 100, height: 120)
+                                    .cornerRadius(15)
+                                
+                            }
                         }
                     }
                     .padding()

@@ -8,35 +8,55 @@
 import SwiftUI
 
 struct FilmGridView: View {
-    var title: String
     var data: [Int] = Array(1...20)
     let adaptiveColumns = [
         GridItem(.adaptive(minimum: 100))
     ]
     var body: some View {
-        VStack(alignment: .leading){
-            Text(title)
-                .font(.largeTitle)
-                .padding()
-                .bold()
-            
-            
+        ZStack{
+            BGView()
             ScrollView{
-                LazyVGrid(columns: adaptiveColumns,spacing: 10){
-                    ForEach(data, id: \.self){
-                        number in
-                        ZStack{
-                            FilmSecondRowView()
-                        }
+                VStack{
+                    ForEach(Category.allCases, id: \.rawValue){ category in
+                        FilmSecondRowView(title: category.title)
                     }
                 }
             }
         }
     }
+    
+    @ViewBuilder
+    func BGView()->some View{
+        GeometryReader{proxy in
+            let color: Color = .black
+           //  Custom Gradient
+//            LinearGradient(colors: [
+//                .black.opacity(0.9),
+//                .black.opacity(0.8),
+//                .black.opacity(0.7),
+//                color.opacity(0.6),
+//                color.opacity(0.5),
+//                color.opacity(0.4),
+//                .purple
+//            ], startPoint: .top, endPoint: .bottom)
+
+//             Blurred Overlay
+//            Rectangle()
+//                .fill(.ultraThinMaterial)
+            
+            Color(.black)
+                
+            
+            //Color(red: 234/255, green: 182/255, blue: 118/255).opacity(0.8)
+            
+      
+        }
+        .ignoresSafeArea()
+    }
 }
 
 struct FilmGridView_Previews: PreviewProvider {
     static var previews: some View {
-        FilmGridView(title: "Vizyondakiler")
+        FilmGridView()
     }
 }
