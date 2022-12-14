@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilmSearchRowView: View {
-    var movie: Movie = Movie(movieTitle: "Ad Astra", releaseDate: "1972", movieTime: "2 sa 4 dk", movieDescription: "mesela", artwork: "Movie1")
+    var movie: Movie = Movie(id:1234, movieTitle: "Ad Astra", releaseDate: "1972", movieTime: "2 sa 4 dk", movieDescription: "mesela", artwork: "Movie1")
     var body: some View {
         ZStack{
             

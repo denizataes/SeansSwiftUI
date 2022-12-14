@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct SeansApp: App {
+    
     var body: some Scene {
         WindowGroup {
             NavigationView{

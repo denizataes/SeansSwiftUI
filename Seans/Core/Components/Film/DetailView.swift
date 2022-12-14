@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct DetailView: View {
     var movie: Movie
@@ -46,7 +47,7 @@ struct DetailView: View {
              
                     
                 
-                Image(movie.artwork)
+                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: currentCardSize.width, height: currentCardSize.height)

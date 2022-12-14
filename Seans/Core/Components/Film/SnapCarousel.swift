@@ -77,7 +77,7 @@ struct SnapCarousel<Content: View,T: Identifiable>: View {
                         
                         let progress = -offsetX / width + 60
                         let roundIndex = progress.rounded()
-                        print(roundIndex)
+                        
                         
                         // setting min...
                         currentIndex = max(min(currentIndex + Int(roundIndex), list.count - 1), 0)
@@ -97,7 +97,7 @@ struct SnapCarousel<Content: View,T: Identifiable>: View {
                         // based on the progress increasing or decreasing the currentIndex...
                         
                         let progress = (-offsetX / (width - 200))
-                        print(progress)
+                        
                         
                         let roundIndex = progress.rounded()
                         

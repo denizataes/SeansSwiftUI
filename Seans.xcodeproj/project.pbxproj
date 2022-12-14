@@ -20,12 +20,17 @@
 		A00612BE293FD1A100BB3413 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00612BD293FD1A100BB3413 /* Tab.swift */; };
 		A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF2C293676CA00443F95 /* CircularLayout.swift */; };
 		A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF302939615000443F95 /* TweetFilterViewModel.swift */; };
+		A04824B8294A5D4400CDA4BD /* FilmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824B7294A5D4400CDA4BD /* FilmService.swift */; };
+		A04824BB294A5FDC00CDA4BD /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A04824BA294A5FDC00CDA4BD /* Kingfisher */; };
+		A04824BD294A61B100CDA4BD /* Statics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824BC294A61B100CDA4BD /* Statics.swift */; };
 		A0CD84FA294795C30093221F /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD84F9294795C30093221F /* Category.swift */; };
 		A0CD84FC29479E010093221F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD84FB29479E010093221F /* Message.swift */; };
 		A0CD84FE2948E40F0093221F /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD84FD2948E40F0093221F /* SearchBar.swift */; };
 		A0CD85032948E5FB0093221F /* UserRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD85022948E5FB0093221F /* UserRowView.swift */; };
 		A0CD85052948E72A0093221F /* FilmSearchRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD85042948E72A0093221F /* FilmSearchRowView.swift */; };
 		A0CD85072948ED350093221F /* SearchFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD85062948ED350093221F /* SearchFilterViewModel.swift */; };
+		A0CD850A29493E4A0093221F /* TMDBSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A0CD850929493E4A0093221F /* TMDBSwift */; };
+		A0CD850C29493EAE0093221F /* FilmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD850B29493EAE0093221F /* FilmViewModel.swift */; };
 		A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD910C2932224F00ECE810 /* SeansApp.swift */; };
 		A0DD910F2932224F00ECE810 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DD910E2932224F00ECE810 /* ContentView.swift */; };
 		A0DD91112932225000ECE810 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0DD91102932225000ECE810 /* Assets.xcassets */; };
@@ -61,12 +66,15 @@
 		A00612BD293FD1A100BB3413 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		A02AEF2C293676CA00443F95 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
 		A02AEF302939615000443F95 /* TweetFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetFilterViewModel.swift; sourceTree = "<group>"; };
+		A04824B7294A5D4400CDA4BD /* FilmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmService.swift; sourceTree = "<group>"; };
+		A04824BC294A61B100CDA4BD /* Statics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statics.swift; sourceTree = "<group>"; };
 		A0CD84F9294795C30093221F /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A0CD84FB29479E010093221F /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		A0CD84FD2948E40F0093221F /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		A0CD85022948E5FB0093221F /* UserRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRowView.swift; sourceTree = "<group>"; };
 		A0CD85042948E72A0093221F /* FilmSearchRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmSearchRowView.swift; sourceTree = "<group>"; };
 		A0CD85062948ED350093221F /* SearchFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilterViewModel.swift; sourceTree = "<group>"; };
+		A0CD850B29493EAE0093221F /* FilmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmViewModel.swift; sourceTree = "<group>"; };
 		A0DD91092932224F00ECE810 /* Seans.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seans.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0DD910C2932224F00ECE810 /* SeansApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeansApp.swift; sourceTree = "<group>"; };
 		A0DD910E2932224F00ECE810 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -94,6 +102,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A04824BB294A5FDC00CDA4BD /* Kingfisher in Frameworks */,
+				A0CD850A29493E4A0093221F /* TMDBSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +217,7 @@
 			children = (
 				A0DD912C2932249300ECE810 /* ImagePicker.swift */,
 				A0CD84F9294795C30093221F /* Category.swift */,
+				A04824BC294A61B100CDA4BD /* Statics.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -225,6 +236,7 @@
 		A0DD911D2932233F00ECE810 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				A04824B7294A5D4400CDA4BD /* FilmService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -381,6 +393,7 @@
 		A0DD913829322CA800ECE810 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				A0CD850B29493EAE0093221F /* FilmViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -521,6 +534,10 @@
 			dependencies = (
 			);
 			name = Seans;
+			packageProductDependencies = (
+				A0CD850929493E4A0093221F /* TMDBSwift */,
+				A04824BA294A5FDC00CDA4BD /* Kingfisher */,
+			);
 			productName = Seans;
 			productReference = A0DD91092932224F00ECE810 /* Seans.app */;
 			productType = "com.apple.product-type.application";
@@ -549,6 +566,10 @@
 				Base,
 			);
 			mainGroup = A0DD91002932224F00ECE810;
+			packageReferences = (
+				A0CD850829493E4A0093221F /* XCRemoteSwiftPackageReference "TheMovieDatabaseSwiftWrapper" */,
+				A04824B9294A5FDC00CDA4BD /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = A0DD910A2932224F00ECE810 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -575,6 +596,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0CD850C29493EAE0093221F /* FilmViewModel.swift in Sources */,
 				A0F5CA3029411BFA007E5F91 /* OffsetModifier.swift in Sources */,
 				A00612B4293D084C00BB3413 /* ReviewRowView.swift in Sources */,
 				A00612A8293B8BD200BB3413 /* FilmInfoView.swift in Sources */,
@@ -583,6 +605,7 @@
 				A0DD914C2932330200ECE810 /* ExploreView.swift in Sources */,
 				A0DD915329337DE300ECE810 /* TextArea.swift in Sources */,
 				A0CD84FA294795C30093221F /* Category.swift in Sources */,
+				A04824B8294A5D4400CDA4BD /* FilmService.swift in Sources */,
 				A0CD85032948E5FB0093221F /* UserRowView.swift in Sources */,
 				A0F5CA2C29411BD8007E5F91 /* SnapCarousel.swift in Sources */,
 				A0CD85052948E72A0093221F /* FilmSearchRowView.swift in Sources */,
@@ -610,6 +633,7 @@
 				A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */,
 				A00612BE293FD1A100BB3413 /* Tab.swift in Sources */,
 				A0DD91582933A14000ECE810 /* ActorView.swift in Sources */,
+				A04824BD294A61B100CDA4BD /* Statics.swift in Sources */,
 				A0DD913329322C7600ECE810 /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -811,6 +835,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A04824B9294A5FDC00CDA4BD /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		A0CD850829493E4A0093221F /* XCRemoteSwiftPackageReference "TheMovieDatabaseSwiftWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gkye/TheMovieDatabaseSwiftWrapper/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A04824BA294A5FDC00CDA4BD /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A04824B9294A5FDC00CDA4BD /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		A0CD850929493E4A0093221F /* TMDBSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A0CD850829493E4A0093221F /* XCRemoteSwiftPackageReference "TheMovieDatabaseSwiftWrapper" */;
+			productName = TMDBSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A0DD91012932224F00ECE810 /* Project object */;
 }

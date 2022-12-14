@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Movie: Identifiable, Equatable{
-    var id = UUID().uuidString
+    var id: Int
     var movieTitle: String
     var releaseDate: String
     var movieTime: String
