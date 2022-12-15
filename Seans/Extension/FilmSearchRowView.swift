@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FilmSearchRowView: View {
-    var movie: Movie = Movie(id:1234, movieTitle: "Ad Astra", releaseDate: "1972", movieTime: "2 sa 4 dk", movieDescription: "mesela", artwork: "Movie1")
+    var movie: Movie = Movie(id:1234, movieTitle: "Ad Astra", releaseDate: "1972", movieTime: "2 sa 4 dk", movieDescription: "mesela", artwork: "Movie1",vote_average: 12,vote_count: 12)
     var body: some View {
         ZStack{
             
             GeometryReader{proxy in
                 let size = proxy.size
             
-                Image(movie.artwork)
+                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: size.width, height: size.height)
@@ -42,7 +43,7 @@ struct FilmSearchRowView: View {
             .ignoresSafeArea()
             HStack{
                 
-                Image(movie.artwork)
+                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 56, height: 70)

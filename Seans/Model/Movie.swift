@@ -14,4 +14,6 @@ struct Movie: Identifiable, Equatable{
     var movieTime: String
     var movieDescription: String
     var artwork: String
+    var vote_average: Double = 0
+    var vote_count: Double = 0
 }

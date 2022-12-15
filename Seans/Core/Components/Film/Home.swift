@@ -78,7 +78,7 @@ struct Home: View {
                     Spacer()
                     
                     NavigationLink {
-                        FilmGridView()
+                        AllFilmView()
                         
                     } label: {
                         Text("Tüm Filmler")
@@ -95,7 +95,7 @@ struct Home: View {
                     HStack(spacing: 15){
                         ForEach(viewmodel.popularMovies){movie in
                             NavigationLink {
-                                FilmInfoView()
+                                FilmInfoView(movie: movie)
                             } label: {
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                                     .resizable()

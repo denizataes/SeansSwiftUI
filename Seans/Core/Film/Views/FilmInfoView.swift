@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FilmInfoView: View {
     @State private var backgroundColor: Color = .clear
     @State private var pointted: Bool = false
     @Environment(\.presentationMode) var mode
+    var movie: Movie
     
     
     var body: some View {
@@ -46,8 +48,8 @@ struct FilmInfoView: View {
     }
     
     private func setAverageColor() {
-        let uiColor = UIImage(named: "godfather")?.averageColor ?? .clear
-        backgroundColor = Color(uiColor)
+//        let uiColor = UIImage()?.averageColor ?? .clear
+        backgroundColor = Color(.clear)
     }
     
 }
@@ -55,7 +57,7 @@ struct FilmInfoView: View {
 
 struct FilmInfoView_Previews: PreviewProvider {
     static var previews: some View {
-        FilmInfoView()
+        FilmInfoView(movie: Movie(id: 5, movieTitle: "Başlık", releaseDate: "22/02/2022", movieTime: "2 saat 2 dakika", movieDescription: "Açıklama", artwork: "Movie2",vote_average: 12,vote_count: 12))
     }
 }
 extension FilmInfoView{
@@ -171,7 +173,7 @@ extension FilmInfoView{
         GeometryReader{proxy in
             let size = proxy.size
             
-            Image("godfather")
+            KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size.width, height: size.height)
@@ -203,7 +205,7 @@ extension FilmInfoView{
         VStack {
             HStack{
                 //ZStack(alignment: .bottomTrailing){
-                    Image("godfather")
+                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                         .resizable()
                         .frame(width: 130,height:180)
                         .cornerRadius(20)
@@ -226,7 +228,7 @@ extension FilmInfoView{
                 
                 VStack(alignment: .leading, spacing: 10){
                     HStack{
-                        Text("The Godfather")
+                        Text(movie.movieTitle)
                             .font(.system(size: 18))
                             .bold()
                             .foregroundColor(.white)
@@ -236,7 +238,7 @@ extension FilmInfoView{
                     HStack{
                         Image(systemName: "calendar")
                         
-                        Text("19 Ekim 1973")
+                        Text(movie.releaseDate)
                             .font(.system(size: 10))
                             .bold()
                             .padding(.trailing)
@@ -283,7 +285,7 @@ extension FilmInfoView{
                         }
                         VStack{
                             HStack(spacing: 0){
-                                Text("8.8")
+                                Text(String(movie.vote_average))
                                     .foregroundColor(.white)
                                     .bold()
                                     .font(.system(size: 14))
@@ -291,7 +293,7 @@ extension FilmInfoView{
                                     .font(.system(size: 8))
                                     .foregroundColor(.white)
                             }
-                            Text("2.339.685")
+                            Text(String(movie.vote_count))
                                 .foregroundColor(.gray)
                                 .font(.system(size: 8))
                         }
@@ -343,7 +345,7 @@ extension FilmInfoView{
                         Text("Film Hakkında")
                             .font(.system(size: 16))
                             .bold()
-                        Text("(3 saat 2 dakika)")
+                        Text(movie.movieTime)
                             .font(.system(size: 8))
                         Spacer()
                     }
@@ -352,7 +354,8 @@ extension FilmInfoView{
                 .padding(.top)
                 .padding(.bottom,2)
                 
-                Text("Sicilya'dan göç eden Corleone ailesi, Amerika'da yerleşme çabalarını sürdürürken kendilerine kaba kuvvet kullanmaya kalkan ve yapmaya kalktıkları her işten haraç isteyen bir takım kimliği belirsiz kişilere karşı onlar da kaba kuvvet kullanmaya ve bunda da başarılı olmaya başlayınca kendilerini tahmin bile edemeyecekleri bir yaşantının içinde bulurlar. Bir taraftan son derece katı örf ve aile yaşantısı diğer tarafta ise acımasızca önlerine çıkanları yok etmeye başlayan Corleone ailesi bir müddet sonra Amerika'nın en korkulan mafya topluluğu haline gelmiştir. Kendileri her ne kadar mafya değil bir aile olduklarını söyleseler de.")
+//                Text("Sicilya'dan göç eden Corleone ailesi, Amerika'da yerleşme çabalarını sürdürürken kendilerine kaba kuvvet kullanmaya kalkan ve yapmaya kalktıkları her işten haraç isteyen bir takım kimliği belirsiz kişilere karşı onlar da kaba kuvvet kullanmaya ve bunda da başarılı olmaya başlayınca kendilerini tahmin bile edemeyecekleri bir yaşantının içinde bulurlar. Bir taraftan son derece katı örf ve aile yaşantısı diğer tarafta ise acımasızca önlerine çıkanları yok etmeye başlayan Corleone ailesi bir müddet sonra Amerika'nın en korkulan mafya topluluğu haline gelmiştir. Kendileri her ne kadar mafya değil bir aile olduklarını söyleseler de.")
+                Text(movie.movieDescription)
                     .multilineTextAlignment(.leading)
                     .lineSpacing(5)
                     .padding(.top,2)

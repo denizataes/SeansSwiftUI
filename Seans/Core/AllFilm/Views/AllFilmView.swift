@@ -7,18 +7,20 @@
 
 import SwiftUI
 
-struct FilmGridView: View {
+struct AllFilmView: View {
     var data: [Int] = Array(1...20)
     let adaptiveColumns = [
         GridItem(.adaptive(minimum: 100))
     ]
+    @ObservedObject var viewmodel = AllFilmViewModel()
+    
     var body: some View {
         ZStack{
             BGView()
             ScrollView{
                 VStack{
                     ForEach(Category.allCases, id: \.rawValue){ category in
-                        FilmSecondRowView(title: category.title)
+                        FilmSecondRowView(films: viewmodel, category: category)
                     }
                 }
             }
@@ -57,6 +59,6 @@ struct FilmGridView: View {
 
 struct FilmGridView_Previews: PreviewProvider {
     static var previews: some View {
-        FilmGridView()
+        AllFilmView()
     }
 }
