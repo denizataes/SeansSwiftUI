@@ -66,7 +66,7 @@ extension PostRowView{
         HStack(alignment: .top) {
             VStack{
                 NavigationLink {
-                    ActorView()
+                    //ActorView()
                     
                 } label: {
                     Image("actor1")
@@ -80,7 +80,7 @@ extension PostRowView{
                     .foregroundColor(.gray)
                     .italic()
                 NavigationLink {
-                    ActorView()
+                   // ActorView()
                     
                 } label: {
                     Image("actor2")
@@ -94,7 +94,7 @@ extension PostRowView{
                     .foregroundColor(.gray)
                     .italic()
                 NavigationLink {
-                    ActorView()
+                   // ActorView()
                     
                 } label: {
                     Image("actor3")

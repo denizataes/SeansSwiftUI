@@ -14,6 +14,7 @@ class ExploreViewModel: ObservableObject{
     var searchableMovies = [Movie]()
     let service = FilmService()
     
+    
     var searchableFilms: [Movie]{
         if input.isEmpty{
             return popularMovies

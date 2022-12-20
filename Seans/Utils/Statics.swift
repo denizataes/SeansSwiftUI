@@ -10,3 +10,6 @@ import Foundation
 class Statics{
     static let URL: String = "https://image.tmdb.org/t/p/w500"
 }
+
+    
+//https://image.tmdb.org/t/p/w500/4whbLY7IUbMctL0zGt2ZZdzogAS.jpg

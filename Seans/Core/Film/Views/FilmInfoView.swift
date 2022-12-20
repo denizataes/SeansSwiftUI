@@ -30,7 +30,11 @@ struct FilmInfoView: View {
                         }
                         .background(.black.opacity(0.65))
                         .clipShape(RoundedRectangle(cornerRadius: 20))
+                        
                         actors
+                        
+                       // similarMovies
+                        
                         reviews
                         Spacer()
                     }
@@ -74,6 +78,19 @@ extension FilmInfoView{
                 }
 
                 Spacer()
+                
+                 NavigationLink {
+                     SimilarMoviesView(id: movie.id)
+                    } label: {
+                        VStack{
+                            Image(systemName: "film.stack")
+                                .resizable()
+                                .frame(width: 18,height: 18)
+                                .bold()
+                            Text("Benzer Filmler")
+                                .font(.system(size: 10))
+                        }
+                    }
                 
                 Button {
                         
@@ -125,6 +142,38 @@ extension FilmInfoView{
         }
         
     }
+//    var similarMovies: some View{
+//
+//        VStack(alignment: .leading){
+//            if movie.similarMovie != nil{
+//                Text("Benzer Filmler")
+//                    .font(.headline)
+//                    .foregroundColor(.white)
+//                    .bold()
+//
+//                ScrollView(.horizontal, showsIndicators: false) {
+//                    HStack(spacing: 15){
+//
+//                        ForEach(movie.similarMovie!){movie in
+//                            NavigationLink {
+//                                FilmInfoView(movie: movie)
+//                            } label: {
+//                                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                                    .frame(width: 100, height: 120)
+//                                    .cornerRadius(15)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            else
+//            {
+//                EmptyView()
+//            }
+//        }
+//    }
     
     var reviews: some View{
         VStack(alignment: .leading){
@@ -408,32 +457,7 @@ extension FilmInfoView{
 //    }
     
     var actors: some View{
-        VStack(alignment: .leading){
-            HStack{
-                Text("Oyuncular")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .bold()
-                
-                Spacer()
-                
-                NavigationLink {
-                    
-                } label: {
-                    Text("Hepsini Göster")
-                        .font(.system(size: 10))
-                        .foregroundColor(.white)
-                        .bold()
-                }
-            }
-            ScrollView(.horizontal,showsIndicators: false){
-                HStack(spacing: 20){
-                    ForEach(1..<5) { index in
-                        ActorRowView()
-                    }
-                }
-            }
-        }
+        ActorRowView(id: movie.id)
     }
 }
 

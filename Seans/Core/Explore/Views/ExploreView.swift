@@ -33,6 +33,17 @@ struct ExploreView: View {
                                 .foregroundColor(.gray)
                                 .frame(minWidth: 0, maxWidth: .infinity,alignment: .leading)
                                 .padding(.leading,8)
+                            Spacer()
+                            Button {
+                                viewmodel.input = ""
+                                
+                            } label: {
+                                Image(systemName: "multiply")
+                                    .padding(.trailing,8)
+                                    .foregroundColor(.purple)
+                                    .bold()
+                            }
+
                         }
                     )
                 }
@@ -61,20 +72,18 @@ struct ExploreView: View {
             }
             else
             {
-                ScrollView{
-                    LazyVStack(spacing: 0){
-                        ForEach(viewmodel.searchableFilms){ movie in
-                            NavigationLink {
-                                FilmInfoView(movie: movie)
-                            } label: {
-                                FilmSearchRowView(movie: movie)
+                    ScrollView{
+                        LazyVStack(spacing: 0){
+                            ForEach(viewmodel.searchableFilms){ movie in
+                                NavigationLink {
+                                    FilmInfoView(movie: movie)
+                                } label: {
+                                    FilmSearchRowView(movie: movie)
+                                }
                             }
                             
-
                         }
-                        
                     }
-                }
             }
                 
         }

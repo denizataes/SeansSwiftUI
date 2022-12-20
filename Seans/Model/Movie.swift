@@ -16,4 +16,6 @@ struct Movie: Identifiable, Equatable{
     var artwork: String
     var vote_average: Double = 0
     var vote_count: Double = 0
+    var actors: [Actor]?
+//    var similarMovie: [Movie]?
 }
