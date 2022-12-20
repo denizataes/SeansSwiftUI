@@ -20,7 +20,7 @@ struct ActorMoviesView: View {
         VStack(alignment: .leading){
             Text("Oynadığı Filmler")
                 .font(.headline)
-                .foregroundColor(.black)
+                .foregroundColor(.white)
                 .bold()
                 .padding(.bottom)
             

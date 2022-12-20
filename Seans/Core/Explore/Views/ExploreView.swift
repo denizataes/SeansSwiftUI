@@ -70,7 +70,7 @@ struct ExploreView: View {
                     }
                 }
             }
-            else
+            else if(selectedFilter == .films)
             {
                     ScrollView{
                         LazyVStack(spacing: 0){
@@ -84,6 +84,30 @@ struct ExploreView: View {
                             
                         }
                     }
+            }
+            else
+            {
+                
+//                ScrollView{
+//                    LazyVStack(spacing: 0){
+                        ActorSearchView(input: $viewmodel.input)
+//
+//                    }
+//                }
+          
+//                ScrollView{
+//                    LazyVStack(spacing: 0){
+//                        ForEach(viewmodel.searchableFilms){ movie in
+//                            NavigationLink {
+//                                FilmInfoView(movie: movie)
+//                            } label: {
+//                                FilmSearchRowView(movie: movie)
+//                            }
+//                        }
+//
+//                    }
+//                }
+                
             }
                 
         }

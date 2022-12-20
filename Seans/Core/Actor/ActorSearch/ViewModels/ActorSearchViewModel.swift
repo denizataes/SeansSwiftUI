@@ -8,15 +8,14 @@
 import Foundation
 import TMDBSwift
 
-class ActorRowViewModel: ObservableObject{
+class ActorSearchViewModel: ObservableObject{
     let service = ActorService()
     @Published var actors = [Actor]()
-    
-    func fetchActors(id: Int)
+
+    func searchActors(query: String)
     {
-        self.service.fetchActors(with: id) { actors in
-            self.actors = actors
-            
+        self.service.searchPeople(query: query) { data in
+            self.actors = data
         }
     }
     

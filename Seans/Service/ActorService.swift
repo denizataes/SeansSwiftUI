@@ -67,4 +67,40 @@ struct ActorService{
         }
     }
     
+    
+//    func searchMovies(query: String, completion: @escaping([Movie]) -> Void){
+//        var movieList = [Movie]()
+//        SearchMDB.movie(query: query, language: "tr" , page: 1, includeAdult: true, year: nil, primaryReleaseYear: nil) { clientReturn, movie in
+//            if let movie = movie{
+//                movie.forEach { MovieMDB in
+//                    guard let poster = MovieMDB.poster_path  else {return} // poster yoksa listeye alma
+//                    let date = MovieMDB.release_date != "" && MovieMDB.release_date != nil ? convertDate(dateString: MovieMDB.release_date) : ""
+//                    var mov = Movie(id: MovieMDB.id, movieTitle: MovieMDB.title ?? "", releaseDate: date , movieTime: "2 saat", movieDescription: MovieMDB.overview ?? "", artwork: poster)
+//                    movieList.append(mov)
+//                        completion(movieList)
+//
+//
+//                }
+//            }
+//
+//
+//        }
+//    }
+    
+    func searchPeople(query: String, completion: @escaping([Actor]) -> Void){
+        var actorList = [Actor]()
+        
+        SearchMDB.person(query: query, page: 1, includeAdult: true) { clientReturn, person in
+            if let data = person{
+                data.forEach { pers in
+                    guard pers.profile_path != nil else {return}
+                    let personItem = Actor(id: pers.id, profile_path: pers.profile_path ?? "" ,name: pers.name ?? "")
+                    actorList.append(personItem)
+                }
+            }
+            completion(actorList)
+        }
+    }
+    
+    
 }

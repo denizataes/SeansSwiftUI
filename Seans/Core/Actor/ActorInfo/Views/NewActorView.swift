@@ -39,7 +39,7 @@ struct NewActorView: View {
                         if viewModel.actor.deathday != nil && viewModel.actor.deathday != ""{
                             Text("😔 \(viewModel.actor.birthday ?? "") /  \(viewModel.actor.deathday ?? "")")
                                 .font(.callout)
-                                .foregroundColor(Color(red: 54/255, green: 26/255, blue: 31/255))
+                                .foregroundColor(.white)
                                 .bold()
                         }
                             
