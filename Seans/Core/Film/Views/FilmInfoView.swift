@@ -8,46 +8,62 @@
 import SwiftUI
 import Kingfisher
 
+
 struct FilmInfoView: View {
     @State private var backgroundColor: Color = .clear
     @State private var pointted: Bool = false
     @Environment(\.presentationMode) var mode
+    @StateObject var viewModel = FilmViewModel()
     var movie: Movie
     
     
     var body: some View {
 
-        GeometryReader { geometry in
-            ScrollView(.vertical,showsIndicators: false){
-                ZStack{
-                    filmBackground
-                    VStack(alignment: .center){
-                        navbar
-                        Spacer()
-                        VStack{
-                            filmHeader
-                            filmGeneralInfo
+        
+            GeometryReader { geometry in
+                ScrollView(.vertical,showsIndicators: false){
+                    ZStack{
+                        filmBackground
+                        VStack(alignment: .center){
+                            navbar
+                            Spacer()
+                            VStack{
+                             
+                                filmHeader
+      
+                                if viewModel.trailers.count != 0 {
+                                    trailers
+                                }
+                                if(movie.movieDescription != nil && movie.movieDescription != ""){
+                                    filmGeneralInfo
+                                }
+                                    
+                                
+                            }
+                            .onAppear{
+                                viewModel.fetchFilmTrailer(id: movie.id)
+                            }
+                            .background(.black.opacity(0.65))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .frame(minHeight: 0, maxHeight: UIScreen.main.bounds.height)
+                            actors
+                            
+                           // similarMovies
+                            
+                            reviews
+                            Spacer()
                         }
-                        .background(.black.opacity(0.65))
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        
-                        actors
-                        
-                       // similarMovies
-                        
-                        reviews
-                        Spacer()
+                        .padding()
                     }
-                    .padding()
                 }
             }
-        }
-        .edgesIgnoringSafeArea(.all)
-        .background(backgroundColor)
-        .onAppear {
-            self.setAverageColor()
-        }
-        .navigationBarBackButtonHidden(true)
+            .edgesIgnoringSafeArea(.all)
+            .background(backgroundColor)
+            .onAppear {
+                self.setAverageColor()
+            }
+            .navigationBarBackButtonHidden(true)
+
 
     }
     
@@ -59,11 +75,11 @@ struct FilmInfoView: View {
 }
 
 
-struct FilmInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        FilmInfoView(movie: Movie(id: 5, movieTitle: "Başlık", releaseDate: "22/02/2022", movieTime: "2 saat 2 dakika", movieDescription: "Açıklama", artwork: "Movie2",vote_average: 12,vote_count: 12))
-    }
-}
+//struct FilmInfoView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FilmInfoView(movie: Movie(id: 5, movieTitle: "Başlık", releaseDate: "22/02/2022", movieTime: "2 saat 2 dakika", movieDescription: "Açıklama", artwork: "Movie2",vote_average: 12,vote_count: 12))
+//    }
+//}
 extension FilmInfoView{
     var navbar: some View{
         VStack{
@@ -238,13 +254,13 @@ extension FilmInfoView{
                 //.black.opacity(0.4),
                 //color.opacity(0.1),
                 //color.opacity(0.1),
-                    .black.opacity(0.7),
+                    .black.opacity(0.8),
                     .purple.opacity(0.9)
             ], startPoint: .top, endPoint: .bottom)
             
             // Blurred Overlay
             Rectangle()
-                .fill(.ultraThinMaterial.opacity(0.9))
+                .fill(.ultraThinMaterial.opacity(0.8))
         }
         .ignoresSafeArea()
     }
@@ -258,22 +274,6 @@ extension FilmInfoView{
                         .resizable()
                         .frame(width: 130,height:180)
                         .cornerRadius(20)
-            
-    //                    .cornerRadius(15)
-    //
-    //               Image("youtube")
-    //                    .resizable()
-    //                    .frame(width: 32,height: 32)
-    //                    .clipShape(Circle())
-    //                    .opacity(0.5)
-    //                    .foregroundColor(.red)
-    //                    .padding(.trailing,5)
-    //                    .padding(.bottom,5)
-                        
-                        
-            //    }
-                 
-                
                 
                 VStack(alignment: .leading, spacing: 10){
                     HStack{
@@ -296,28 +296,27 @@ extension FilmInfoView{
                     }
                     .foregroundColor(.white)
                     
-                    
-                    NavigationLink {
-                        
-                    } label: {
-                        HStack{
-                            Image(systemName: "play.circle")
-                                .resizable()
-                                .frame(width: 16,height: 16)
-                                .foregroundColor(.white)
-                                
-                            
-                            Text("Fragman İzle")
-                                .font(.system(size: 10))
-                                .bold()
-                                .foregroundColor(.white)
-                       
-                        }
-                        .frame(width:100 , height: 30)
-                        .foregroundColor(.white)
-                        .background(.red).opacity(0.9)
-                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    }
+//                    NavigationLink {
+//
+//                    } label: {
+//                        HStack{
+//                            Image(systemName: "play.circle")
+//                                .resizable()
+//                                .frame(width: 16,height: 16)
+//                                .foregroundColor(.white)
+//
+//
+//                            Text("Fragman İzle")
+//                                .font(.system(size: 10))
+//                                .bold()
+//                                .foregroundColor(.white)
+//
+//                        }
+//                        .frame(width:100 , height: 30)
+//                        .foregroundColor(.white)
+//                        .background(.red).opacity(0.9)
+//                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+//                    }
                     
                     HStack{
                         ZStack{
@@ -385,30 +384,44 @@ extension FilmInfoView{
         
     }
     
+    var trailers: some View{
+        ScrollView(.horizontal,showsIndicators: false){
+            HStack(spacing: 10){
+                ForEach(viewModel.trailers) { trailer in
+                    
+                    VideoView(videoID: trailer.key ?? "")
+                        .frame(width: viewModel.trailers.count == 1 ? 320 : 200,height: 150)
+                        .cornerRadius(12)
+                        .shadow(radius: 10)
+                }
+            }
+            
+        }
+        .padding()
+    }
+    
     var filmGeneralInfo: some View{
         VStack {
            
             VStack(alignment: .leading){
                 VStack(alignment: .leading,spacing: 15){
-                    HStack{
+                    
                         Text("Film Hakkında")
                             .font(.system(size: 16))
                             .bold()
-                        Text(movie.movieTime)
-                            .font(.system(size: 8))
-                        Spacer()
-                    }
+                        
+                    
                 }
                 .padding(.leading)
                 .padding(.top)
                 .padding(.bottom,2)
                 
-//                Text("Sicilya'dan göç eden Corleone ailesi, Amerika'da yerleşme çabalarını sürdürürken kendilerine kaba kuvvet kullanmaya kalkan ve yapmaya kalktıkları her işten haraç isteyen bir takım kimliği belirsiz kişilere karşı onlar da kaba kuvvet kullanmaya ve bunda da başarılı olmaya başlayınca kendilerini tahmin bile edemeyecekleri bir yaşantının içinde bulurlar. Bir taraftan son derece katı örf ve aile yaşantısı diğer tarafta ise acımasızca önlerine çıkanları yok etmeye başlayan Corleone ailesi bir müddet sonra Amerika'nın en korkulan mafya topluluğu haline gelmiştir. Kendileri her ne kadar mafya değil bir aile olduklarını söyleseler de.")
+                
                 Text(movie.movieDescription)
                     .multilineTextAlignment(.leading)
                     .lineSpacing(5)
                     .padding(.top,2)
-                    .padding(.bottom,10)
+                    .padding(.bottom,30)
                     .padding(.leading)
                     .padding(.trailing)
                     .font(.system(size: 12))
@@ -419,6 +432,7 @@ extension FilmInfoView{
             }
             .foregroundColor(.white)
         }
+        .animation(.interpolatingSpring(mass: 3.0,stiffness: 100.0,damping: 120,initialVelocity: 0))
         
     }
     

@@ -11,8 +11,8 @@ struct ContentView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
-        
-            MainTabView()
+
+        MainTabView()
     }
 }
 

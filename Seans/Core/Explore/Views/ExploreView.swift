@@ -12,10 +12,10 @@ struct ExploreView: View {
     @State private var selectedFilter: SearchFilterViewModel  = .films
     @Namespace var animation
     @ObservedObject var viewmodel = ExploreViewModel()
-
+    
     var body: some View {
         VStack{
-        
+            
             VStack {
                 HStack{
                     TextField("Film, dizi veya kullanıcı ara...", text: $viewmodel.input, onEditingChanged: {
@@ -43,7 +43,7 @@ struct ExploreView: View {
                                     .foregroundColor(.purple)
                                     .bold()
                             }
-
+                            
                         }
                     )
                 }
@@ -51,7 +51,7 @@ struct ExploreView: View {
                 .padding(.trailing)
                 
             }
-
+            
             searchFilterBar
             
             if(selectedFilter == .users)
@@ -72,46 +72,26 @@ struct ExploreView: View {
             }
             else if(selectedFilter == .films)
             {
-                    ScrollView{
-                        LazyVStack(spacing: 0){
-                            ForEach(viewmodel.searchableFilms){ movie in
-                                NavigationLink {
-                                    FilmInfoView(movie: movie)
-                                } label: {
-                                    FilmSearchRowView(movie: movie)
-                                }
+                ScrollView{
+                    LazyVStack(spacing: 0){
+                        ForEach(viewmodel.searchableFilms){ movie in
+                            NavigationLink {
+                                FilmInfoView(movie: movie)
+                            } label: {
+                                FilmSearchRowView(movie: movie)
                             }
-                            
                         }
+                        
                     }
+                }
             }
             else
             {
                 
-//                ScrollView{
-//                    LazyVStack(spacing: 0){
-                        ActorSearchView(input: $viewmodel.input)
-//
-//                    }
-//                }
-          
-//                ScrollView{
-//                    LazyVStack(spacing: 0){
-//                        ForEach(viewmodel.searchableFilms){ movie in
-//                            NavigationLink {
-//                                FilmInfoView(movie: movie)
-//                            } label: {
-//                                FilmSearchRowView(movie: movie)
-//                            }
-//                        }
-//
-//                    }
-//                }
-                
+                ActorSearchView(input: $viewmodel.input)
             }
-                
+            
         }
-
     }
 }
 

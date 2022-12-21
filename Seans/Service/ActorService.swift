@@ -33,6 +33,14 @@ struct ActorService{
                                              popularity: data.popularity,
                                              profile_path: data.profile_path
                     )
+                    let dateFormatter = DateFormatter()
+                    if let birthday = actor.birthday {
+                        actor.age = calcAge(birthday: birthday)
+                    }
+                    
+                    if actor.deathday != nil, actor.birthday != nil{
+                        actor.deathAge = calcDeathAge(birthday: actor.birthday!, deathDay: actor.deathday!)
+                    }
                     
                     group.leave()
                 }
@@ -43,6 +51,30 @@ struct ActorService{
             }
         }
         
+    }
+    
+    
+    func calcDeathAge(birthday: String, deathDay: String) -> Int {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "yyyy-MM-dd"
+        let birthdayDate = dateFormater.date(from: birthday)
+        let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
+        let deathDate = dateFormater.date(from: deathDay)
+        let calcAge = calendar.components(.year, from: birthdayDate!, to: deathDate!, options: [])
+        let deathAge = calcAge.year
+        return deathAge!
+    }
+    
+    
+    func calcAge(birthday: String) -> Int {
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "yyyy-MM-dd"
+        let birthdayDate = dateFormater.date(from: birthday)
+        let calendar: NSCalendar! = NSCalendar(calendarIdentifier: .gregorian)
+        let now = Date()
+        let calcAge = calendar.components(.year, from: birthdayDate!, to: now, options: [])
+        let age = calcAge.year
+        return age!
     }
     
     

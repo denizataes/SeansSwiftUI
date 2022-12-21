@@ -14,6 +14,7 @@ struct FilmView: View {
                     .padding(.top,40)
             }
             .edgesIgnoringSafeArea(.all)
+        
             
     }
 }

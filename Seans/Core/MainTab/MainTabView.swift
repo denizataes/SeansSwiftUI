@@ -39,7 +39,7 @@ struct MainTabView: View {
         
             
                 FilmView()
-                .ignoresSafeArea()
+                
                 .onTapGesture {
                     self.selectedIndex = 3
                 }
@@ -47,33 +47,17 @@ struct MainTabView: View {
                     Image(systemName: "film")
                 }.tag(3)
             
-
-
             
-                ProfileView()
-                
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            print("Deneme")
-                        } label: {
-                            Image(systemName: "list.bullet")
-                                .foregroundColor(.gray)
-                            
-                        }
-                        
-                    }
-                    
-                }
-                .onTapGesture {
-                    self.selectedIndex = 4
-                }
-                .tabItem{
-                    Image(systemName: "person.crop.circle")
-                }.tag(4)
             
-
-                
+            ProfileView()
+            .onTapGesture {
+                self.selectedIndex = 4
+            }
+            .tabItem{
+                Image(systemName: "person.crop.circle")
+            }.tag(4)
+            
+     
         }
         .accentColor(.purple)
 

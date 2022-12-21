@@ -17,35 +17,38 @@ struct ActorMoviesView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading){
-            Text("Oynadığı Filmler")
-                .font(.headline)
-                .foregroundColor(.white)
-                .bold()
-                .padding(.bottom)
-            
-            
-            ScrollView(.horizontal, showsIndicators: false) {
+        
+        if viewModel.actorMovies.count > 0{
+            VStack(alignment: .leading){
+                Text("Oynadığı Filmler")
+                    .font(.title2)
+                    .bold()
+                    .padding(.bottom)
                 
                 
-                HStack(spacing: 15){
+                ScrollView(.horizontal, showsIndicators: false) {
                     
-                    ForEach(viewModel.actorMovies){movie in
-                        NavigationLink {
-                               FilmInfoView(movie: movie)
-                        } label: {
-                            
-                            KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 100, height: 120)
-                                .cornerRadius(15)
+                    
+                    HStack(spacing: 15){
+                        
+                        ForEach(viewModel.actorMovies){movie in
+                            NavigationLink {
+                                FilmInfoView(movie: movie)
+                            } label: {
+                                
+                                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 100, height: 120)
+                                    .cornerRadius(15)
+                            }
                         }
                     }
                 }
             }
+            .animation(.easeInOut)
+            .padding()
         }
-        .padding()
     }
 }
 

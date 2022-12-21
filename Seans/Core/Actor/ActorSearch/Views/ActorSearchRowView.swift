@@ -57,6 +57,7 @@ struct ActorSearchRowView: View {
                         .font(.system(size: 20))
                         .bold()
                         .foregroundColor(.white)
+                    
                 }
                 .padding(.leading)
                 

@@ -20,5 +20,7 @@ struct ActorDetail: Identifiable, Equatable{
     var place_of_birth: String?
     var popularity: Double?
     var profile_path: String?
+    var age: Int?
+    var deathAge: Int?
     
 }
