@@ -11,6 +11,18 @@ import TMDBSwift
 
 struct ActorService{
     
+    func convertDate(dateString: String?) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-DD"
+        
+        let date = dateFormatter.date(from: dateString!)
+        let formatted = date?.formatted(
+            .dateTime
+                .day().month(.wide).year()
+        )
+        return formatted ?? ""
+    }
+    
     func fetchActorDetail(id: Int,completion: @escaping(ActorDetail) -> Void){
         var actor = ActorDetail()
         PersonMDB.person_id(personID: id) { clientReturn, data in
@@ -24,7 +36,7 @@ struct ActorService{
                                              adult: data.adult,
                                              also_known_as: data.also_known_as,
                                              biography: data.biography,
-                                             birthday: data.birthday,
+                                            birthday: data.birthday,
                                              deathday: data.deathday,
                                              homepage: data.homepage,
                                              imdb_id: data.imdb_id,

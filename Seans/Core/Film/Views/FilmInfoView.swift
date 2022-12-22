@@ -34,7 +34,7 @@ struct FilmInfoView: View {
                                 if viewModel.trailers.count != 0 {
                                     trailers
                                 }
-                                if(movie.movieDescription != nil && movie.movieDescription != ""){
+                                if(movie.movieDescription != ""){
                                     filmGeneralInfo
                                 }
                                     
@@ -51,6 +51,15 @@ struct FilmInfoView: View {
                            // similarMovies
                             
                             reviews
+                            
+//                            VStack{
+//                                if viewModel.collections.count > 0{
+//                                    collections
+//                                }
+//                            }
+//                            .onAppear{
+//                                viewModel.fetchCollection(id: movie.id)
+//                            }
                             Spacer()
                         }
                         .padding()
@@ -158,38 +167,6 @@ extension FilmInfoView{
         }
         
     }
-//    var similarMovies: some View{
-//
-//        VStack(alignment: .leading){
-//            if movie.similarMovie != nil{
-//                Text("Benzer Filmler")
-//                    .font(.headline)
-//                    .foregroundColor(.white)
-//                    .bold()
-//
-//                ScrollView(.horizontal, showsIndicators: false) {
-//                    HStack(spacing: 15){
-//
-//                        ForEach(movie.similarMovie!){movie in
-//                            NavigationLink {
-//                                FilmInfoView(movie: movie)
-//                            } label: {
-//                                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    .frame(width: 100, height: 120)
-//                                    .cornerRadius(15)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                EmptyView()
-//            }
-//        }
-//    }
     
     var reviews: some View{
         VStack(alignment: .leading){
@@ -220,6 +197,43 @@ extension FilmInfoView{
         }
         .padding(.top)
     }
+    
+    var collections: some View{
+        
+     //   if viewModel.collections.count > 0{
+            VStack(alignment: .leading){
+                Text("Serinin Diğer Filmleri")
+                    .font(.title2)
+                    .bold()
+                    .padding(.bottom)
+                
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    
+                    
+                    HStack(spacing: 15){
+                        
+                        ForEach(viewModel.collections){movie in
+                            NavigationLink {
+                                FilmInfoView(movie: movie)
+                            } label: {
+                                
+                                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 100, height: 120)
+                                    .cornerRadius(15)
+                            }
+                        }
+                    }
+                }
+              
+            }
+            .animation(.easeInOut)
+            .padding()
+    }
+        
+        
     
     var filmBackground: some View{
 //        VStack(spacing: 0){
@@ -278,17 +292,18 @@ extension FilmInfoView{
                 VStack(alignment: .leading, spacing: 10){
                     HStack{
                         Text(movie.movieTitle)
-                            .font(.system(size: 18))
+                            .font(.system(size: 24))
                             .bold()
                             .foregroundColor(.white)
-                        Spacer()
+                        
                     }
                     
-                    HStack{
+                    HStack(spacing: 0){
                         Image(systemName: "calendar")
+                            .bold()
                         
                         Text(movie.releaseDate)
-                            .font(.system(size: 10))
+                            .font(.system(size: 16))
                             .bold()
                             .padding(.trailing)
                             .padding(.trailing,5)
@@ -319,31 +334,42 @@ extension FilmInfoView{
 //                    }
                     
                     HStack{
-                        ZStack{
-                            Color(red: 245/255, green: 222/255, blue: 80/255)
-                                .frame(width: 32,height:32 )
-                                .clipShape(Circle())
-                            
-                            VStack{
-                                Text("IMDb")
-                                    .font(.system(size: 6))
-                                    .bold()
-                                    .foregroundColor(.black)
-                            }
-                        }
+//                        ZStack{
+//                            Color(red: 245/255, green: 222/255, blue: 80/255)
+//                                .frame(width: 32,height:32 )
+//                                .clipShape(Circle())
+//
+//                            VStack{
+//                                Text("IMDb")
+//                                    .font(.system(size: 6))
+//                                    .bold()
+//                                    .foregroundColor(.black)
+//                            }
+//                        }
                         VStack{
                             HStack(spacing: 0){
-                                Text(String(movie.vote_average))
+                      
+
+                                Text(String(format: "%.1f", movie.vote_average))
+                                    .foregroundColor(.yellow)
+                                    .bold()
+                                    .font(.system(size: 26))
+                                Text("/10")
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.white)
+                                    .bold()
+                            }
+                            VStack{
+                                Text(String(format: "%.0f", movie.vote_count))
                                     .foregroundColor(.white)
                                     .bold()
                                     .font(.system(size: 14))
-                                Text("/10")
+                                
+                                Text("kişi oyladı")
                                     .font(.system(size: 8))
                                     .foregroundColor(.white)
+                                
                             }
-                            Text(String(movie.vote_count))
-                                .foregroundColor(.gray)
-                                .font(.system(size: 8))
                         }
                         
                         Button {
@@ -352,8 +378,8 @@ extension FilmInfoView{
                             HStack{
                                 Image(systemName: pointted ? "star.fill" : "star")
                                     .resizable()
-                                    .frame(width: 32,height: 32)
-                                    .foregroundColor(.green)
+                                    .frame(width: 36,height: 36)
+                                    .foregroundColor(.yellow)
                                 HStack(spacing: 0){
                                     Text(pointted ? "9.8" : "")
                                         .font(.system(size: 14))

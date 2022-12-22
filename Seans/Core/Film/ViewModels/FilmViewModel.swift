@@ -14,6 +14,7 @@ class FilmViewModel: ObservableObject{
     @Published var popularMovies = [Movie]()
     @Published var nowPlayingMovies = [Movie]()
     @Published var trailers = [Videos]()
+    @Published var collections = [Movie]()
     
     init()
     {
@@ -38,5 +39,13 @@ class FilmViewModel: ObservableObject{
         service.fetchFilmTrailers(id: id) { trailers in
             self.trailers = trailers
         }
+    }
+    
+    func fetchCollection(id: Int)
+    {
+        service.fetchFilmCollections(id: id) { movies in
+            self.collections = movies
+        }
+        
     }
 }
