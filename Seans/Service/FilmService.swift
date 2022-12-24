@@ -14,92 +14,12 @@ struct FilmService{
         TMDBConfig.apikey = "066cd92637346c12593cd4a8543c8fe2"
     }
     
+
+    
     func fetchPopularMovies(completion: @escaping([Movie]) -> Void){
-        
-        
-        //        GenresMDB.genres(listType: .movie, language: "tr"){
-        //          apiReturn, genres in
-        //          if let genres = genres{
-        //            genres.forEach{
-        //
-        //            }
-        //          }
-        //        }
-        
-        //        MovieMDB.movie(movieID: 674919, language: "en"){
-        //             apiReturn, movie in
-        //             if let movie = movie{
-        //                 print(movie.production_companies)
-        //                 print(movie.)
-        //               print(movie.title)
-        //               print(movie.revenue)
-        //                 print(movie.belongs_to_collection)
-        //                 print(movie.budget)
-        //                 print(movie.imdb_id)
-        //                 print(movie.homepage)
-        //                 print(movie.runtime)
-        //                 print(movie.status)
-        //                 print(movie.tagline)
-        //                 print(movie.overview)
-        //                 print(movie.genre_ids)
-        //
-        ////               print(movie.genres[0].name)
-        //                 movie.production_companies?.forEach({ item in
-        //                     print(item.name)
-        //                 })
-        //             }
-        //           }
-        
-        //        MovieMDB.keywords(movieID: 27275){
-        //          apiReturn, keywords in
-        //          if let keywords = keywords{
-        //              keywords.forEach { item in
-        //                  print(item.name)
-        //              }
-        //        }
-        //        }
-        //
-        
-        
-        //        MovieMDB.release_dates(movieID: 27275){
-        //              apiReturn, dates in
-        //              if let releaseDates = dates{
-        //                for releaseDate in releaseDates{
-        //                  print(releaseDate.iso_3166_1)
-        //                  print(releaseDate.release_dates[0].certification)
-        //                  print(releaseDate.release_dates[0].iso_639_1 ?? "") //possible nil value
-        //                  print(releaseDate.release_dates[0].note ?? "") //possible nil value
-        //                  print(releaseDate.release_dates[0].release_date)
-        //                  print(releaseDate.release_dates[0].type)
-        //                }
-        //              }
-        //            }
-        
-        //
-        //        MovieMDB.list(movieID: 27275, page: 1, language: "tr"){
-        //            apiReturn, lists in
-        //            if let lists  = lists{
-        //                for list in lists{
-        //                    print(list.name!)
-        //                    print(list.description)
-        //                    print(list.item_count)
-        //                }
-        //            }
-        //        }
-        //
-        //        MovieMDB.reviews(movieID: 27275, page: 1, language: "en"){
-        //             data, reviews in
-        //            if let reviews = reviews{
-        //                reviews.forEach { item in
-        //                    print(item.content)
-        //
-        //                }
-        //            }
-        //           }
-        //
-        
+   
         var movieList = [Movie]()
-        MovieMDB.popular(language: "tr", page: 10) { clientReturn, movie in
+        MovieMDB.popular(language: "tr", page: 1) { clientReturn, movie in
             if let movie = movie {
                 movie.forEach { movie in
                     
@@ -117,7 +37,7 @@ struct FilmService{
     
     func fetchNowPlaying(completion: @escaping([Movie]) -> Void){
         var movieList = [Movie]()
-        MovieMDB.nowplaying(language: "tr", page: 10) { clientReturn, movie in
+        MovieMDB.nowplaying(language: "tr", page: 1) { clientReturn, movie in
             if let movie = movie {
                 movie.forEach { movie in
                     guard movie.poster_path != nil  else {return} // poster yoksa listeye alma
@@ -135,7 +55,7 @@ struct FilmService{
     
     func fetchTopRated(completion: @escaping([Movie]) -> Void){
         var movieList = [Movie]()
-        MovieMDB.toprated(language: "tr", page: 10) { clientReturn, movie in
+        MovieMDB.toprated(language: "tr", page: 1) { clientReturn, movie in
             if let movie = movie {
                 movie.forEach { movie in
                     
@@ -155,7 +75,7 @@ struct FilmService{
     func fetchUpComing(completion: @escaping([Movie]) -> Void){
         var movieList = [Movie]()
         
-        MovieMDB.upcoming(page: 10,language: "tr") { clientReturn, movie in
+        MovieMDB.upcoming(page: 1,language: "tr") { clientReturn, movie in
             
             if let movie = movie {
                 movie.forEach { movie in
@@ -182,6 +102,7 @@ struct FilmService{
                     let date = MovieMDB.release_date != "" && MovieMDB.release_date != nil ? convertDate(dateString: MovieMDB.release_date) : ""
                     let mov = Movie(id: MovieMDB.id, movieTitle: MovieMDB.title ?? "", releaseDate: date, movieTime: "2 saat", movieDescription: MovieMDB.overview ?? "", artwork: MovieMDB.poster_path ?? "",vote_average: MovieMDB.vote_average ?? 0 ,vote_count: MovieMDB.vote_count ?? 0)
                     movieList.append(mov)
+                    
                     
                     completion(movieList)
                     
@@ -230,7 +151,7 @@ struct FilmService{
     func getSimilarWithMovieID(with id: Int, completion: @escaping ([Movie]) -> Void){
         var movieList = [Movie]()
         
-        MovieMDB.similar(movieID: id, page: 10, language: "tr") { clientReturn, movie in
+        MovieMDB.similar(movieID: id, page: 1, language: "tr") { clientReturn, movie in
             if let movie = movie {
                 
                 movie.forEach { movie in

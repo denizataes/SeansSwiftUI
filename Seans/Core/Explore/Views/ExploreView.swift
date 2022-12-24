@@ -77,6 +77,7 @@ struct ExploreView: View {
                         ForEach(viewmodel.searchableFilms){ movie in
                             NavigationLink {
                                 FilmInfoView(movie: movie)
+
                             } label: {
                                 FilmSearchRowView(movie: movie)
                             }

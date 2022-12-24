@@ -30,6 +30,9 @@
 		A04824D2294E6A1200CDA4BD /* ActorDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824D1294E6A1200CDA4BD /* ActorDetail.swift */; };
 		A04824D4294E6A7500CDA4BD /* ActorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824D3294E6A7500CDA4BD /* ActorService.swift */; };
 		A04824D6294E6C7A00CDA4BD /* ActorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824D5294E6C7A00CDA4BD /* ActorViewModel.swift */; };
+		A05EDB072957A42000F60F70 /* FilmInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05EDB062957A42000F60F70 /* FilmInfoViewModel.swift */; };
+		A05EDB092957A8AA00F60F70 /* MovieDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05EDB082957A8AA00F60F70 /* MovieDetail.swift */; };
+		A05EDB0C2957B26200F60F70 /* TMDb in Frameworks */ = {isa = PBXBuildFile; productRef = A05EDB0B2957B26200F60F70 /* TMDb */; };
 		A0CD84FA294795C30093221F /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD84F9294795C30093221F /* Category.swift */; };
 		A0CD84FE2948E40F0093221F /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD84FD2948E40F0093221F /* SearchBar.swift */; };
 		A0CD85032948E5FB0093221F /* UserRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CD85022948E5FB0093221F /* UserRowView.swift */; };
@@ -92,6 +95,8 @@
 		A04824D1294E6A1200CDA4BD /* ActorDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorDetail.swift; sourceTree = "<group>"; };
 		A04824D3294E6A7500CDA4BD /* ActorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorService.swift; sourceTree = "<group>"; };
 		A04824D5294E6C7A00CDA4BD /* ActorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorViewModel.swift; sourceTree = "<group>"; };
+		A05EDB062957A42000F60F70 /* FilmInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmInfoViewModel.swift; sourceTree = "<group>"; };
+		A05EDB082957A8AA00F60F70 /* MovieDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetail.swift; sourceTree = "<group>"; };
 		A0CD84F9294795C30093221F /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A0CD84FD2948E40F0093221F /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		A0CD85022948E5FB0093221F /* UserRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRowView.swift; sourceTree = "<group>"; };
@@ -138,6 +143,7 @@
 				A04824BB294A5FDC00CDA4BD /* Kingfisher in Frameworks */,
 				A0CD850A29493E4A0093221F /* TMDBSwift in Frameworks */,
 				A0E38B1729535908003268FD /* YouTubePlayerKit in Frameworks */,
+				A05EDB0C2957B26200F60F70 /* TMDb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,6 +364,7 @@
 				A04824C7294CF4F900CDA4BD /* Actor.swift */,
 				A04824D1294E6A1200CDA4BD /* ActorDetail.swift */,
 				A0E38B112953529E003268FD /* Videos.swift */,
+				A05EDB082957A8AA00F60F70 /* MovieDetail.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -507,6 +514,7 @@
 			isa = PBXGroup;
 			children = (
 				A0CD850B29493EAE0093221F /* FilmViewModel.swift */,
+				A05EDB062957A42000F60F70 /* FilmInfoViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -756,6 +764,7 @@
 				A0CD850929493E4A0093221F /* TMDBSwift */,
 				A04824BA294A5FDC00CDA4BD /* Kingfisher */,
 				A0E38B1629535908003268FD /* YouTubePlayerKit */,
+				A05EDB0B2957B26200F60F70 /* TMDb */,
 			);
 			productName = Seans;
 			productReference = A0DD91092932224F00ECE810 /* Seans.app */;
@@ -789,6 +798,7 @@
 				A0CD850829493E4A0093221F /* XCRemoteSwiftPackageReference "TheMovieDatabaseSwiftWrapper" */,
 				A04824B9294A5FDC00CDA4BD /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				A0E38B1529535907003268FD /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
+				A05EDB0A2957B26200F60F70 /* XCRemoteSwiftPackageReference "TMDb" */,
 			);
 			productRefGroup = A0DD910A2932224F00ECE810 /* Products */;
 			projectDirPath = "";
@@ -828,6 +838,7 @@
 				A0DD915329337DE300ECE810 /* TextArea.swift in Sources */,
 				A0CD84FA294795C30093221F /* Category.swift in Sources */,
 				A04824D4294E6A7500CDA4BD /* ActorService.swift in Sources */,
+				A05EDB092957A8AA00F60F70 /* MovieDetail.swift in Sources */,
 				A04824B8294A5D4400CDA4BD /* FilmService.swift in Sources */,
 				A0CD85032948E5FB0093221F /* UserRowView.swift in Sources */,
 				A0F5CA2C29411BD8007E5F91 /* SnapCarousel.swift in Sources */,
@@ -858,6 +869,7 @@
 				A00612B8293FB3E200BB3413 /* Movie.swift in Sources */,
 				A0DD910F2932224F00ECE810 /* ContentView.swift in Sources */,
 				A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */,
+				A05EDB072957A42000F60F70 /* FilmInfoViewModel.swift in Sources */,
 				A00612A3293B807500BB3413 /* FilmSecondRowView.swift in Sources */,
 				A04824D2294E6A1200CDA4BD /* ActorDetail.swift in Sources */,
 				A0E38B0A2952539C003268FD /* ActorSearchView.swift in Sources */,
@@ -1081,6 +1093,14 @@
 				kind = branch;
 			};
 		};
+		A05EDB0A2957B26200F60F70 /* XCRemoteSwiftPackageReference "TMDb" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamayoung/TMDb.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		A0CD850829493E4A0093221F /* XCRemoteSwiftPackageReference "TheMovieDatabaseSwiftWrapper" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gkye/TheMovieDatabaseSwiftWrapper/";
@@ -1104,6 +1124,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A04824B9294A5FDC00CDA4BD /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		A05EDB0B2957B26200F60F70 /* TMDb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A05EDB0A2957B26200F60F70 /* XCRemoteSwiftPackageReference "TMDb" */;
+			productName = TMDb;
 		};
 		A0CD850929493E4A0093221F /* TMDBSwift */ = {
 			isa = XCSwiftPackageProductDependency;

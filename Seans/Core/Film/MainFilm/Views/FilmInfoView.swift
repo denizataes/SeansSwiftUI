@@ -14,7 +14,9 @@ struct FilmInfoView: View {
     @State private var pointted: Bool = false
     @Environment(\.presentationMode) var mode
     @StateObject var viewModel = FilmViewModel()
+    
     var movie: Movie
+    @ObservedObject var viewModel2 = FilmInfoViewModel()
     
     
     var body: some View {
@@ -69,6 +71,9 @@ struct FilmInfoView: View {
             .edgesIgnoringSafeArea(.all)
             .background(backgroundColor)
             .onAppear {
+                Task{
+                    await  viewModel2.fetchMovie(id: movie.id)
+                }
                 self.setAverageColor()
             }
             .navigationBarBackButtonHidden(true)
@@ -216,6 +221,7 @@ extension FilmInfoView{
                         ForEach(viewModel.collections){movie in
                             NavigationLink {
                                 FilmInfoView(movie: movie)
+
                             } label: {
                                 
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
@@ -303,7 +309,7 @@ extension FilmInfoView{
                             .bold()
                         
                         Text(movie.releaseDate)
-                            .font(.system(size: 16))
+                            .font(.system(size: 12))
                             .bold()
                             .padding(.trailing)
                             .padding(.trailing,5)
@@ -311,41 +317,34 @@ extension FilmInfoView{
                     }
                     .foregroundColor(.white)
                     
-//                    NavigationLink {
-//
-//                    } label: {
-//                        HStack{
-//                            Image(systemName: "play.circle")
-//                                .resizable()
-//                                .frame(width: 16,height: 16)
-//                                .foregroundColor(.white)
-//
-//
-//                            Text("Fragman İzle")
-//                                .font(.system(size: 10))
-//                                .bold()
-//                                .foregroundColor(.white)
-//
-//                        }
-//                        .frame(width:100 , height: 30)
-//                        .foregroundColor(.white)
-//                        .background(.red).opacity(0.9)
-//                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-//                    }
+                    HStack(spacing: 0){
+                        if(viewModel2.movie.runtime == 0)
+                        {
+                            ProgressView()
+                        }
+                        else if viewModel2.movie.runtime != nil{
+                            Image(systemName: "clock")
+                                .bold()
+                            
+                            Text("\(viewModel2.movie.runtime ?? 0) Dakika")
+                                .font(.system(size: 12))
+                                .bold()
+                                .padding(.trailing)
+                                .padding(.trailing,5)
+                                .padding(.leading, 5)
+                        }
+                            
+                    }
+                    .foregroundColor(.white)
+                    .animation(.easeInOut)
                     
+                    
+                    
+
+                    
+            
                     HStack{
-//                        ZStack{
-//                            Color(red: 245/255, green: 222/255, blue: 80/255)
-//                                .frame(width: 32,height:32 )
-//                                .clipShape(Circle())
-//
-//                            VStack{
-//                                Text("IMDb")
-//                                    .font(.system(size: 6))
-//                                    .bold()
-//                                    .foregroundColor(.black)
-//                            }
-//                        }
+                            
                         VStack{
                             HStack(spacing: 0){
                       
@@ -353,9 +352,9 @@ extension FilmInfoView{
                                 Text(String(format: "%.1f", movie.vote_average))
                                     .foregroundColor(.yellow)
                                     .bold()
-                                    .font(.system(size: 26))
+                                    .font(.system(size: 18))
                                 Text("/10")
-                                    .font(.system(size: 14))
+                                    .font(.system(size: 12))
                                     .foregroundColor(.white)
                                     .bold()
                             }
@@ -378,7 +377,7 @@ extension FilmInfoView{
                             HStack{
                                 Image(systemName: pointted ? "star.fill" : "star")
                                     .resizable()
-                                    .frame(width: 36,height: 36)
+                                    .frame(width: 24,height: 24)
                                     .foregroundColor(.yellow)
                                 HStack(spacing: 0){
                                     Text(pointted ? "9.8" : "")
@@ -394,11 +393,22 @@ extension FilmInfoView{
                             }
                             .frame(width: 80)
                         }
+                        
+                        if(viewModel2.movie.imdbID != nil && viewModel2.movie.imdbID != ""){
+                            Link(destination: URL(string: "https://www.imdb.com/title/\(viewModel2.movie.imdbID ?? "")")!) {
+                                Image("imdb")
+                                    .resizable()
+                                    .frame(width: 24,height: 24)
+                                    .scaledToFill()
+                                    .shadow(radius: 20)
+                            }
+                        }
                     }
 
                 }
                 .frame(height:180)
                 .padding(.leading)
+                .padding(.trailing)
                 Spacer()
                 
             }

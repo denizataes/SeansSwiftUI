@@ -34,6 +34,7 @@ struct ActorMoviesView: View {
                         ForEach(viewModel.actorMovies){movie in
                             NavigationLink {
                                 FilmInfoView(movie: movie)
+
                             } label: {
                                 
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))

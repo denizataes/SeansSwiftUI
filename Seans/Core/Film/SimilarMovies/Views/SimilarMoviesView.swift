@@ -26,8 +26,7 @@ struct SimilarMoviesView: View {
                     ForEach(viewModel.similarMovies){movie in
 
                         NavigationLink{
-                            FilmInfoView(movie: movie)
-                        }label: {
+                            FilmInfoView(movie: movie)                     }label: {
                             KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                                 .resizable()
                                 .scaledToFill()
