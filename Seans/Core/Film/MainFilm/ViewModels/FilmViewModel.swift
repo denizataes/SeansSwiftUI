@@ -35,12 +35,6 @@ class FilmViewModel: ObservableObject{
         }
     }
     
-    func fetchFilmTrailer(id: Int){
-        service.fetchFilmTrailers(id: id) { trailers in
-            self.trailers = trailers
-        }
-    }
-    
     func fetchCollection(id: Int)
     {
         service.fetchFilmCollections(id: id) { movies in

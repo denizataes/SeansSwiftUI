@@ -12,7 +12,7 @@ struct MovieDetail {
     var backdropPath: String?
   //  var belongsToCollection: JSONNull?
     var budget: Int?
-   // var genres: [Genre]?
+    var genres: [Genre]?
     var homepage: String?
     var id: Int?
     var imdbID: String?
@@ -32,7 +32,7 @@ struct MovieDetail {
 }
 
 // MARK: - Genre
-struct Genre: Codable {
+struct Genre: Codable, Identifiable {
     var id: Int?
     var name: String?
 }

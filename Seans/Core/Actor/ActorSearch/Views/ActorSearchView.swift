@@ -15,15 +15,21 @@ struct ActorSearchView: View {
 
     var body: some View {
   
-//        if(input != "" && viewModel.actors.count == 0)
-//        {
-//            HStack{
-//                Spacer()
-//                ProgressView()
-//                Spacer()
-//            }
-//        }
-//        else{
+        if(input == "")
+        {
+            ScrollView{
+                LazyVStack(spacing: 0){
+                    ForEach(viewModel.popularActors){ actorItem in
+                        NavigationLink {
+                            NewActorView(id: actorItem.id)
+                        } label: {
+                            ActorSearchRowView(actor: actorItem)
+                        }
+                    }
+                }
+        }
+        }
+        else{
             ScrollView{
                 LazyVStack(spacing: 0){
                     ForEach(viewModel.actors){ actorItem in
@@ -37,8 +43,7 @@ struct ActorSearchView: View {
                         viewModel.searchActors(query:input)
                     }
                 }
-                
-            //}
+            }
         }
         
     }

@@ -11,6 +11,22 @@ import TMDBSwift
 
 struct ActorService{
     
+    
+    func fetchPopularActors(completion: @escaping([Actor]) -> Void){
+        var actorList = [Actor]()
+        
+        PersonMDB.popular(page: 1, language: "tr") { clientReturn, person in
+            if let data = person{
+                data.forEach { pers in
+                    guard pers.profile_path != nil else {return}
+                    let personItem = Actor(id: pers.id, profile_path: pers.profile_path ?? "" ,name: pers.name ?? "")
+                    actorList.append(personItem)
+                }
+            }
+            completion(actorList)
+        }
+    }
+    
     func convertDate(dateString: String?) -> String{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-DD"

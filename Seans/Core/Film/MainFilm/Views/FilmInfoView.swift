@@ -29,39 +29,15 @@ struct FilmInfoView: View {
                         VStack(alignment: .center){
                             navbar
                             Spacer()
-                            VStack{
-                             
-                                filmHeader
-      
-                                if viewModel.trailers.count != 0 {
-                                    trailers
-                                }
-                                if(movie.movieDescription != ""){
-                                    filmGeneralInfo
-                                }
-                                    
-                                
-                            }
-                            .onAppear{
-                                viewModel.fetchFilmTrailer(id: movie.id)
-                            }
-                            .background(.black.opacity(0.65))
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                            .frame(minHeight: 0, maxHeight: UIScreen.main.bounds.height)
+                            
+                            filmInfo
+                   
                             actors
                             
-                           // similarMovies
+                            similarMovies
                             
                             reviews
                             
-//                            VStack{
-//                                if viewModel.collections.count > 0{
-//                                    collections
-//                                }
-//                            }
-//                            .onAppear{
-//                                viewModel.fetchCollection(id: movie.id)
-//                            }
                             Spacer()
                         }
                         .padding()
@@ -76,6 +52,7 @@ struct FilmInfoView: View {
                 }
                 self.setAverageColor()
             }
+            .animation(.interpolatingSpring(mass: 3.0,stiffness: 100.0,damping: 120,initialVelocity: 0))
             .navigationBarBackButtonHidden(true)
 
 
@@ -108,19 +85,6 @@ extension FilmInfoView{
                 }
 
                 Spacer()
-                
-                 NavigationLink {
-                     SimilarMoviesView(id: movie.id)
-                    } label: {
-                        VStack{
-                            Image(systemName: "film.stack")
-                                .resizable()
-                                .frame(width: 18,height: 18)
-                                .bold()
-                            Text("Benzer Filmler")
-                                .font(.system(size: 10))
-                        }
-                    }
                 
                 Button {
                         
@@ -235,26 +199,12 @@ extension FilmInfoView{
                 }
               
             }
-            .animation(.easeInOut)
             .padding()
     }
         
         
     
     var filmBackground: some View{
-//        VStack(spacing: 0){
-//            Image("godfather")
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .opacity(0.2)
-//            Image("godfather")
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .opacity(0.2)
-//        }
-        
-        
-        
         GeometryReader{proxy in
             let size = proxy.size
             
@@ -336,7 +286,7 @@ extension FilmInfoView{
                             
                     }
                     .foregroundColor(.white)
-                    .animation(.easeInOut)
+                  //  .animation(.easeInOut)
                     
                     
                     
@@ -369,7 +319,7 @@ extension FilmInfoView{
                                     .foregroundColor(.white)
                                 
                             }
-                        }
+                        }.frame(width: 50)
                         
                         Button {
                             pointted.toggle()
@@ -420,22 +370,6 @@ extension FilmInfoView{
         
     }
     
-    var trailers: some View{
-        ScrollView(.horizontal,showsIndicators: false){
-            HStack(spacing: 10){
-                ForEach(viewModel.trailers) { trailer in
-                    
-                    VideoView(videoID: trailer.key ?? "")
-                        .frame(width: viewModel.trailers.count == 1 ? 320 : 200,height: 150)
-                        .cornerRadius(12)
-                        .shadow(radius: 10)
-                }
-            }
-            
-        }
-        .padding()
-    }
-    
     var filmGeneralInfo: some View{
         VStack {
            
@@ -468,7 +402,7 @@ extension FilmInfoView{
             }
             .foregroundColor(.white)
         }
-        .animation(.interpolatingSpring(mass: 3.0,stiffness: 100.0,damping: 120,initialVelocity: 0))
+       // .animation(.interpolatingSpring(mass: 3.0,stiffness: 100.0,damping: 120,initialVelocity: 0))
         
     }
     
@@ -508,6 +442,57 @@ extension FilmInfoView{
     
     var actors: some View{
         ActorRowView(id: movie.id)
+    }
+    
+    var similarMovies: some View{
+        SimilarMoviesView(id: movie.id)
+    }
+    
+    var filmInfo: some View{
+        VStack{
+         
+            filmHeader
+            if(viewModel2.movie.genres != nil)
+            {
+                if viewModel2.movie.genres!.count > 0{
+                    ScrollView(.horizontal,showsIndicators: false){
+                        HStack(spacing: 10){
+                            ForEach(viewModel2.movie.genres!) { genre in
+                                Button {
+                                    
+                                } label: {
+                                    Text(genre.name ?? "")
+                                        .font(.system(size: 10))
+                                        .foregroundColor(.white)
+                                        .bold()
+                                        .padding(8)
+                                }
+                                .shadow(radius: 10)
+                                .background(Capsule().stroke(lineWidth: 2).foregroundColor(.yellow).opacity(0.8))
+                                
+                            }
+                        }
+                        .padding(.leading,20)
+                        .padding(.trailing)
+                        .padding(.top)
+                        .padding(.bottom,2)
+                    }
+                }
+            }
+
+            
+
+            TrailersView(id: movie.id)
+            
+            if(movie.movieDescription != ""){
+                filmGeneralInfo
+            }
+                
+        
+        }
+        .background(.black.opacity(0.65))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .frame(minHeight: 0, maxHeight: UIScreen.main.bounds.height)
     }
 }
 

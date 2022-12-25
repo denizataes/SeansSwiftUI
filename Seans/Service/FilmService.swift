@@ -7,15 +7,14 @@
 
 import Foundation
 import TMDBSwift
+import TMDb
 
 struct FilmService{
     init()
     {
         TMDBConfig.apikey = "066cd92637346c12593cd4a8543c8fe2"
     }
-    
 
-    
     func fetchPopularMovies(completion: @escaping([Movie]) -> Void){
    
         var movieList = [Movie]()
@@ -231,7 +230,5 @@ struct FilmService{
                 })
             }
         }
-        
-        
     }
 }
