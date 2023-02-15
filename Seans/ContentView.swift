@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @AppStorage("log_status") var logStatus: Bool = false
 
     var body: some View {
 
-        MainTabView()
+        if logStatus{
+            MainTabView()
+        }
+        else{
+            LoginView()
+        }
     }
 }
 

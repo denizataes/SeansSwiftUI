@@ -12,6 +12,8 @@ struct ProfileView: View {
     @Namespace var animation
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
     @State var show = false
+    @AppStorage("log_status") var logStatus: Bool = false
+
     var socialMedia = ["instagram","twitter","tiktok","youtube", "snapchat"]
     var body: some View {
         ScrollView(showsIndicators: false){
@@ -42,6 +44,23 @@ struct ProfileView: View {
             }
             .padding()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    logout()
+                } label: {
+                    Text("Çıkış Yap")
+                        .foregroundColor(Color(.systemRed))
+                        .bold()
+                }
+
+                    
+            }
+        }
+    }
+    
+    func logout(){
+        logStatus = false
     }
 }
 

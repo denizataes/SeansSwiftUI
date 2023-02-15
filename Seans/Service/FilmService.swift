@@ -124,8 +124,7 @@ struct FilmService{
         )
         return formatted ?? ""
     }
-    
-    
+        
     func getActorsWithMovieID(with id: Int, completion: @escaping ([Actor]?) -> Void){
         var actorList = [Actor]()
         MovieMDB.credits(movieID: id) { clientReturn, credits in
