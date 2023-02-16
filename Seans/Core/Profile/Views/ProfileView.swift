@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseFirestoreSwift
+import FirebaseAuth
 
 struct ProfileView: View {
     @Environment(\.presentationMode) var mode
@@ -13,6 +16,9 @@ struct ProfileView: View {
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
     @State var show = false
     @AppStorage("log_status") var logStatus: Bool = false
+    @AppStorage("user_profile_url") var profileURL: URL?
+    @AppStorage("user_name") var userNameStored: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
 
     var socialMedia = ["instagram","twitter","tiktok","youtube", "snapchat"]
     var body: some View {
@@ -48,6 +54,7 @@ struct ProfileView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     logout()
+                
                 } label: {
                     Text("Çıkış Yap")
                         .foregroundColor(Color(.systemRed))
@@ -60,7 +67,11 @@ struct ProfileView: View {
     }
     
     func logout(){
+        try? Auth.auth().signOut()
         logStatus = false
+        userUID = ""
+        userNameStored = ""
+        profileURL = nil
     }
 }
 
@@ -105,7 +116,7 @@ extension ProfileView{
                         .font(.system(size: 20))
 
                 }
-                Text("@denizataes")
+                Text(userNameStored)
                     .font(.footnote)
                     .foregroundColor(.gray)
                 

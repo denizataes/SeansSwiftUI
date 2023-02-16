@@ -14,11 +14,8 @@ struct LoginView: View {
     
     // MARK: View Properties
     @State var createAccount: Bool = false
-    @State var showError: Bool = false
-    @State var errorMessage: String = ""
-    @State var isLoading: Bool = false
     // MARK: App Storage
-    @AppStorage("log_status") var logStatus: Bool = false
+    @ObservedObject var viewModel = LoginViewModel()
     
     var body: some View {
         VStack(alignment: .leading,spacing: 12){
@@ -146,21 +143,27 @@ struct LoginView: View {
             RegisterView()
         }
         .overlay(content: {
-            LoadingView(show: $isLoading)
+            LoadingView(show: $viewModel.isLoading)
         })
+        // MARK: Displaying Alert
+        .alert(viewModel.errorMessage, isPresented: $viewModel.showError) {
+        }
         
         
         
         //}
     }
     func login(){
-        isLoading = true
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            logStatus = true
-        }
-        
-        
+        viewModel.login(email: emailID, password: password)
+    }
+    
+    // MARK: Displaying Error VIA Alert
+    func setError(_ error: Error)async{
+        // MARK: UI Must be updated on main thread
+        await MainActor.run(body: {
+            viewModel.errorMessage = error.localizedDescription
+            viewModel.showError.toggle()
+        })
     }
     
     struct LoginView_Previews: PreviewProvider {
