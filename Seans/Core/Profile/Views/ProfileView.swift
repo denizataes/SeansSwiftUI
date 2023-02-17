@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import Kingfisher
+import GoogleSignIn
+import GoogleSignInSwift
 import Firebase
-import FirebaseFirestoreSwift
-import FirebaseAuth
 
 struct ProfileView: View {
     @Environment(\.presentationMode) var mode
@@ -87,7 +88,8 @@ extension ProfileView{
                     Spacer()
                     VStack{
                         GeometryReader { geometry in
-                            Image("profile")
+                            KFImage(profileURL)
+//                            Image("profile")
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 100, height: 100)

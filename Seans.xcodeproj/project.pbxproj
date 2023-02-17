@@ -34,6 +34,10 @@
 		A018D846299EC51D00AC12FB /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D845299EC51D00AC12FB /* StorageManager.swift */; };
 		A018D848299EC64300AC12FB /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D847299EC64300AC12FB /* RegisterViewModel.swift */; };
 		A018D84A299EE0DE00AC12FB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D849299EE0DE00AC12FB /* LoginViewModel.swift */; };
+		A018D85229A0081800AC12FB /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85129A0081800AC12FB /* GoogleSignInButton.swift */; };
+		A018D85429A00E6E00AC12FB /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85329A00E6E00AC12FB /* Application.swift */; };
+		A018D85729A0179600AC12FB /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A018D85629A0179600AC12FB /* GoogleSignIn */; };
+		A018D85929A0179600AC12FB /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A018D85829A0179600AC12FB /* GoogleSignInSwift */; };
 		A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF2C293676CA00443F95 /* CircularLayout.swift */; };
 		A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF302939615000443F95 /* TweetFilterViewModel.swift */; };
 		A04824B8294A5D4400CDA4BD /* FilmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824B7294A5D4400CDA4BD /* FilmService.swift */; };
@@ -119,6 +123,9 @@
 		A018D845299EC51D00AC12FB /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		A018D847299EC64300AC12FB /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		A018D849299EE0DE00AC12FB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		A018D84B29A0061700AC12FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A018D85129A0081800AC12FB /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
+		A018D85329A00E6E00AC12FB /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		A02AEF2C293676CA00443F95 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
 		A02AEF302939615000443F95 /* TweetFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetFilterViewModel.swift; sourceTree = "<group>"; };
 		A04824B7294A5D4400CDA4BD /* FilmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmService.swift; sourceTree = "<group>"; };
@@ -188,10 +195,12 @@
 				A018D83F299EC14A00AC12FB /* FirebaseStorage in Frameworks */,
 				A018D837299EC14A00AC12FB /* FirebaseAuth in Frameworks */,
 				A0CD850A29493E4A0093221F /* TMDBSwift in Frameworks */,
+				A018D85729A0179600AC12FB /* GoogleSignIn in Frameworks */,
 				A0E38B1729535908003268FD /* YouTubePlayerKit in Frameworks */,
 				A05EDB0C2957B26200F60F70 /* TMDb in Frameworks */,
 				A018D83B299EC14A00AC12FB /* FirebaseFirestore in Frameworks */,
 				A018D83D299EC14A00AC12FB /* FirebaseFirestoreSwift in Frameworks */,
+				A018D85929A0179600AC12FB /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +494,7 @@
 		A0DD910B2932224F00ECE810 /* Seans */ = {
 			isa = PBXGroup;
 			children = (
+				A018D84B29A0061700AC12FB /* Info.plist */,
 				A018D842299EC50C00AC12FB /* Managers */,
 				A018D833299EC0EA00AC12FB /* GoogleService-Info.plist */,
 				A0DD911F2932235100ECE810 /* Core */,
@@ -518,6 +528,8 @@
 				A018D824299D73E300AC12FB /* View_Extensions.swift */,
 				A018D82B299D93B000AC12FB /* LoadingView.swift */,
 				A018D82F299E9A3A00AC12FB /* SocialMediaType.swift */,
+				A018D85129A0081800AC12FB /* GoogleSignInButton.swift */,
+				A018D85329A00E6E00AC12FB /* Application.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -965,6 +977,8 @@
 				A018D83A299EC14A00AC12FB /* FirebaseFirestore */,
 				A018D83C299EC14A00AC12FB /* FirebaseFirestoreSwift */,
 				A018D83E299EC14A00AC12FB /* FirebaseStorage */,
+				A018D85629A0179600AC12FB /* GoogleSignIn */,
+				A018D85829A0179600AC12FB /* GoogleSignInSwift */,
 			);
 			productName = Seans;
 			productReference = A0DD91092932224F00ECE810 /* Seans.app */;
@@ -1000,6 +1014,7 @@
 				A0E38B1529535907003268FD /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
 				A05EDB0A2957B26200F60F70 /* XCRemoteSwiftPackageReference "TMDb" */,
 				A018D835299EC14A00AC12FB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				A018D85529A0179600AC12FB /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = A0DD910A2932224F00ECE810 /* Products */;
 			projectDirPath = "";
@@ -1052,6 +1067,7 @@
 				A0CD85052948E72A0093221F /* FilmSearchRowView.swift in Sources */,
 				A018D841299EC30200AC12FB /* User.swift in Sources */,
 				A00612BA293FB52A00BB3413 /* Home.swift in Sources */,
+				A018D85229A0081800AC12FB /* GoogleSignInButton.swift in Sources */,
 				A018D82C299D93B000AC12FB /* LoadingView.swift in Sources */,
 				A018D846299EC51D00AC12FB /* StorageManager.swift in Sources */,
 				A0E38B122953529E003268FD /* Videos.swift in Sources */,
@@ -1084,6 +1100,7 @@
 				A0CD84FE2948E40F0093221F /* SearchBar.swift in Sources */,
 				A04824CE294E5F9D00CDA4BD /* BlurView.swift in Sources */,
 				A00612B8293FB3E200BB3413 /* Movie.swift in Sources */,
+				A018D85429A00E6E00AC12FB /* Application.swift in Sources */,
 				A0A2C95329587D7B0011ECF4 /* SelectedCategoryViewModel.swift in Sources */,
 				A0DD910F2932224F00ECE810 /* ContentView.swift in Sources */,
 				A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */,
@@ -1159,7 +1176,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1213,7 +1230,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1234,6 +1251,7 @@
 				DEVELOPMENT_TEAM = 68KQTL44VS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Seans/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1263,6 +1281,7 @@
 				DEVELOPMENT_TEAM = 68KQTL44VS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Seans/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1311,6 +1330,15 @@
 			requirement = {
 				branch = master;
 				kind = branch;
+			};
+		};
+		A018D85529A0179600AC12FB /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = versionRange;
+				maximumVersion = 7.0.0;
+				minimumVersion = 6.0.0;
 			};
 		};
 		A04824B9294A5FDC00CDA4BD /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -1372,6 +1400,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A018D835299EC14A00AC12FB /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		A018D85629A0179600AC12FB /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A018D85529A0179600AC12FB /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		A018D85829A0179600AC12FB /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A018D85529A0179600AC12FB /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 		A04824BA294A5FDC00CDA4BD /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

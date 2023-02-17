@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import GoogleSignInSwift
+import GoogleSignIn
 
 struct LoginView: View {
     
@@ -100,9 +102,13 @@ struct LoginView: View {
             }
             .padding(.top, 10)
             
-            
+
+          
+        
+    
             Button {
-                
+                viewModel.signUpWithGoogle()
+
             } label: {
                 // MARK: Login Button
                 HStack{
@@ -113,9 +119,13 @@ struct LoginView: View {
                         .font(.title3)
                         .foregroundColor(.white)
                         .hAlign(.center)
-                    
+
                 }
                 .fillView(Color(.darkGray))
+//                .overlay{
+//                    GoogleSignInButton
+//                        .blendMode(.overlay)
+//                }
             }
             .padding(.top, 10)
             

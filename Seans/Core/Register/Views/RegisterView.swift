@@ -197,7 +197,6 @@ struct RegisterView: View {
                                 userProfilePicData = imageData
                             })
                         }catch{
-                            
                         }
                     }
                 }

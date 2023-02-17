@@ -27,14 +27,16 @@ class RegisterViewModel: ObservableObject{
             guard let strongSelf = self else {return}
             switch result{
             case .success():
-                strongSelf.isLoading = false
-                
                 guard let userUID = Auth.auth().currentUser?.uid else{return}
+                strongSelf.dbManager.getUserProfileImageURL(with: userUID) { url in
+                    strongSelf.logStatus = true
+                    strongSelf.userUID = userUID
+                    strongSelf.userNameStored = user.userName
+                    strongSelf.profileURL = URL(string: url)
+                    strongSelf.isLoading = false
+                }
                 
-                strongSelf.logStatus = true
-                strongSelf.userUID = userUID
-                strongSelf.userNameStored = user.userName
-                strongSelf.profileURL = user.userProfileURL == "" ? nil : URL(string: user.userProfileURL)
+
                 
             case .failure(let error):
                 strongSelf.isLoading = false
