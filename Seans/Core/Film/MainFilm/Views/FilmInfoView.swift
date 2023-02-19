@@ -14,6 +14,7 @@ struct FilmInfoView: View {
     @State private var pointted: Bool = false
     @Environment(\.presentationMode) var mode
     @StateObject var viewModel = FilmViewModel()
+    @State private var selectMovie: Bool = false
     
     var movie: Movie
     @ObservedObject var viewModel2 = FilmInfoViewModel()
@@ -54,6 +55,11 @@ struct FilmInfoView: View {
             }
             .animation(.interpolatingSpring(mass: 3.0,stiffness: 100.0,damping: 120,initialVelocity: 0))
             .navigationBarBackButtonHidden(true)
+            .sheet(isPresented: $selectMovie) {
+                CreateNewPost(onPost: { post in
+                    
+                }, selectedMovie: Movie(id: viewModel2.movie.id ?? 0, movieTitle: movie.movieTitle, releaseDate: movie.releaseDate, movieTime: ("\(viewModel2.movie.runtime ?? 0) Dakika"), movieDescription: viewModel2.movie.overview ?? "", artwork: movie.artwork,vote_average: movie.vote_average))
+            }
 
 
     }
@@ -87,7 +93,7 @@ extension FilmInfoView{
                 Spacer()
                 
                 Button {
-                        
+                    selectMovie.toggle()
                     } label: {
                         VStack{
                             Image(systemName: "plus")

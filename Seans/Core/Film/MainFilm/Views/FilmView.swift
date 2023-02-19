@@ -11,9 +11,8 @@ struct FilmView: View {
     var body: some View {
             VStack{
                 Home()
-                    .padding(.top,40)
             }
-            .edgesIgnoringSafeArea(.all)
+            
         
             
     }

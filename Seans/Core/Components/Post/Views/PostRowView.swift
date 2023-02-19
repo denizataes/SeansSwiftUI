@@ -6,12 +6,52 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct PostRowView: View {
+    var post: Post
     @State private var isLiked = false
+    let currentDate = Date()
+    let formatter = DateFormatter()
+    
+    init(post: Post) {
+        self.post = post
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        formatter.timeZone = TimeZone.current
+    }
+    
+
+    
     var body: some View {
      //   ZStack{
            // background
+        
+        GeometryReader{proxy in
+            let size = proxy.size
+
+
+
+            KFImage(URL(string: "\(post.moviePhoto)" ))
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: size.width, height: size.height)
+                .clipped()
+                .shadow(radius: 10)
+                .cornerRadius(10)
+               // .tag(index)
+
+            // Custom Gradient
+            LinearGradient(colors: [
+
+                .black.opacity(0.8)
+            ], startPoint: .leading, endPoint: .trailing)
+
+            // Blurred Overlay
+            Rectangle()
+                .fill(.ultraThinMaterial.opacity(0.8))
+                .cornerRadius(10)
+
+
             VStack(alignment: .leading){
                 HStack{
                     leftSide
@@ -19,19 +59,31 @@ struct PostRowView: View {
                 }
                 buttons
             }
-           
-            Divider()
-        //}.frame(maxWidth: .infinity, maxHeight: 200)
-    }
-}
+            .padding()
 
-struct PostRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostRowView()
-            //.previewLayout(.sizeThatFits)
+
+            Divider()
+        }
+        .frame(height: 250)
+        
+        
+
+       
+        
+        
+        
+
         
     }
 }
+
+//struct PostRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PostRowView()
+//            //.previewLayout(.sizeThatFits)
+//
+//    }
+//}
 
 extension PostRowView{
     
@@ -39,7 +91,7 @@ extension PostRowView{
         GeometryReader{proxy in
             let size = proxy.size
             
-            Image("joker")
+            KFImage(URL(string: "\(post.moviePhoto)" ))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size.width, height: size.height)
@@ -64,130 +116,28 @@ extension PostRowView{
     var leftSide: some View{
         
         HStack(alignment: .top) {
-            VStack{
-                NavigationLink {
-                    //ActorView()
-                    
-                } label: {
-                    Image("actor1")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 32,height: 32)
-                        .clipShape(Circle())
-                }
-                Text("Joaquin Phoenix")
-                    .font(.system(size: 5))
-                    .foregroundColor(.gray)
-                    .italic()
-                NavigationLink {
-                   // ActorView()
-                    
-                } label: {
-                    Image("actor2")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 32,height: 32)
-                        .clipShape(Circle())
-                }
-                Text("Robert De Niro")
-                    .font(.system(size: 5))
-                    .foregroundColor(.gray)
-                    .italic()
-                NavigationLink {
-                   // ActorView()
-                    
-                } label: {
-                    Image("actor3")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 32,height: 32)
-                        .clipShape(Circle())
-                }
-                Text("Zazie Beetz")
-                    .font(.system(size: 5))
-                    .foregroundColor(.gray)
-                    .italic()
-                Spacer()
-                ZStack{
-                    Color(red: 245/255, green: 222/255, blue: 80/255)
-                        .frame(width: 32,height:32 )
-                        .clipShape(Circle())
-                    VStack{
-                        Text("IMDb")
-                            .font(.system(size: 6))
-                            .bold()
-                            .foregroundColor(.black)
-                        Text("8.3")
-                            .foregroundColor(.black)
-                            .font(.system(size: 12))
-                    }
-                }
-                
-//                ScrollView(.vertical,showsIndicators: false){
-//                    VStack{
-//                        ZStack{
-//                            Color(red: 245/255, green: 222/255, blue: 80/255)
-//                                .frame(width: 32,height:32 )
-//                                .clipShape(Circle())
-//                            VStack{
-//                                Text("IMDb")
-//                                    .font(.system(size: 6))
-//                                    .bold()
-//                                Text("8.3")
-//                                    .foregroundColor(.black)
-//                                    .font(.system(size: 12))
-//                            }
-//                        }
-//                        Divider()
-//                        ZStack{
-//                            Color(red: 169/255, green: 66/255, blue: 66/255)
-//                                .frame(width: 32,height:32)
-//                                .clipShape(Circle())
-//                            VStack{
-//                                Text("RT")
-//                                    .font(.system(size: 6))
-//                                    .bold()
-//                                Text("68%")
-//                                    .font(.system(size: 12))
-//                            }
-//                            .foregroundColor(.white)
-//                        }
-//
-//                        Divider()
-//
-//                    }
-//                }
-//                .frame(maxWidth: 1,maxHeight: 48)
-                
-                
-                
-                
-                
-                
-                
-            }
-            
             VStack(alignment: .leading){
                 NavigationLink {
                    // FilmInfoView()
                     
                 } label: {
-                    Image("joker")
+                    KFImage(URL(string: "\(post.moviePhoto)" ))
                         .resizable()
                         .frame(width:100 ,height: 140)
                         .cornerRadius(10)
+                        .shadow(radius: 10)
                         
                 }
                 
                 VStack(alignment: .leading,spacing: 4){
-                    Text("Joker")
+                    Text(post.movieName)
                         .font(.headline)
-                    Text("4 Ekim 2019")
-                        .font(.system(size: 12))
-                        .foregroundColor(.gray)
-                    Text("2 Saat 2 dakika")
-                        .font(.system(size: 10))
-                        .foregroundColor(.gray)
+//                    Text("4 Ekim 2019")
+//                        .font(.system(size: 12))
+//                        .foregroundColor(.gray)
+//                    Text("2 Saat 2 dakika")
+//                        .font(.system(size: 10))
+//                        .foregroundColor(.gray)
 //                    ScrollView(.vertical,showsIndicators: false){
 //                        VStack(alignment: .leading){
 //                            //ForEach(0..<8) { index in
@@ -221,18 +171,18 @@ extension PostRowView{
                     ProfileView()
                         
                 } label: {
-                    Image("profile")
+                    KFImage(post.userProfileURL)
                         .resizable()
                         .scaledToFill()
                         .frame(width: 32,height: 32)
                         .clipShape(Circle())
                     VStack(alignment: .leading){
-                        Text("Deniz Ata EŞ")
+                        Text("\(post.userFirstName) \(post.userLastName)")
                             .font(.system(size: 12))
                             .bold()
                             .foregroundColor(Color("mode"))
                         
-                        Text("@denizataes")
+                        Text(post.userName)
                             .foregroundColor(.gray)
                             .font(.caption)
                     }
@@ -242,12 +192,36 @@ extension PostRowView{
                 
 
                 Spacer()
-                Text("2sa")
-                    .foregroundColor(.gray)
-                    .font(.caption)
+                
+                if let date = formatter.date(from: post.publishedDate.description) {
+                    let interval = Date().timeIntervalSince(date)
+                    
+                    if interval < 3600 { // dakika hesaplama
+                        let minutesAgo = Int(interval / 60)
+                        Text("\(minutesAgo) dakika önce")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    } else if interval < 86400 { // saat hesaplama
+                        let hoursAgo = Int(interval / 3600)
+                        Text("\(hoursAgo) saat önce")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    } else { // gün hesaplama
+                        let daysAgo = Int(interval / 86400)
+                        Text("\(daysAgo) gün önce")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    }
+                } else {
+                    Text("Geçersiz tarih")
+                        .foregroundColor(.gray)
+                        .font(.caption)
+                }
+
+
             }
             
-            Text("Gerçekten son yıllarda izlediğim en iyisiydi. Joaquin sen bir efsanesin ! 👏🏻")
+            Text(post.text)
                 .font(.footnote)
             Spacer()
         }
@@ -265,7 +239,7 @@ extension PostRowView{
                     Image(systemName: "message")
                         .font(.subheadline)
                         .foregroundColor(.green)
-                    Text("3")
+                    Text(post.repliesPost.count.description)
                         .font(.caption2)
                         .foregroundColor(.gray)
                 }
@@ -281,7 +255,7 @@ extension PostRowView{
                     Image(systemName: isLiked  ? "heart.fill" : "heart")
                         .foregroundColor(.red)
                         .font(.subheadline)
-                    Text("61")
+                    Text(post.likedIDs.count.description)
                         .font(.caption2)
                         .foregroundColor(.gray)
 

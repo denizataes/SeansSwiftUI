@@ -29,23 +29,23 @@ struct MainTabView: View {
                     Image(systemName: "magnifyingglass")
                 }.tag(1)
             
-            PostView()
-            .onTapGesture {
-                self.selectedIndex = 2
-            }
-            .tabItem{
-                Image(systemName: "plus")
-            }.tag(2)
+//            PostView()
+//            .onTapGesture {
+//                self.selectedIndex = 2
+//            }
+//            .tabItem{
+//                Image(systemName: "plus")
+//            }.tag(2)
         
             
-                FilmView()
+                Home()
                 
                 .onTapGesture {
                     self.selectedIndex = 3
                 }
                 .tabItem{
                     Image(systemName: "film")
-                }.tag(3)
+                }.tag(2)
             
             
             
@@ -55,7 +55,7 @@ struct MainTabView: View {
             }
             .tabItem{
                 Image(systemName: "person.crop.circle")
-            }.tag(4)
+            }.tag(3)
             
      
         }

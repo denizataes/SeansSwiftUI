@@ -10,6 +10,8 @@ import Kingfisher
 
 struct FilmSearchRowView: View {
     var movie: Movie = Movie(id:1234, movieTitle: "Ad Astra", releaseDate: "1972", movieTime: "2 sa 4 dk", movieDescription: "mesela", artwork: "Movie1",vote_average: 12,vote_count: 12)
+    @State private var selectedMovie: Movie? = nil
+
     var body: some View {
         ZStack{
             

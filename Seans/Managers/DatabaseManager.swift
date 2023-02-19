@@ -226,55 +226,75 @@ final class DatabaseManager {
         }
     }
     
-//    func signInWithGoogle(){
-//
-//        // 1
-//        if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-//            GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
-//                authenticateUser(for: user, with: error)
-//            }
-//        } else {
-//            // 2
-//            guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-//
-//            // 3
-//            let configuration = GIDConfiguration(clientID: clientID)
-//
-//            // 4
-//            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-//            guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
-//
-//            // 5
-//            GIDSignIn.sharedInstance.signIn(with: configuration, presenting: rootViewController) { [unowned self] user, error in
-//                authenticateUser(for: user, with: error)
-//            }
-//        }
-//
-//    }
-//
-//     func authenticateUser(for user: GIDGoogleUser?, with error: Error?) {
-//      // 1
-//      if let error = error {
-//        print(error.localizedDescription)
-//        return
-//      }
-//
-//      // 2
-//      guard let authentication = user?.authentication, let idToken = authentication.idToken else { return }
-//
-//      let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
-//
-//      // 3
-//      Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
-//        if let error = error {
-//          print(error.localizedDescription)
-//        } else {
-//
-//        }
-//      }
-//    }
+    
+    func createPost(_ post: Post, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let collection = Firestore.firestore().collection("Posts")
+            var newPost = post
+            newPost.id = nil // Ignore the id field if it's set
+            try collection.addDocument(from: newPost) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        } catch {
+            completion(.failure(error))
+        }
+    }
 
     
+    
+    func fetchPosts(withUid uid: String, completion: @escaping ([Post]?) -> Void) {
+        let query = Firestore.firestore().collection("Posts").whereField("userUID", isEqualTo: uid)
+        
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching posts for user with UID \(uid): \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            guard let snapshot = snapshot else {
+                completion(nil)
+                return
+            }
+            
+            let posts = snapshot.documents.compactMap { document -> Post? in
+                do {
+                    return try document.data(as: Post.self)
+                } catch {
+                    print("Error decoding post with ID \(document.documentID): \(error.localizedDescription)")
+                    return nil
+                }
+            }
+            
+            completion(posts)
+        }
+    }
+    
+    func fetchAllPosts(completion: @escaping ([Post]?) -> Void) {
+        Firestore.firestore().collection("Posts")
+            .getDocuments { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    completion(nil)
+                    return
+                }
+                
+                let posts = snapshot.documents.compactMap { document -> Post? in
+                    try? document.data(as: Post.self)
+                }
+                print(posts)
+                completion(posts)
+            }
+    }
+
+
+    
+
+
+
     
     
 }

@@ -32,8 +32,10 @@ struct FilmSecondRowView: View {
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 100, height: 130)
-                                    .cornerRadius(15)
+                                    .frame(width: 100, height: 150)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                                
                             }
                         }
                     case .popular:
@@ -47,8 +49,9 @@ struct FilmSecondRowView: View {
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 100, height: 130)
-                                    .cornerRadius(15)
+                                    .frame(width: 100, height: 150)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
                             }
                         }
                     case .topRated:
@@ -62,8 +65,9 @@ struct FilmSecondRowView: View {
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 100, height: 130)
-                                    .cornerRadius(15)
+                                    .frame(width: 100, height: 150)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
                             }
                         }
                     case .upComing:
@@ -77,8 +81,9 @@ struct FilmSecondRowView: View {
                                 KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 100, height: 130)
-                                    .cornerRadius(15)
+                                    .frame(width: 100, height: 150)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
                             }
                         }
                         

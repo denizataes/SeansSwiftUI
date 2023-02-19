@@ -34,10 +34,16 @@
 		A018D846299EC51D00AC12FB /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D845299EC51D00AC12FB /* StorageManager.swift */; };
 		A018D848299EC64300AC12FB /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D847299EC64300AC12FB /* RegisterViewModel.swift */; };
 		A018D84A299EE0DE00AC12FB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D849299EE0DE00AC12FB /* LoginViewModel.swift */; };
-		A018D85229A0081800AC12FB /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85129A0081800AC12FB /* GoogleSignInButton.swift */; };
 		A018D85429A00E6E00AC12FB /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85329A00E6E00AC12FB /* Application.swift */; };
 		A018D85729A0179600AC12FB /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A018D85629A0179600AC12FB /* GoogleSignIn */; };
 		A018D85929A0179600AC12FB /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A018D85829A0179600AC12FB /* GoogleSignInSwift */; };
+		A018D85B29A158F500AC12FB /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85A29A158F500AC12FB /* ProfileViewModel.swift */; };
+		A018D85E29A20C3000AC12FB /* CreateNewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85D29A20C3000AC12FB /* CreateNewPost.swift */; };
+		A018D86029A20C5D00AC12FB /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D85F29A20C5D00AC12FB /* Post.swift */; };
+		A018D86529A2140600AC12FB /* FilmSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D86429A2140600AC12FB /* FilmSelectorViewModel.swift */; };
+		A018D86729A2141300AC12FB /* FilmSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D86629A2141300AC12FB /* FilmSelectorView.swift */; };
+		A018D86B29A2976E00AC12FB /* CreateNewPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D86A29A2976E00AC12FB /* CreateNewPostViewModel.swift */; };
+		A018D86D29A2A56000AC12FB /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A018D86C29A2A56000AC12FB /* FeedViewModel.swift */; };
 		A02AEF2D293676CA00443F95 /* CircularLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF2C293676CA00443F95 /* CircularLayout.swift */; };
 		A02AEF312939615000443F95 /* TweetFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02AEF302939615000443F95 /* TweetFilterViewModel.swift */; };
 		A04824B8294A5D4400CDA4BD /* FilmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04824B7294A5D4400CDA4BD /* FilmService.swift */; };
@@ -124,8 +130,14 @@
 		A018D847299EC64300AC12FB /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		A018D849299EE0DE00AC12FB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A018D84B29A0061700AC12FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		A018D85129A0081800AC12FB /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
 		A018D85329A00E6E00AC12FB /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
+		A018D85A29A158F500AC12FB /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		A018D85D29A20C3000AC12FB /* CreateNewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPost.swift; sourceTree = "<group>"; };
+		A018D85F29A20C5D00AC12FB /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		A018D86429A2140600AC12FB /* FilmSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmSelectorViewModel.swift; sourceTree = "<group>"; };
+		A018D86629A2141300AC12FB /* FilmSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmSelectorView.swift; sourceTree = "<group>"; };
+		A018D86A29A2976E00AC12FB /* CreateNewPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPostViewModel.swift; sourceTree = "<group>"; };
+		A018D86C29A2A56000AC12FB /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		A02AEF2C293676CA00443F95 /* CircularLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularLayout.swift; sourceTree = "<group>"; };
 		A02AEF302939615000443F95 /* TweetFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetFilterViewModel.swift; sourceTree = "<group>"; };
 		A04824B7294A5D4400CDA4BD /* FilmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilmService.swift; sourceTree = "<group>"; };
@@ -290,6 +302,56 @@
 				A018D845299EC51D00AC12FB /* StorageManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		A018D85C29A20C2000AC12FB /* CreateNewPost */ = {
+			isa = PBXGroup;
+			children = (
+				A018D86929A2975000AC12FB /* ViewModels */,
+				A018D86829A2974D00AC12FB /* Views */,
+			);
+			path = CreateNewPost;
+			sourceTree = "<group>";
+		};
+		A018D86129A213D500AC12FB /* FilmSelector */ = {
+			isa = PBXGroup;
+			children = (
+				A018D86329A213F000AC12FB /* ViewModels */,
+				A018D86229A213EC00AC12FB /* Views */,
+			);
+			path = FilmSelector;
+			sourceTree = "<group>";
+		};
+		A018D86229A213EC00AC12FB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A018D86629A2141300AC12FB /* FilmSelectorView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A018D86329A213F000AC12FB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A018D86429A2140600AC12FB /* FilmSelectorViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A018D86829A2974D00AC12FB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A018D85D29A20C3000AC12FB /* CreateNewPost.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A018D86929A2975000AC12FB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A018D86A29A2976E00AC12FB /* CreateNewPostViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		A04824BE294BC22200CDA4BD /* AllFilm */ = {
@@ -494,6 +556,7 @@
 		A0DD910B2932224F00ECE810 /* Seans */ = {
 			isa = PBXGroup;
 			children = (
+				A018D85C29A20C2000AC12FB /* CreateNewPost */,
 				A018D84B29A0061700AC12FB /* Info.plist */,
 				A018D842299EC50C00AC12FB /* Managers */,
 				A018D833299EC0EA00AC12FB /* GoogleService-Info.plist */,
@@ -528,7 +591,6 @@
 				A018D824299D73E300AC12FB /* View_Extensions.swift */,
 				A018D82B299D93B000AC12FB /* LoadingView.swift */,
 				A018D82F299E9A3A00AC12FB /* SocialMediaType.swift */,
-				A018D85129A0081800AC12FB /* GoogleSignInButton.swift */,
 				A018D85329A00E6E00AC12FB /* Application.swift */,
 			);
 			path = Utils;
@@ -567,6 +629,7 @@
 				A0E38B112953529E003268FD /* Videos.swift */,
 				A05EDB082957A8AA00F60F70 /* MovieDetail.swift */,
 				A018D840299EC30200AC12FB /* User.swift */,
+				A018D85F29A20C5D00AC12FB /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -574,6 +637,7 @@
 		A0DD911F2932235100ECE810 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				A018D86129A213D500AC12FB /* FilmSelector */,
 				A018D826299D804F00AC12FB /* Register */,
 				A018D81E299D70C400AC12FB /* Login */,
 				A0DD9126293223F600ECE810 /* Components */,
@@ -738,6 +802,7 @@
 			isa = PBXGroup;
 			children = (
 				A02AEF302939615000443F95 /* TweetFilterViewModel.swift */,
+				A018D85A29A158F500AC12FB /* ProfileViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -753,6 +818,7 @@
 		A0DD914029322D9900ECE810 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				A018D86C29A2A56000AC12FB /* FeedViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1045,8 +1111,11 @@
 			files = (
 				A0CD850C29493EAE0093221F /* FilmViewModel.swift in Sources */,
 				A0F5CA3029411BFA007E5F91 /* OffsetModifier.swift in Sources */,
+				A018D86D29A2A56000AC12FB /* FeedViewModel.swift in Sources */,
 				A0A2C94C2958740E0011ECF4 /* TMDBService.swift in Sources */,
 				A00612B4293D084C00BB3413 /* ReviewRowView.swift in Sources */,
+				A018D85E29A20C3000AC12FB /* CreateNewPost.swift in Sources */,
+				A018D86029A20C5D00AC12FB /* Post.swift in Sources */,
 				A0E38B0229523EB1003268FD /* ActorRowViewModel.swift in Sources */,
 				A04824C8294CF4F900CDA4BD /* Actor.swift in Sources */,
 				A00612A8293B8BD200BB3413 /* FilmInfoView.swift in Sources */,
@@ -1067,8 +1136,8 @@
 				A0CD85052948E72A0093221F /* FilmSearchRowView.swift in Sources */,
 				A018D841299EC30200AC12FB /* User.swift in Sources */,
 				A00612BA293FB52A00BB3413 /* Home.swift in Sources */,
-				A018D85229A0081800AC12FB /* GoogleSignInButton.swift in Sources */,
 				A018D82C299D93B000AC12FB /* LoadingView.swift in Sources */,
+				A018D86529A2140600AC12FB /* FilmSelectorViewModel.swift in Sources */,
 				A018D846299EC51D00AC12FB /* StorageManager.swift in Sources */,
 				A0E38B122953529E003268FD /* Videos.swift in Sources */,
 				A04824C2294BC26C00CDA4BD /* AllFilmViewModel.swift in Sources */,
@@ -1076,6 +1145,7 @@
 				A018D823299D710800AC12FB /* LoginView.swift in Sources */,
 				A0EA8EE0294FAB610054916D /* SimilarMoviesView.swift in Sources */,
 				A00612A6293B870200BB3413 /* FriendsWatchRowView.swift in Sources */,
+				A018D86729A2141300AC12FB /* FilmSelectorView.swift in Sources */,
 				A0A2C94129586B790011ECF4 /* TrailersViewModel.swift in Sources */,
 				A0EA8EDB294F52D80054916D /* NewActorView.swift in Sources */,
 				A0DD913E29322D8600ECE810 /* ProfileView.swift in Sources */,
@@ -1095,6 +1165,7 @@
 				A0E38B1029534C76003268FD /* VideoView.swift in Sources */,
 				A00612AC293BE45100BB3413 /* UIImage+Extension.swift in Sources */,
 				A0DD913129322C6600ECE810 /* MessagesView.swift in Sources */,
+				A018D86B29A2976E00AC12FB /* CreateNewPostViewModel.swift in Sources */,
 				A04824C6294BDAF300CDA4BD /* ExploreViewModel.swift in Sources */,
 				A0DD912D2932249300ECE810 /* ImagePicker.swift in Sources */,
 				A0CD84FE2948E40F0093221F /* SearchBar.swift in Sources */,
@@ -1106,6 +1177,7 @@
 				A0DD910D2932224F00ECE810 /* SeansApp.swift in Sources */,
 				A0A2C94329586BB20011ECF4 /* TrailersView.swift in Sources */,
 				A05EDB072957A42000F60F70 /* FilmInfoViewModel.swift in Sources */,
+				A018D85B29A158F500AC12FB /* ProfileViewModel.swift in Sources */,
 				A0A2C95129587D6C0011ECF4 /* SelectedCategoryView.swift in Sources */,
 				A00612A3293B807500BB3413 /* FilmSecondRowView.swift in Sources */,
 				A04824D2294E6A1200CDA4BD /* ActorDetail.swift in Sources */,

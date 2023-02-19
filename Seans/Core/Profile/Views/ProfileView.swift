@@ -12,15 +12,18 @@ import GoogleSignInSwift
 import Firebase
 
 struct ProfileView: View {
-    @Environment(\.presentationMode) var mode
+    
     @Namespace var animation
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
     @State var show = false
+    @AppStorage("user_first_name") private var firstName: String?
+    @AppStorage("user_last_name") private var lastName: String?
     @AppStorage("log_status") var logStatus: Bool = false
     @AppStorage("user_profile_url") var profileURL: URL?
     @AppStorage("user_name") var userNameStored: String = ""
     @AppStorage("user_UID") var userUID: String = ""
-
+    @ObservedObject var viewModel = ProfileViewModel()
+    
     var socialMedia = ["instagram","twitter","tiktok","youtube", "snapchat"]
     var body: some View {
         ScrollView(showsIndicators: false){
@@ -32,21 +35,18 @@ struct ProfileView: View {
                 tweetFilterBar
                 
                 ZStack(alignment: .bottomTrailing) {
-                                        
-                                        LazyVStack{
-                                            ForEach(1..<50) { index in
-                                                PostRowView()
-                                                    .padding(.trailing)
-                                                    .padding(.leading)
-                                                    .padding(.vertical,5)
-                                                    .padding(.top,10)
-                                            }
-                                            
-                                        }
-                                        
-                                        
+                    
+                    if let posts = viewModel.posts{
+                        LazyVStack{
+                            ForEach(posts) { post in
+                                PostRowView(post: post)
+                            }
+                        }
+                    }
+                    
+                    
                 }.padding(.top)
-            
+                
                 Spacer()
             }
             .padding()
@@ -55,14 +55,14 @@ struct ProfileView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     logout()
-                
+                    
                 } label: {
                     Text("Çıkış Yap")
                         .foregroundColor(Color(.systemRed))
                         .bold()
                 }
-
-                    
+                
+                
             }
         }
     }
@@ -84,74 +84,74 @@ struct ProfileView_Previews: PreviewProvider {
 extension ProfileView{
     var profileSection: some View{
         HStack{
-                HStack {
-                    Spacer()
-                    VStack{
-                        GeometryReader { geometry in
-                            KFImage(profileURL)
-//                            Image("profile")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color(.systemGray5), lineWidth: 4))
-                                .shadow(radius: 10)
+            HStack {
+                Spacer()
+                VStack{
+                    GeometryReader { geometry in
+                        KFImage(profileURL)
+                        //                            Image("profile")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color(.systemGray5), lineWidth: 4))
+                            .shadow(radius: 10)
                             .foregroundColor(.init(hue: 0, saturation: 0.0, brightness: 0.9))
-                                .frame(width: geometry.size.width, height: geometry.size.width, alignment: .center)
+                            .frame(width: geometry.size.width, height: geometry.size.width, alignment: .center)
                             .overlay(
                                 CircularLayout(radius: (geometry.size.width * 0.8) / 2, name: socialMedia)
                                     .offset(x: geometry.size.width * 0.1, y: geometry.size.width * 0.1)
                             )
-                        }
-                        
                     }
-                    .frame(height: 180)
-                    Spacer()
+                    
                 }
-               
-                
+                .frame(height: 180)
+                Spacer()
+            }
+            
+            
             VStack(alignment: .leading,spacing: 8){
                 HStack{
                     //profileName ANİMASYONLU
-                    Text("Deniz Ata EŞ")
+                    Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                         .foregroundColor(Color("mode"))
                         .font(.system(size: 20))
-
+                    
                 }
-                Text(userNameStored)
+                Text("\(viewModel.user?.userName ?? "")")
                     .font(.footnote)
                     .foregroundColor(.gray)
                 
                 
-                Text("Sinema, tiyatro en büyük sevdam... 🎬")
+                Text("\(viewModel.user?.userBio ?? "")")
                     .foregroundColor(.gray)
                     .font(.caption2)
                 
-                    Button {
+                Button {
+                    
+                } label: {
+                    HStack{
+                        Text("Takip Et")
+                            .font(.system(size: 12))
+                            .bold()
+                            .foregroundColor(.purple)
                         
-                    } label: {
-                            HStack{
-                                Text("Takip Et")
-                                    .font(.system(size: 12))
-                                    .bold()
-                                    .foregroundColor(.purple)
-                                
-                                
-                                Image(systemName: "person.badge.plus")
-                                    .resizable()
-                                    .frame(width: 16,height: 16)
-                                    .foregroundColor(.purple)
-                                    .bold()
-                            }
-                            .frame(width: 90, height: 30)
-                            .foregroundColor(.white)
-                            .background(LinearGradient(colors: [.gray,.clear,.clear,.clear,.gray], startPoint: .bottomLeading, endPoint: .topTrailing))
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        }
+                        
+                        Image(systemName: "person.badge.plus")
+                            .resizable()
+                            .frame(width: 16,height: 16)
+                            .foregroundColor(.purple)
+                            .bold()
+                    }
+                    .frame(width: 90, height: 30)
+                    .foregroundColor(.white)
+                    .background(LinearGradient(colors: [.gray,.clear,.clear,.clear,.gray], startPoint: .bottomLeading, endPoint: .topTrailing))
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                }
             }
             
             
-                
+            
             Spacer()
         }
         
@@ -161,26 +161,26 @@ extension ProfileView{
     var profileName: some View{
         ZStack{
             
-                Text("Deniz Ata EŞ")
-                    .foregroundColor(Color("mode"))
-                    .font(.system(size: 20))
-                
-                Text("Deniz Ata EŞ")
-                    .foregroundColor(.purple)
-                    .font(.system(size: 20))
-                    .mask{
-                        Capsule()
-                            .fill(LinearGradient(gradient: .init(colors: [.red,.gray,.black]), startPoint: .top, endPoint: .bottom))
-                            .rotationEffect(.init(degrees: 30))
-                            .offset(x:self.show ? 100 : -130)
-                    }
+            Text("Deniz Ata EŞ")
+                .foregroundColor(Color("mode"))
+                .font(.system(size: 20))
+            
+            Text("Deniz Ata EŞ")
+                .foregroundColor(.purple)
+                .font(.system(size: 20))
+                .mask{
+                    Capsule()
+                        .fill(LinearGradient(gradient: .init(colors: [.red,.gray,.black]), startPoint: .top, endPoint: .bottom))
+                        .rotationEffect(.init(degrees: 30))
+                        .offset(x:self.show ? 100 : -130)
+                }
             
         }
         .onAppear{
             withAnimation(Animation.default.speed(0.08).delay(0)
                 .repeatForever(autoreverses: false)){
-                self.show.toggle()
-            }
+                    self.show.toggle()
+                }
         }
     }
     
