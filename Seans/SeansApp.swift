@@ -24,7 +24,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct SeansApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     var body: some Scene {
         WindowGroup {
             NavigationView{

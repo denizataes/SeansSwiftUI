@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftUI
+import Firebase
+import FirebaseFirestoreSwift
+import FirebaseFirestore
 
 class FeedViewModel: ObservableObject{
     
@@ -14,6 +17,7 @@ class FeedViewModel: ObservableObject{
     @Published var isLoading = false
     let dbManager = DatabaseManager()
     @AppStorage("user_UID") var userUID: String = ""
+    @Published var paginationDoc: QueryDocumentSnapshot?
     
     init(){
         fetchPosts()

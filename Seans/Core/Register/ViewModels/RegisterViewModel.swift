@@ -17,8 +17,8 @@ class RegisterViewModel: ObservableObject{
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
     @AppStorage("log_status") var logStatus: Bool = false
-    @AppStorage("user_first_name") private var firstName: String?
-    @AppStorage("user_last_name") private var lastName: String?
+    @AppStorage("user_first_name") private var firstName: String = ""
+    @AppStorage("user_last_name") private var lastName: String = ""
     @AppStorage("user_profile_url") var profileURL: URL?
     @AppStorage("user_name") var userNameStored: String = ""
     @AppStorage("user_UID") var userUID: String = ""

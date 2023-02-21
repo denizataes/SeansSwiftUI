@@ -231,16 +231,8 @@ struct RegisterView: View {
     
     func registerUser(){
         closeKeyboard()
-        //let userUID = viewModel.
-//        let userPhotoURL = viewModel.insertUserProfilePhoto(data: userProfilePicData)
-        
-                
-        let user = User(firstName: firstName, lastName: lastName, userName: userName, userBio: userBio, userUID: "", userEmail: emailID, password: password, instagramProfileURL: instagramUsername, twitterProfileURL: twitterUsername, snapchatProfileURL: snapchatUsername, tiktokProfileURL: tiktokUsername, youtubeProfileURL: youtubeUsername, userProfileURL: "", userProfilePicData: userProfilePicData)
-        
-        
+        let user = User(firstName: firstName, lastName: lastName, userName: userName, userBio: userBio, userUID: "", userEmail: emailID, password: password, instagramProfileURL: instagramUsername, twitterProfileURL: twitterUsername, snapchatProfileURL: snapchatUsername, tiktokProfileURL: tiktokUsername, youtubeProfileURL: youtubeUsername, userProfileURL: "", userProfilePicData: userProfilePicData, follow: [], follower: [], updatedDate: Date())
         viewModel.insertUser(user: user)
-      
-        //viewModel.insertUser(user: user)
     }
     
 }

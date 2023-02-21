@@ -11,23 +11,39 @@ struct FeedView: View {
     @State private var createNewPost: Bool = false
     @ObservedObject var viewModel = FeedViewModel()
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            ScrollView{
-                if let posts = viewModel.posts {
-                    LazyVStack{
-                        ForEach(posts) { post in
-                            PostRowView(post: post)
+      //  NavigationStack{
+            ZStack(alignment: .bottomTrailing) {
+                ScrollView{
+                    if let posts = viewModel.posts {
+                        LazyVStack(spacing: 0){
+                            ForEach(posts) { post in
+                                PostRowView(post: post) { updatedPost in
+                                    if let index = posts.firstIndex(where: { post
+                                        in
+                                        post.id == updatedPost.id
+                                    }){
+                                        viewModel.posts?[index].likedIDs = updatedPost.likedIDs
+                                    }
+                                    
+                                } onDelete: {
+                                    /// Removing Post From The array
+                                    withAnimation(.easeInOut(duration: 0.25)){
+                                        viewModel.posts?.removeAll { post.id == $0.id }
+                                    }
+                                }
+
+                            }
                         }
                     }
+                    
                 }
-
             }
-        }
+           // .navigationTitle("Gönderiler")
+          //  .navigationBarTitleDisplayMode(.large)
+        //}
         .refreshable {
             viewModel.posts = nil
             viewModel.fetchPosts()
-            
-            print("refresh")
         }
         .overlay{
             LoadingView(show: $viewModel.isLoading)

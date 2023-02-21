@@ -7,15 +7,28 @@
 
 import SwiftUI
 import Kingfisher
+import Firebase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+import FirebaseStorage
 
 struct PostRowView: View {
+    /// - CallBacks
+    var onUpdate: (Post) -> ()
+    var onDelete: () -> ()
+    
     var post: Post
     @State private var isLiked = false
     let currentDate = Date()
     let formatter = DateFormatter()
+    @State private var docListener: ListenerRegistration?
+    @ObservedObject var viewModel = PostRowViewModel()
+    @AppStorage("user_UID") var userUID: String = ""
     
-    init(post: Post) {
+    init(post: Post, onUpdate: @escaping (Post) -> (), onDelete: @escaping () -> ()) {
         self.post = post
+        self.onUpdate = onUpdate
+        self.onDelete = onDelete
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         formatter.timeZone = TimeZone.current
     }
@@ -31,25 +44,25 @@ struct PostRowView: View {
 
 
 
-            KFImage(URL(string: "\(post.moviePhoto)" ))
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: size.width, height: size.height)
-                .clipped()
-                .shadow(radius: 10)
-                .cornerRadius(10)
-               // .tag(index)
-
-            // Custom Gradient
-            LinearGradient(colors: [
-
-                .black.opacity(0.8)
-            ], startPoint: .leading, endPoint: .trailing)
-
-            // Blurred Overlay
-            Rectangle()
-                .fill(.ultraThinMaterial.opacity(0.8))
-                .cornerRadius(10)
+//            KFImage(URL(string: "\(post.moviePhoto)" ))
+//                .resizable()
+//                .aspectRatio(contentMode: .fill)
+//                .frame(width: size.width, height: size.height)
+//                .clipped()
+//                .shadow(radius: 10)
+//                .cornerRadius(10)
+//               // .tag(index)
+//
+//            // Custom Gradient
+//            LinearGradient(colors: [
+//
+//                .black.opacity(0.4)
+//            ], startPoint: .leading, endPoint: .trailing)
+//
+//            // Blurred Overlay
+//            Rectangle()
+//                .fill(.ultraThinMaterial.opacity(0.9))
+//                .cornerRadius(10)
 
 
             VStack(alignment: .leading){
@@ -62,18 +75,70 @@ struct PostRowView: View {
             .padding()
 
 
-            Divider()
+        
         }
         .frame(height: 250)
+        .overlay(alignment: .topTrailing){
+            /// Displaying Delete Button ( if it's Author of that post)
+            if post.userUID == userUID{
+                Menu{
+                    Button("Gönderiyi Sil", role: .destructive, action: deletePost)
+                }label: {
+                    Image(systemName: "ellipsis")
+                        .font(.caption)
+                        .rotationEffect(.init(degrees: -90))
+                        .foregroundColor(Color(.systemPurple))
+                        .padding(8)
+                        .contentShape(Rectangle())
+                }
+                .offset(x: 8)
+            }
+        }
+        .onAppear{
+            /// - Adding Only once
+            if docListener == nil{
+                guard let postID = post.id else{return}
+                docListener = Firestore.firestore().collection("Posts").document(postID).addSnapshotListener({ snapshot, error in
+                    if let snapshot{
+                        if snapshot.exists{
+                            /// - Document
+                            /// Fetcihng Updated Document
+                            if let updatedPost = try? snapshot.data(as: Post.self){
+                                onUpdate(updatedPost)
+                            }
+                        }else{
+                            ///- Document Deleted
+                            onDelete()
+                        }
+                    }
+                })
+            }
+        }
+        .onDisappear{
+            // MARK: Applying SnapShot Listener only when the post is available on the screen
+            // Else removing the listener(it saves unwanted live eupdates from the posts which has swiped away screen)
+            if let docListener{
+                docListener.remove()
+                self.docListener = nil
+            }
+        }
         
-        
+        Divider()
 
-       
-        
-        
-        
-
-        
+    }
+    
+    func deletePost(){
+        guard let postID = post.id else{return}
+        viewModel.deletePost(postID: postID)
+    }
+    
+    func likePost(){
+        guard let postID = post.id else{return}
+        var isLiked: Bool = false
+        if post.likedIDs.contains(userUID){
+            isLiked = true
+        }
+        viewModel.likePost(postID: postID, isLiked: isLiked)
     }
 }
 
@@ -114,8 +179,6 @@ extension PostRowView{
     }
     
     var leftSide: some View{
-        
-        HStack(alignment: .top) {
             VStack(alignment: .leading){
                 NavigationLink {
                    // FilmInfoView()
@@ -123,15 +186,16 @@ extension PostRowView{
                 } label: {
                     KFImage(URL(string: "\(post.moviePhoto)" ))
                         .resizable()
-                        .frame(width:100 ,height: 140)
+                        .frame(width:110 ,height: 150)
                         .cornerRadius(10)
-                        .shadow(radius: 10)
+                        .shadow(radius: 15)
                         
                 }
                 
                 VStack(alignment: .leading,spacing: 4){
                     Text(post.movieName)
                         .font(.headline)
+                        
 //                    Text("4 Ekim 2019")
 //                        .font(.system(size: 12))
 //                        .foregroundColor(.gray)
@@ -153,13 +217,13 @@ extension PostRowView{
 //                            //}
 //                        }
 //                    }
-//                    .frame(maxWidth: 115,minHeight: 16)
+//
                 }
+                .frame(maxWidth: 100)
 
                 
                 
             }
-        }
     }
     
     var profilSection: some View{
@@ -168,7 +232,7 @@ extension PostRowView{
             HStack{
                 
                 NavigationLink {
-                    ProfileView()
+                    ProfileView(userUID: post.userUID)
                         
                 } label: {
                     KFImage(post.userProfileURL)
@@ -225,6 +289,7 @@ extension PostRowView{
                 .font(.footnote)
             Spacer()
         }
+        .padding(.top,10)
         .frame(maxWidth: .infinity,  maxHeight: .infinity)
     }
     
@@ -248,11 +313,10 @@ extension PostRowView{
             Spacer()
             
             Button {
-                isLiked.toggle()
-                
+                likePost()
             } label: {
                 HStack{
-                    Image(systemName: isLiked  ? "heart.fill" : "heart")
+                    Image(systemName: post.likedIDs.contains(userUID)  ? "heart.fill" : "heart")
                         .foregroundColor(.red)
                         .font(.subheadline)
                     Text(post.likedIDs.count.description)

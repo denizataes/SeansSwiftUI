@@ -130,6 +130,7 @@ struct Home: View {
                 }
             }
         }
+  
     }
     
     // MARK: Custom Indicator

@@ -25,8 +25,8 @@ struct CreateNewPost: View {
     @AppStorage("user_profile_url") private var profileURL: URL?
     @AppStorage("user_name") private var userName: String = ""
     @AppStorage("user_UID") private var userUID: String = ""
-    @AppStorage("user_first_name") private var firstName: String?
-    @AppStorage("user_last_name") private var lastName: String?
+    @AppStorage("user_first_name") private var firstName: String = ""
+    @AppStorage("user_last_name") private var lastName: String = ""
     /// - View Properties
     @Environment(\.dismiss) private var dismiss
     @State private var isLoading: Bool = false

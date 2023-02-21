@@ -18,8 +18,12 @@ struct User: Identifiable,Codable{
     var youtubeProfileURL: String
     var userProfileURL: String
     var userProfilePicData: Data?
+    var follow: [String]
+    var follower: [String]
+    var createdDate: Date = Date()
+    var updatedDate: Date
     
-    init(firstName: String, lastName: String, userName: String, userBio: String, userUID: String, userEmail: String, password: String, instagramProfileURL: String, twitterProfileURL: String, snapchatProfileURL: String, tiktokProfileURL: String, youtubeProfileURL: String, userProfileURL: String, userProfilePicData: Data?) {
+    init(firstName: String, lastName: String, userName: String, userBio: String, userUID: String, userEmail: String, password: String, instagramProfileURL: String, twitterProfileURL: String, snapchatProfileURL: String, tiktokProfileURL: String, youtubeProfileURL: String, userProfileURL: String, userProfilePicData: Data?, follow: [String], follower: [String], updatedDate: Date) {
         self.firstName = firstName
         self.lastName = lastName
         self.userName = userName
@@ -34,6 +38,9 @@ struct User: Identifiable,Codable{
         self.youtubeProfileURL = youtubeProfileURL
         self.userProfileURL = userProfileURL
         self.userProfilePicData = userProfilePicData
+        self.follow = follow
+        self.follower = follower
+        self.updatedDate = updatedDate
     }
 
     
@@ -52,6 +59,10 @@ struct User: Identifiable,Codable{
         tiktokProfileURL = try container.decode(String.self, forKey: .tiktokProfileURL)
         youtubeProfileURL = try container.decode(String.self, forKey: .youtubeProfileURL)
         userProfileURL = try container.decode(String.self, forKey: .userProfileURL)
+        follower = try container.decode([String].self, forKey: .follower)
+        follow = try container.decode([String].self, forKey: .follow)
+        createdDate = try container.decode(Date.self, forKey: .createdDate)
+        updatedDate = try container.decode(Date.self, forKey: .updatedDate)
         userProfilePicData = nil // Bu alan Decode edilmeyecek
         password = "" // Bu alan Decode edilmeyecek
     }
@@ -73,6 +84,10 @@ struct User: Identifiable,Codable{
         case youtubeProfileURL
         case userProfileURL
         case userProfilePicData
+        case follow
+        case follower
+        case createdDate
+        case updatedDate
     }
     
 }

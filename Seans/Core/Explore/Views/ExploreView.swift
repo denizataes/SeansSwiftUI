@@ -60,7 +60,7 @@ struct ExploreView: View {
                     LazyVStack(spacing: 0){
                         ForEach(1..<25){index in
                             NavigationLink {
-                                ProfileView()
+                                ProfileView(userUID: "")
                             } label: {
                                 
                                 UserRowView()

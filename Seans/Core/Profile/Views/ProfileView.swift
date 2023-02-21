@@ -10,77 +10,120 @@ import Kingfisher
 import GoogleSignIn
 import GoogleSignInSwift
 import Firebase
+import FirebaseStorage
+import FirebaseFirestore
 
 struct ProfileView: View {
     
     @Namespace var animation
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
     @State var show = false
-    @AppStorage("user_first_name") private var firstName: String?
-    @AppStorage("user_last_name") private var lastName: String?
+    @AppStorage("user_first_name") var firstName: String = ""
+    @AppStorage("user_last_name") var lastName: String = ""
     @AppStorage("log_status") var logStatus: Bool = false
     @AppStorage("user_profile_url") var profileURL: URL?
     @AppStorage("user_name") var userNameStored: String = ""
-    @AppStorage("user_UID") var userUID: String = ""
-    @ObservedObject var viewModel = ProfileViewModel()
+    @AppStorage("user_UID") var currentUserUID: String = ""
+    @ObservedObject var viewModel: ProfileViewModel
+    private var selectedUserUID: String = ""
+    
+    init(userUID: String){
+        self.selectedUserUID = userUID
+        self.viewModel = ProfileViewModel(userUID: userUID)
+    }
     
     var socialMedia = ["instagram","twitter","tiktok","youtube", "snapchat"]
+
     var body: some View {
         ScrollView(showsIndicators: false){
             VStack{
+                if viewModel.user?.userUID == currentUserUID{
+                    HStack {
+                        Spacer()
+                        Menu {
+                            Button("Çıkış Yap",role: .destructive, action: logout)
+                            Button("Profili Düzenle", action: editProfile)
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .font(.headline)
+                                .padding(8)
+                                .contentShape(Rectangle())
+                        }
+
+                    }
+                    .hAlign(.trailing)
+                }
+                
                 profileSection
                 
                 userInfoDetails
                 
                 tweetFilterBar
-                
-                ZStack(alignment: .bottomTrailing) {
-                    
-                    if let posts = viewModel.posts{
-                        LazyVStack{
-                            ForEach(posts) { post in
-                                PostRowView(post: post)
+            
+            }
+            .padding(.top)
+            .padding(.leading)
+            .padding(.trailing)
+            
+            ZStack(alignment: .bottomTrailing) {
+                if let posts = viewModel.posts{
+                    LazyVStack(spacing: 0){
+                        ForEach(posts) { post in
+                            PostRowView(post: post) { updatedPost in
+                                if let index = posts.firstIndex(where: { post
+                                    in
+                                    post.id == updatedPost.id
+                                }){
+                                    viewModel.posts?[index].likedIDs = updatedPost.likedIDs
+                                }
+                                
+                            } onDelete: {
+                                /// Removing Post From The array
+                                withAnimation(.easeInOut(duration: 0.25)){
+                                    viewModel.posts?.removeAll { post.id == $0.id }
+                                }
                             }
                         }
                     }
-                    
-                    
-                }.padding(.top)
-                
-                Spacer()
-            }
-            .padding()
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    logout()
-                    
-                } label: {
-                    Text("Çıkış Yap")
-                        .foregroundColor(Color(.systemRed))
-                        .bold()
                 }
-                
-                
             }
+            
+            
         }
+        .refreshable {
+            viewModel.fetchUser(userUID: selectedUserUID)
+            viewModel.fetchPost(userUID: selectedUserUID)
+        }
+
+    }
+    
+    func editProfile(){
+         
     }
     
     func logout(){
+        print(firstName)
+        print(lastName)
+        print(currentUserUID)
+        print(logStatus)
+        print(profileURL)
+        print(userNameStored)
         try? Auth.auth().signOut()
+        firstName = ""
+        lastName = ""
         logStatus = false
-        userUID = ""
+        currentUserUID = ""
         userNameStored = ""
         profileURL = nil
     }
+
 }
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
-}
+//struct ProfileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ProfileView()
+//    }
+//}
 extension ProfileView{
     var profileSection: some View{
         HStack{
@@ -88,8 +131,7 @@ extension ProfileView{
                 Spacer()
                 VStack{
                     GeometryReader { geometry in
-                        KFImage(profileURL)
-                        //                            Image("profile")
+                        KFImage(URL(string: viewModel.user?.userProfileURL ?? ""))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)
@@ -128,25 +170,78 @@ extension ProfileView{
                     .font(.caption2)
                 
                 Button {
-                    
-                } label: {
-                    HStack{
-                        Text("Takip Et")
-                            .font(.system(size: 12))
-                            .bold()
-                            .foregroundColor(.purple)
-                        
-                        
-                        Image(systemName: "person.badge.plus")
-                            .resizable()
-                            .frame(width: 16,height: 16)
-                            .foregroundColor(.purple)
-                            .bold()
+                    guard selectedUserUID != currentUserUID else {return} // Kendi kullanıcıysa takip etme özelliği kapatılsın.
+                    guard let user = viewModel.user else {return}
+                    print("Selected User UID : \(selectedUserUID)")
+                    print("Kullanıcı User UID : \(currentUserUID)")
+                    var isFollow: Bool = false
+                    print("şuan ekrandaki kullanıcının takipçileri: \(user.follower)")
+                    if user.follower.contains(currentUserUID){
+                        isFollow = true
                     }
-                    .frame(width: 90, height: 30)
-                    .foregroundColor(.white)
-                    .background(LinearGradient(colors: [.gray,.clear,.clear,.clear,.gray], startPoint: .bottomLeading, endPoint: .topTrailing))
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow)
+                } label: {
+                    
+                    if viewModel.user?.userUID == currentUserUID{
+                        HStack{
+                            Text("Düzenle")
+                                .font(.system(size: 12))
+                                .bold()
+                                .foregroundColor(.purple)
+                            
+                            
+                            Image(systemName: "person.badge.plus")
+                                .resizable()
+                                .frame(width: 16,height: 16)
+                                .foregroundColor(.purple)
+                                .bold()
+                        }
+                        .frame(width: 90, height: 30)
+                        .foregroundColor(.white)
+                        .background(LinearGradient(colors: [.gray,.clear,.clear,.clear,.gray], startPoint: .bottomLeading, endPoint: .topTrailing))
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    }
+                    //else if viewModel.user?.follower.contains(currentUserUID) {
+                    else if let follower = viewModel.user?.follower, follower.contains(currentUserUID) {
+                        HStack{
+                            Text("Takipten çıkar")
+                                .font(.system(size: 12))
+                                .bold()
+                                .foregroundColor(.purple)
+                            
+                            
+                            Image(systemName: "person.badge.minus")
+                                .resizable()
+                                .frame(width: 16,height: 16)
+                                .foregroundColor(.purple)
+                                .bold()
+                        }
+                        .frame(width: 90, height: 30)
+                        .foregroundColor(.white)
+                        .background(LinearGradient(colors: [.gray,.clear,.clear,.clear,.gray], startPoint: .bottomLeading, endPoint: .topTrailing))
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    }
+                    else{
+                        HStack{
+                            Text("Takip Et")
+                                .font(.system(size: 12))
+                                .bold()
+                                .foregroundColor(.purple)
+                            
+                            
+                            Image(systemName: "person.badge.plus")
+                                .resizable()
+                                .frame(width: 16,height: 16)
+                                .foregroundColor(.purple)
+                                .bold()
+                        }
+                        .frame(width: 90, height: 30)
+                        .foregroundColor(.white)
+                        .background(LinearGradient(colors: [.gray,.clear,.clear,.clear,.gray], startPoint: .bottomLeading, endPoint: .topTrailing))
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    }
+                    
+                    
                 }
             }
             
@@ -192,7 +287,7 @@ extension ProfileView{
                 VStack{
                     Text("Gönderiler")
                         .font(.system(size: 14))
-                    Text("10")
+                    Text("\(viewModel.posts?.count ?? 0)")
                         .font(.system(size: 16))
                         .bold()
                 }
@@ -200,7 +295,7 @@ extension ProfileView{
                 VStack{
                     Text("Takipçi")
                         .font(.system(size: 14))
-                    Text("165")
+                    Text("\(viewModel.user?.follower.count ?? 0)")
                         .font(.system(size: 16))
                         .bold()
                 }
@@ -208,7 +303,7 @@ extension ProfileView{
                 VStack{
                     Text("Takip")
                         .font(.system(size: 14))
-                    Text("203")
+                    Text("\(viewModel.user?.follow.count ?? 0)")
                         .font(.system(size: 16))
                         .bold()
                 }
@@ -217,18 +312,12 @@ extension ProfileView{
                 VStack{
                     Text("Film")
                         .font(.system(size: 14))
-                    Text("212")
-                        .font(.system(size: 16))
-                        .bold()
+                    if let posts = viewModel.posts {
+                        let movieIDs = Set(posts.map { $0.movieID })
+                        Text("\(movieIDs.count)")
+                    }
                 }
-                
-                VStack{
-                    Text("Dizi")
-                        .font(.system(size: 14))
-                    Text("17")
-                        .font(.system(size: 16))
-                        .bold()
-                }
+
                 
                 
                 VStack{
@@ -240,9 +329,9 @@ extension ProfileView{
                         Image(systemName: "calendar.circle")
                             .foregroundColor(.purple)
                     }
-                    Text("17 Temmuz 2022")
-                        .font(.system(size: 16))
-                        .foregroundColor(.gray)
+                    
+                    Text(viewModel.user?.createdDate.formattedString(format: "dd MMMM yyyy") ?? "Belirsiz")
+
                     
                 }
                 

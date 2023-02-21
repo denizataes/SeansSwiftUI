@@ -33,7 +33,7 @@ final class DatabaseManager {
                 return
             }
             
-            var data = [
+            let data = [
                 "userUID": userUID,
                 "firstName": user.firstName,
                 "lastName": user.lastName,
@@ -45,13 +45,13 @@ final class DatabaseManager {
                 "snapchatProfileURL": user.snapchatProfileURL,
                 "tiktokProfileURL": user.tiktokProfileURL,
                 "youtubeProfileURL": user.youtubeProfileURL,
-                "userProfileURL": user.userProfileURL
+                "userProfileURL": user.userProfileURL,
+                "follow": [],
+                "follower": [],
+                "createdDate": user.createdDate,
+                "updatedDate": user.updatedDate
             ]
-            //
-            //            if let userProfileURL = user.userProfileURL {
-            //                data["userProfileURL"] = userProfileURL
-            //            }
-            //
+            
             Firestore.firestore().collection("Users").document(userUID).setData(data){ error in
                 if let error = error {
                     completion(.failure(error))
@@ -157,7 +157,7 @@ final class DatabaseManager {
                 }
             }
     }
-
+    
     
     
     
@@ -180,7 +180,8 @@ final class DatabaseManager {
     }
     
     func saveUser(with user: User, completion: @escaping (Result<(), Error>) -> Void){
-        let data = [
+        
+        let data: [String: Any] = [
             "userUID": user.userUID,
             "firstName": user.firstName,
             "lastName": user.lastName,
@@ -192,8 +193,13 @@ final class DatabaseManager {
             "snapchatProfileURL": user.snapchatProfileURL,
             "tiktokProfileURL": user.tiktokProfileURL,
             "youtubeProfileURL": user.youtubeProfileURL,
-            "userProfileURL": user.userProfileURL
+            "userProfileURL": user.userProfileURL,
+            "follow": [],
+            "follower": [],
+            "createdDate": user.createdDate,
+            "updatedDate": user.updatedDate
         ]
+        
         
         Firestore.firestore().collection("Users").document(user.userUID).setData(data){ error in
             if let error = error {
@@ -243,7 +249,7 @@ final class DatabaseManager {
             completion(.failure(error))
         }
     }
-
+    
     
     
     func fetchPosts(withUid uid: String, completion: @escaping ([Post]?) -> Void) {
@@ -274,6 +280,41 @@ final class DatabaseManager {
         }
     }
     
+    func likePost(postID: String, userUID: String, isLiked: Bool) {
+        let postRef = Firestore.firestore().collection("Posts").document(postID)
+        
+        if isLiked {
+            postRef.updateData(["likedIDs": FieldValue.arrayRemove([userUID])])
+        } else {
+            postRef.updateData(["likedIDs": FieldValue.arrayUnion([userUID])])
+        }
+    }
+    
+    func deletePost(postID: String) {
+        let postRef = Firestore.firestore().collection("Posts").document(postID)
+        
+        postRef.delete { error in
+            if let error = error {
+                print("Error deleting post: \(error.localizedDescription)")
+            } else {
+                print("Post with ID \(postID) successfully deleted")
+            }
+        }
+    }
+    
+    func followUser(currentUserID: String, followUserID: String, isFollow: Bool) {
+        let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
+        let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
+        if isFollow {
+            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])])
+            followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])])
+        } else {
+            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])])
+            currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])])
+        }
+    }
+    
+    
     func fetchAllPosts(completion: @escaping ([Post]?) -> Void) {
         Firestore.firestore().collection("Posts")
             .getDocuments { querySnapshot, error in
@@ -285,16 +326,8 @@ final class DatabaseManager {
                 let posts = snapshot.documents.compactMap { document -> Post? in
                     try? document.data(as: Post.self)
                 }
-                print(posts)
                 completion(posts)
             }
     }
-
-
-    
-
-
-
-    
     
 }
