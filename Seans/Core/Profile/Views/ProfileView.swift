@@ -35,65 +35,74 @@ struct ProfileView: View {
     var socialMedia = ["instagram","twitter","tiktok","youtube", "snapchat"]
 
     var body: some View {
-        ScrollView(showsIndicators: false){
-            VStack{
-                if viewModel.user?.userUID == currentUserUID{
-                    HStack {
-                        Spacer()
-                        Menu {
-                            Button("Çıkış Yap",role: .destructive, action: logout)
-                            Button("Profili Düzenle", action: editProfile)
-                        } label: {
-                            Image(systemName: "ellipsis")
-                                .font(.headline)
-                                .padding(8)
-                                .contentShape(Rectangle())
-                        }
-
-                    }
-                    .hAlign(.trailing)
+        NavigationView{
+            ScrollView(showsIndicators: false){
+                VStack{
+                
+                    profileSection
+                    
+                    userInfoDetails
+                    
+                    tweetFilterBar
+                    
                 }
+                .padding(.top)
+                .padding(.leading)
+                .padding(.trailing)
                 
-                profileSection
-                
-                userInfoDetails
-                
-                tweetFilterBar
-            
-            }
-            .padding(.top)
-            .padding(.leading)
-            .padding(.trailing)
-            
-            ZStack(alignment: .bottomTrailing) {
-                if let posts = viewModel.posts{
-                    LazyVStack(spacing: 0){
-                        ForEach(posts) { post in
-                            PostRowView(post: post) { updatedPost in
-                                if let index = posts.firstIndex(where: { post
-                                    in
-                                    post.id == updatedPost.id
-                                }){
-                                    viewModel.posts?[index].likedIDs = updatedPost.likedIDs
-                                }
-                                
-                            } onDelete: {
-                                /// Removing Post From The array
-                                withAnimation(.easeInOut(duration: 0.25)){
-                                    viewModel.posts?.removeAll { post.id == $0.id }
+                ZStack(alignment: .bottomTrailing) {
+                    if let posts = viewModel.posts{
+                        LazyVStack(spacing: 0){
+                            ForEach(posts) { post in
+                                PostRowView(post: post) { updatedPost in
+                                    if let index = posts.firstIndex(where: { post
+                                        in
+                                        post.id == updatedPost.id
+                                    }){
+                                        viewModel.posts?[index].likedIDs = updatedPost.likedIDs
+                                    }
+                                    
+                                } onDelete: {
+                                    /// Removing Post From The array
+                                    withAnimation(.easeInOut(duration: 0.25)){
+                                        viewModel.posts?.removeAll { post.id == $0.id }
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if viewModel.user?.userUID == currentUserUID{
+                            HStack {
+                                Spacer()
+                                Menu {
+                                    Button("Çıkış Yap",role: .destructive, action: logout)
+                                    Button("Profili Düzenle", action: editProfile)
+                                } label: {
+                                    Image(systemName: "ellipsis")
+                                        .font(.headline)
+                                        .padding(8)
+                                        .contentShape(Rectangle())
+                                }
+                                
+                            }
+                        }
+
+                    }
+                    ToolbarItem(placement: .primaryAction) {
+                        Text("\(viewModel.user?.userName ?? "")")
+                    }
+                }
             }
-            
-            
+            .refreshable {
+                viewModel.fetchUser(userUID: selectedUserUID)
+                viewModel.fetchPost(userUID: selectedUserUID)
+            }
         }
-        .refreshable {
-            viewModel.fetchUser(userUID: selectedUserUID)
-            viewModel.fetchPost(userUID: selectedUserUID)
-        }
+        
 
     }
     
@@ -106,7 +115,7 @@ struct ProfileView: View {
         print(lastName)
         print(currentUserUID)
         print(logStatus)
-        print(profileURL)
+        //print(profileURL)
         print(userNameStored)
         try? Auth.auth().signOut()
         firstName = ""
@@ -131,7 +140,7 @@ extension ProfileView{
                 Spacer()
                 VStack{
                     GeometryReader { geometry in
-                        KFImage(URL(string: viewModel.user?.userProfileURL ?? ""))
+                        KFImage(URL(string: viewModel.user?.userProfileURL ??  ""))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)

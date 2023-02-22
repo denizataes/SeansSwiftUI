@@ -232,7 +232,7 @@ extension PostRowView{
             HStack{
                 
                 NavigationLink {
-                    ProfileView(userUID: post.userUID)
+                    NewProfileView(userUID: post.userUID)
                         
                 } label: {
                     KFImage(post.userProfileURL)
@@ -260,7 +260,12 @@ extension PostRowView{
                 if let date = formatter.date(from: post.publishedDate.description) {
                     let interval = Date().timeIntervalSince(date)
                     
-                    if interval < 3600 { // dakika hesaplama
+                    if interval < 60 { // saniye hesaplama
+                        let secondsAgo = Int(interval)
+                        Text("\(secondsAgo) saniye önce")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    } else if interval < 3600 { // dakika hesaplama
                         let minutesAgo = Int(interval / 60)
                         Text("\(minutesAgo) dakika önce")
                             .foregroundColor(.gray)

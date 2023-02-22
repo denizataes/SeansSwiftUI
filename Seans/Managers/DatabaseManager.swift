@@ -315,8 +315,9 @@ final class DatabaseManager {
     }
     
     
-    func fetchAllPosts(completion: @escaping ([Post]?) -> Void) {
+    func fetchAllPosts(userUIDs: [String], completion: @escaping ([Post]?) -> Void) {
         Firestore.firestore().collection("Posts")
+            .whereField("userUID", in: userUIDs)
             .getDocuments { querySnapshot, error in
                 guard let snapshot = querySnapshot else {
                     completion(nil)
@@ -329,5 +330,82 @@ final class DatabaseManager {
                 completion(posts)
             }
     }
+    
+//    func searchUsers(query: String, completion: @escaping ([User]?, Error?) -> Void) {
+//        Firestore.firestore().collection("Users")
+//            .whereField("userName", isGreaterThanOrEqualTo: query.lowercased())
+//            .whereField("userName", isLessThanOrEqualTo: query.lowercased() + "\u{f8ff}")
+//            .whereField("firstName", isGreaterThanOrEqualTo: query.capitalized + "\u{f8ff}")
+//            .whereField("lastName", isGreaterThanOrEqualTo: query.capitalized + "\u{f8ff}")
+//            .getDocuments { snapshot, error in
+//                if let error = error {
+//                    completion(nil, error)
+//                } else {
+//                    let users = snapshot?.documents.compactMap { document in
+//                        try? document.data(as: User.self)
+//                    }
+//                    completion(users, nil)
+//                }
+//            }
+//    }
+    func fetchFollowerIDs(completion: @escaping ([Post]?) -> Void) {
+
+        let currentUser = Auth.auth().currentUser
+        guard let userUID = currentUser?.uid else{return}
+        var followingUserUID = [String]()
+        followingUserUID.append(userUID)
+        print("Giriş yapan kullanıcı: \(userUID)")
+        Firestore.firestore().collection("Users").document(userUID).getDocument {[weak self] snapshot, error in
+            guard let strongSelf = self else{return}
+            guard let snapshot = snapshot else {
+                print(error?.localizedDescription ?? "Unknown error")
+                return
+            }
+            guard let data = snapshot.data() else { return }
+            let following = data["follow"] as? [String]
+            guard let following = following , following.count >= 1 else {
+                completion(nil)
+                return
+            }
+            followingUserUID += following // kendi postlarımı göreyim eğer takip ettiklerim varsa onlarda gelsin.
+            print("Takip Ettiğim kullanıcılar: \(following)")
+            strongSelf.fetchAllPosts(userUIDs: followingUserUID) { posts in
+                completion(posts)
+            }
+        }
+
+    }
+    
+    
+    
+    func searchUsers(query: String, completion: @escaping ([User]?, Error?) -> Void) {
+        print("Aratılan değer: \(query)")
+        let collectionRef = Firestore.firestore().collection("Users")
+        collectionRef
+            .whereField("userName", isGreaterThanOrEqualTo: query)
+            .whereField("userName", isLessThanOrEqualTo: query + "\u{f8ff}")
+            .order(by: "userName")
+            .limit(to: 10)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(nil,error)
+                    return
+                }
+                guard let documents = snapshot?.documents else {
+                    completion(nil,nil)
+                    return
+                }
+                let users = documents.compactMap { document in
+                    try? document.data(as: User.self)
+                }
+                print(users)
+                completion(users,nil)
+            }
+    }
+
+
+
+
     
 }

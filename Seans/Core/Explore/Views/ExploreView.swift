@@ -14,85 +14,95 @@ struct ExploreView: View {
     @ObservedObject var viewmodel = ExploreViewModel()
     
     var body: some View {
-        VStack{
-            
-            VStack {
-                HStack{
-                    TextField("Film, dizi veya kullanıcı ara...", text: $viewmodel.input, onEditingChanged: {
-                        self.viewmodel.typing = $0
-                    }, onCommit: {
-                        self.viewmodel.output = self.viewmodel.input
-                    })
-                    .padding(10)
-                    .padding(.horizontal,24)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                    .overlay(
-                        HStack{
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
-                                .frame(minWidth: 0, maxWidth: .infinity,alignment: .leading)
-                                .padding(.leading,8)
-                            Spacer()
-                            Button {
-                                viewmodel.input = ""
+    
+            VStack{
+                
+                VStack {
+                    HStack{
+                        TextField("Film, dizi veya kullanıcı ara...", text: $viewmodel.input, onEditingChanged: {
+                            self.viewmodel.typing = $0
+                        }, onCommit: {
+                            self.viewmodel.$output = self.viewmodel.$input
+                        })
+                        .onChange(of: viewmodel.input, perform: { newValue in
+                            self.viewmodel.output = self.viewmodel.input
+                            if selectedFilter == .users
+                            {
+                                viewmodel.searchUsers()
+                            }
+                        })
+                        .padding(8)
+                        .padding(.horizontal,24)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .overlay(
+                            HStack{
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.gray)
+                                    .frame(minWidth: 0, maxWidth: .infinity,alignment: .leading)
+                                    .padding(.leading,8)
+                                Spacer()
+                                Button {
+                                    viewmodel.input = ""
+                                    viewmodel.searchableUsers = []
+                                    
+                                } label: {
+                                    Image(systemName: "multiply")
+                                        .padding(.trailing,8)
+                                        .foregroundColor(.purple)
+                                        .bold()
+                                }
                                 
+                            }
+                        )
+                    }
+                    .padding(.leading)
+                    .padding(.trailing)
+                    
+                }
+                
+                searchFilterBar
+                
+                if(selectedFilter == .users)
+                {
+                    ScrollView{
+                        ForEach(viewmodel.searchableUsers){ user in
+                            NavigationLink {
+                                NewProfileView(userUID: user.userUID)
                             } label: {
-                                Image(systemName: "multiply")
-                                    .padding(.trailing,8)
-                                    .foregroundColor(.purple)
-                                    .bold()
+                                UserRowView(user: user)
+                            }
+                        }
+                    }
+                    .refreshable {
+                        viewmodel.searchUsers()
+                    }
+                }
+                else if(selectedFilter == .films)
+                {
+                    ScrollView{
+                        LazyVStack(spacing: 0){
+                            ForEach(viewmodel.searchableFilms){ movie in
+                                NavigationLink {
+                                    FilmInfoView(movie: movie)
+                                    
+                                } label: {
+                                    FilmSearchRowView(movie: movie)
+                                }
                             }
                             
                         }
-                    )
-                }
-                .padding(.leading)
-                .padding(.trailing)
-                
-            }
-            
-            searchFilterBar
-            
-            if(selectedFilter == .users)
-            {
-                ScrollView{
-                    LazyVStack(spacing: 0){
-                        ForEach(1..<25){index in
-                            NavigationLink {
-                                ProfileView(userUID: "")
-                            } label: {
-                                
-                                UserRowView()
-                            }
-                        }
-                        
                     }
                 }
-            }
-            else if(selectedFilter == .films)
-            {
-                ScrollView{
-                    LazyVStack(spacing: 0){
-                        ForEach(viewmodel.searchableFilms){ movie in
-                            NavigationLink {
-                                FilmInfoView(movie: movie)
-
-                            } label: {
-                                FilmSearchRowView(movie: movie)
-                            }
-                        }
-                        
-                    }
+                else
+                {
+                    ActorSearchView(input: $viewmodel.input)
                 }
-            }
-            else
-            {
                 
-                ActorSearchView(input: $viewmodel.input)
             }
-            
-        }
+            .navigationTitle("Keşfet")
+            .navigationBarTitleDisplayMode(.large)
+        
     }
 }
 

@@ -27,110 +27,111 @@ struct Home: View {
     @Namespace var animation
     @Environment(\.colorScheme) var scheme
     var body: some View {
-        ZStack{
-            // BG
-            BGView()
-            
-            // MARK: Main View Content
-            ScrollView{
-                VStack{
-                    
-                    // Custom Nav Nar
-                    NavBar()
-                    
-                    // Check out the Snap Carousel Video
-                    // Link in Description
-                    SnapCarousel(spacing: 20, trailingSpace: 110, index: $currentIndex, items: viewmodel.nowPlayingMovies) { movie in
-                        
-                        GeometryReader{proxy in
-                            let size = proxy.size
-                            
-                            
-                            
-                            KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
-                                .resizable()
-                                .scaledToFill()
-                            //  .aspectRatio(contentMode: .fill)
-                                .frame(width: size.width, height: size.height)
-                            
-                                .cornerRadius(15)
-                                .matchedGeometryEffect(id: movie.id, in: animation)
-                                .onTapGesture {
-                                    currentCardSize = size
-                                    detailMovie = movie
-                                    withAnimation(.easeInOut){
-                                        showDetailView = true
-                                    }
-                                }
-                            
-                        }
-                    }
-                    .frame(height: 360)
-                    // Since Carousel is Moved The current Card a little bit up
-                    // Using Padding to Avoid the Undercovering the top element
-                    .padding(.top,60)
-                    
-                    // Custom Indicator
-                    CustomIndicator()
-                    
-//                    HStack{
-//                        Text("Popüler")
-//                            .font(.title3.bold())
-//
-//                        Spacer()
-//
-//                        NavigationLink {
-//                            AllFilmView()
-//
-//                        } label: {
-//                            Text("Tüm Filmler")
-//                                .font(.system(size: 14, weight: .semibold))
-//                                .foregroundColor(.purple.opacity(0.9))
-//                        }
-//
-//
-//                    }
-//                    .padding(.leading)
-//                    .padding(.trailing)
-//
-//                    ScrollView(.horizontal, showsIndicators: false) {
-//                        HStack(spacing: 15){
-//                            ForEach(viewmodel.popularMovies){movie in
-//                                NavigationLink {
-//                                    FilmInfoView(movie: movie)
-//                                } label: {
-//                                    KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
-//                                        .resizable()
-//                                        .aspectRatio(contentMode: .fill)
-//                                        .frame(width: 100, height: 120)
-//                                        .cornerRadius(15)
-//
-//                                }
-//                            }
-//                        }
-//                        .padding()
-//                    }
-//
+     
+            ZStack{
+                // BG
+                BGView()
+                
+                // MARK: Main View Content
+                ScrollView{
                     VStack{
-                        ForEach(Category.allCases, id: \.rawValue){ category in
-                            FilmSecondRowView(films: viewModelForAllMovie, category: category)
+                        
+                        // Custom Nav Nar
+                        NavBar()
+                        
+                        // Check out the Snap Carousel Video
+                        // Link in Description
+                        SnapCarousel(spacing: 20, trailingSpace: 110, index: $currentIndex, items: viewmodel.nowPlayingMovies) { movie in
+                            
+                            GeometryReader{proxy in
+                                let size = proxy.size
+                                
+                                
+                                
+                                KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
+                                    .resizable()
+                                    .scaledToFill()
+                                //  .aspectRatio(contentMode: .fill)
+                                    .frame(width: size.width, height: size.height)
+                                
+                                    .cornerRadius(15)
+                                    .matchedGeometryEffect(id: movie.id, in: animation)
+                                    .onTapGesture {
+                                        currentCardSize = size
+                                        detailMovie = movie
+                                        withAnimation(.easeInOut){
+                                            showDetailView = true
+                                        }
+                                    }
+                                
+                            }
                         }
+                        .frame(height: 360)
+                        // Since Carousel is Moved The current Card a little bit up
+                        // Using Padding to Avoid the Undercovering the top element
+                        .padding(.top,60)
+                        
+                        // Custom Indicator
+                        CustomIndicator()
+                        
+                        //                    HStack{
+                        //                        Text("Popüler")
+                        //                            .font(.title3.bold())
+                        //
+                        //                        Spacer()
+                        //
+                        //                        NavigationLink {
+                        //                            AllFilmView()
+                        //
+                        //                        } label: {
+                        //                            Text("Tüm Filmler")
+                        //                                .font(.system(size: 14, weight: .semibold))
+                        //                                .foregroundColor(.purple.opacity(0.9))
+                        //                        }
+                        //
+                        //
+                        //                    }
+                        //                    .padding(.leading)
+                        //                    .padding(.trailing)
+                        //
+                        //                    ScrollView(.horizontal, showsIndicators: false) {
+                        //                        HStack(spacing: 15){
+                        //                            ForEach(viewmodel.popularMovies){movie in
+                        //                                NavigationLink {
+                        //                                    FilmInfoView(movie: movie)
+                        //                                } label: {
+                        //                                    KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
+                        //                                        .resizable()
+                        //                                        .aspectRatio(contentMode: .fill)
+                        //                                        .frame(width: 100, height: 120)
+                        //                                        .cornerRadius(15)
+                        //
+                        //                                }
+                        //                            }
+                        //                        }
+                        //                        .padding()
+                        //                    }
+                        //
+                        VStack{
+                            ForEach(Category.allCases, id: \.rawValue){ category in
+                                FilmSecondRowView(films: viewModelForAllMovie, category: category)
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        
+                        
+                        
                     }
-                    
-                    Spacer()
-                    
-                    
-                    
-                    
-                }
-                .overlay {
-                    if let movie = detailMovie,showDetailView{
-                        DetailView(movie: movie, showDetailView: $showDetailView, detailMovie: $detailMovie, currentCardSize: $currentCardSize, animation: animation)
+                    .overlay {
+                        if let movie = detailMovie,showDetailView{
+                            DetailView(movie: movie, showDetailView: $showDetailView, detailMovie: $detailMovie, currentCardSize: $currentCardSize, animation: animation)
+                        }
                     }
                 }
             }
-        }
-  
+        
     }
     
     // MARK: Custom Indicator

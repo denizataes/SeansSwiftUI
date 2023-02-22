@@ -11,28 +11,40 @@ struct MainTabView: View {
     @AppStorage("user_UID") var userUID: String = ""
     var body: some View {
         
-        TabView{
-            
-            FeedView()
-                .tabItem{
+        
+        TabView {
+            NavigationView{
+                FeedView()
+            }
+                .tabItem {
                     Image(systemName: "house")
+                    Text("Gönderiler")
                 }
-            
-            ExploreView()
-                .tabItem{
+            NavigationView{
+                ExploreView()
+            }
+                .tabItem {
                     Image(systemName: "magnifyingglass")
+                    Text("Ara")
+                }
+            NavigationView{
+                Home()
+            }
+                .tabItem {
+                    Image(systemName: "film")
+                    Text("Keşfet")
                 }
             
-            Home()
-                .tabItem{
-                    Image(systemName: "film")
-                }
-            ProfileView(userUID: userUID)
-                .tabItem{
+            NavigationView{
+                NewProfileView(userUID: userUID)
+            }
+                .tabItem {
                     Image(systemName: "person.crop.circle")
+                    Text("Profil")
                 }
         }
         .accentColor(.purple)
+        
         
     }
 }

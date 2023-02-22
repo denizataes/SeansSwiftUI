@@ -11,13 +11,14 @@ struct ContentView: View {
     @AppStorage("log_status") var logStatus: Bool = false
 
     var body: some View {
-
-        if logStatus{
-            MainTabView()
-        }
-        else{
-            LoginView()
-        }
+       // NavigationStack{
+            if logStatus{
+                MainTabView()
+            }
+            else{
+                LoginView()
+            }
+        //}
     }
 }
 

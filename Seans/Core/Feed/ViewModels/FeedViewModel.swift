@@ -26,7 +26,7 @@ class FeedViewModel: ObservableObject{
     func fetchPosts(){
         guard userUID != "" else{return}
         isLoading = true
-        dbManager.fetchAllPosts {[weak self] posts in
+        dbManager.fetchFollowerIDs {[weak self] posts in
             guard let strongSelf = self else{return}
             let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
             strongSelf.posts = sortedPosts
