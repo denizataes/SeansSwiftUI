@@ -7,6 +7,11 @@
 
 import SwiftUI
 import Kingfisher
+import GoogleSignIn
+import GoogleSignInSwift
+import Firebase
+import FirebaseStorage
+import FirebaseFirestore
 
 struct NewProfileView: View {
     @Namespace var animation
@@ -74,10 +79,24 @@ struct NewProfileView: View {
         
         
     }
-}
-func logout(){
     
+    func logout(){
+        print(firstName)
+        print(lastName)
+        print(currentUserUID)
+        print(logStatus)
+        //print(profileURL)
+        print(userNameStored)
+        try? Auth.auth().signOut()
+        firstName = ""
+        lastName = ""
+        logStatus = false
+        currentUserUID = ""
+        userNameStored = ""
+        profileURL = nil
+    }
 }
+
 
 func editProfile(){
     
@@ -167,7 +186,7 @@ extension NewProfileView{
     
     var postsView: some View{
         VStack{
-            if let posts = viewModel.posts{
+            if let posts = viewModel.posts, posts.count > 0{
                 LazyVStack(spacing: 0){
                     ForEach(posts) { post in
                         PostRowView(post: post) { updatedPost in
@@ -192,6 +211,7 @@ extension NewProfileView{
                     .font(.caption)
                     .padding(.top)
             }
+
         }
     }
     
