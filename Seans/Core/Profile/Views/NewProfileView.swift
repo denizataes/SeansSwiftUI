@@ -16,13 +16,14 @@ import FirebaseFirestore
 struct NewProfileView: View {
     @Namespace var animation
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
+    
+    @State var editUser: Bool = false
     private var selectedUserUID: String = ""
+    let currentDate = Date()
+    let formatter = DateFormatter()
     
     let strokeColor = Color(UIImage(named: "profile")?.averageColor ?? .systemGray3)
     
-    
-    @AppStorage("user_first_name") var firstName: String = ""
-    @AppStorage("user_last_name") var lastName: String = ""
     @AppStorage("log_status") var logStatus: Bool = false
     @AppStorage("user_profile_url") var profileURL: URL?
     @AppStorage("user_name") var userNameStored: String = ""
@@ -30,66 +31,79 @@ struct NewProfileView: View {
     @ObservedObject var viewModel: ProfileViewModel
     
     
+    
     init(userUID: String){
         self.selectedUserUID = userUID
         self.viewModel = ProfileViewModel(userUID: userUID)
+        
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        formatter.timeZone = TimeZone.current
     }
     
     var body: some View {
         
-
+        
+        
+        ScrollView{
             
-            ScrollView{
-                
-                profileSection
-                
-                followerSection
-                
-                buttons
-                
-                tweetFilterBar
-                
-                postsView
-                
-            }
-            .navigationTitle("\(viewModel.user?.userName ?? "")")
-            .toolbar {
-                Menu {
-                    Button("Çıkış Yap",role: .destructive, action: logout)
-                } label: {
-                    Image(systemName: "list.bullet")
-                        .foregroundColor(Color(.systemOrange))
-                }
-            }
-            .toolbar {
-                Button {
+            profileSection
+            
+            followerSection
+            
+            buttons
+            
+            tweetFilterBar
+            
+            postsView
+            
+        }
+        .sheet(isPresented: $editUser, content: {
+            if let user = viewModel.user{
+                NewRegisterView(onUpdate: {
                     
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .foregroundColor(Color(.systemOrange))
-                }
-                
+                    viewModel.fetchUser(userUID: currentUserUID)
+                    
+                }, user: user, fromRegister: false)
+                .presentationDetents([.large])
                 
             }
-            .refreshable {
-                viewModel.fetchUser(userUID: selectedUserUID)
-                viewModel.fetchPost(userUID: selectedUserUID)
+        })
+        
+        .navigationTitle("\(viewModel.user?.userName ?? "")")
+        .toolbar {
+            Menu {
+                Button("Çıkış Yap",role: .destructive, action: logout)
+            } label: {
+                Image(systemName: "list.bullet")
+                    .foregroundColor(Color(.systemOrange))
             }
+        }
+        .toolbar {
+            Button {
+                
+            } label: {
+                Image(systemName: "square.and.arrow.up")
+                    .foregroundColor(Color(.systemOrange))
+            }
+            
+            
+        }
+        .refreshable {
+            viewModel.fetchUser(userUID: selectedUserUID)
+            viewModel.fetchPost(userUID: selectedUserUID)
+        }
         
         
         
     }
     
     func logout(){
-        print(firstName)
-        print(lastName)
+        
         print(currentUserUID)
         print(logStatus)
         //print(profileURL)
         print(userNameStored)
         try? Auth.auth().signOut()
-        firstName = ""
-        lastName = ""
         logStatus = false
         currentUserUID = ""
         userNameStored = ""
@@ -113,21 +127,37 @@ extension NewProfileView{
     var profileSection: some View{
         VStack(alignment: .center){
             
-            KFImage(URL(string: viewModel.user?.userProfileURL ??  ""))
-                .placeholder{
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: Color(.systemPurple)))
+            Button {
+                editUser.toggle()
+            } label: {
+                if let image = URL(string: viewModel.user?.userProfileURL ?? ""){
+                    KFImage(image)
+                        .placeholder {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: Color(.systemPurple)))
+                        }
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .clipShape(Circle())
+                        .shadow(color: strokeColor, radius: 4)
+                        .overlay(Circle().stroke(strokeColor, lineWidth: 2))
+                        .padding(.leading)
+                        .padding(.trailing)
                 }
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
-                .clipShape(Circle())
-                .shadow(color: strokeColor, radius: 4)
-                .overlay(Circle().stroke(strokeColor, lineWidth: 2))
-                .padding(.leading)
-                .padding(.trailing)
-            
-            
+                else{
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .foregroundColor(.gray)
+                        .clipShape(Circle())
+                        .shadow(color: strokeColor, radius: 4)
+                        .overlay(Circle().stroke(strokeColor, lineWidth: 2))
+                        .padding(.leading)
+                        .padding(.trailing)
+                }
+            }
             
             Text("\(viewModel.user?.firstName ?? "") \(viewModel.user?.lastName ?? "")")
                 .font(.headline)
@@ -211,7 +241,7 @@ extension NewProfileView{
                     .font(.caption)
                     .padding(.top)
             }
-
+            
         }
     }
     
@@ -283,7 +313,7 @@ extension NewProfileView{
             } label: {
                 
                 if viewModel.user?.userUID != currentUserUID{
-
+                    
                     Button {
                         guard selectedUserUID != currentUserUID else {return} // Kendi kullanıcıysa takip etme özelliği kapatılsın.
                         guard let user = viewModel.user else {return}
@@ -310,20 +340,59 @@ extension NewProfileView{
                     .buttonBorderShape(.roundedRectangle)
                     .buttonStyle(.bordered)
                     .tint(.purple)
-       
+                    
                 }
                 else{
-                    Button {
+                    VStack{
+                        Button {
+                            editUser.toggle()
+                        } label: {
+                            HStack{
+                                Image(systemName: "gear")
+                                Text("Düzenle")
+                            }
+                        }
+                        .buttonBorderShape(.roundedRectangle)
+                        .buttonStyle(.bordered)
+                        .tint(Color(.systemGreen))
                         
-                    } label: {
-                        HStack{
-                            Image(systemName: "gear")
-                            Text("Düzenle")
+                        HStack(spacing: 4){
+                            Image(systemName: "clock.arrow.2.circlepath")
+                                .resizable()
+                                .frame(width: 18,height: 16)
+                                .foregroundColor(.gray)
+                            
+                            if let date = formatter.date(from: viewModel.user?.updatedDate.description ?? "") {
+                                let interval = Date().timeIntervalSince(date)
+                                
+                                if interval < 60 { // saniye hesaplama
+                                    let secondsAgo = Int(interval)
+                                    Text("\(secondsAgo) saniye önce")
+                                        .foregroundColor(.gray)
+                                        .font(.caption2)
+                                } else if interval < 3600 { // dakika hesaplama
+                                    let minutesAgo = Int(interval / 60)
+                                    Text("\(minutesAgo) dakika önce")
+                                        .foregroundColor(.gray)
+                                        .font(.caption2)
+                                } else if interval < 86400 { // saat hesaplama
+                                    let hoursAgo = Int(interval / 3600)
+                                    Text("\(hoursAgo) saat önce")
+                                        .foregroundColor(.gray)
+                                        .font(.caption2)
+                                } else { // gün hesaplama
+                                    let daysAgo = Int(interval / 86400)
+                                    Text("\(daysAgo) gün önce")
+                                        .foregroundColor(.gray)
+                                        .font(.caption2)
+                                }
+                            } else {
+                                Text("Geçersiz tarih")
+                                    .foregroundColor(.gray)
+                                    .font(.caption)
+                            }
                         }
                     }
-                    .buttonBorderShape(.roundedRectangle)
-                    .buttonStyle(.bordered)
-                    .tint(Color(.systemGreen))
                 }
             }
         }

@@ -19,6 +19,64 @@ final class DatabaseManager {
     
     private let database = Database.database().reference()
     
+    func updateUser(with user: User, completion: @escaping (Result<(), Error>) -> Void) {
+        
+        var data = [
+            "firstName": user.firstName,
+            "lastName": user.lastName,
+            "userName": user.userName,
+            "userBio": user.userBio,
+            "instagramProfileURL": user.instagramProfileURL,
+            "twitterProfileURL": user.twitterProfileURL,
+            "updatedDate": user.updatedDate
+        ] as [String : Any]
+        
+        guard let userUID = user.id else {
+            let error = NSError(domain: "com.example.app", code: 401, userInfo: [NSLocalizedDescriptionKey: "Kullanıcı oturumu açık değil"])
+            completion(.failure(error))
+            return
+        }
+        
+        Firestore.firestore().collection("Users").document(userUID).updateData(data) {[weak self] error in
+            guard let strongSelf = self else {return}
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            if let userProfilePicData = user.userProfilePicData { // profil resmi seçtiyse
+                StorageManager.shared.uploadProfilePicture(with: userProfilePicData, userUID: userUID) { result in
+                    
+                    switch result {
+                    case .success(let url):
+                        strongSelf.updateProfilePhoto(with: url, uid: userUID) { updateError in
+                            if let updateError = updateError {
+                                completion(.failure(updateError))
+                                return
+                            }
+                            data = ["userProfileURL": url]
+                            Firestore.firestore().collection("Users").document(userUID).updateData(data) { error in
+                                if let error = error {
+                                    completion(.failure(error))
+                                    return
+                                }
+                                
+                                completion(.success(()))
+                            }
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                completion(.success(()))
+                
+            }
+        }
+    }
+    
+    
+    
     func insertUser(with user: User, completion: @escaping (Result<(), Error>) -> Void){
         Auth.auth().createUser(withEmail: user.userEmail, password: user.password){ result, error in
             if let error = error {
@@ -42,9 +100,6 @@ final class DatabaseManager {
                 "userEmail": user.userEmail,
                 "instagramProfileURL": user.instagramProfileURL,
                 "twitterProfileURL": user.twitterProfileURL,
-                "snapchatProfileURL": user.snapchatProfileURL,
-                "tiktokProfileURL": user.tiktokProfileURL,
-                "youtubeProfileURL": user.youtubeProfileURL,
                 "userProfileURL": user.userProfileURL,
                 "follow": [],
                 "follower": [],
@@ -190,9 +245,6 @@ final class DatabaseManager {
             "userEmail": user.userEmail,
             "instagramProfileURL": user.instagramProfileURL,
             "twitterProfileURL": user.twitterProfileURL,
-            "snapchatProfileURL": user.snapchatProfileURL,
-            "tiktokProfileURL": user.tiktokProfileURL,
-            "youtubeProfileURL": user.youtubeProfileURL,
             "userProfileURL": user.userProfileURL,
             "follow": [],
             "follower": [],
@@ -331,25 +383,25 @@ final class DatabaseManager {
             }
     }
     
-//    func searchUsers(query: String, completion: @escaping ([User]?, Error?) -> Void) {
-//        Firestore.firestore().collection("Users")
-//            .whereField("userName", isGreaterThanOrEqualTo: query.lowercased())
-//            .whereField("userName", isLessThanOrEqualTo: query.lowercased() + "\u{f8ff}")
-//            .whereField("firstName", isGreaterThanOrEqualTo: query.capitalized + "\u{f8ff}")
-//            .whereField("lastName", isGreaterThanOrEqualTo: query.capitalized + "\u{f8ff}")
-//            .getDocuments { snapshot, error in
-//                if let error = error {
-//                    completion(nil, error)
-//                } else {
-//                    let users = snapshot?.documents.compactMap { document in
-//                        try? document.data(as: User.self)
-//                    }
-//                    completion(users, nil)
-//                }
-//            }
-//    }
+    //    func searchUsers(query: String, completion: @escaping ([User]?, Error?) -> Void) {
+    //        Firestore.firestore().collection("Users")
+    //            .whereField("userName", isGreaterThanOrEqualTo: query.lowercased())
+    //            .whereField("userName", isLessThanOrEqualTo: query.lowercased() + "\u{f8ff}")
+    //            .whereField("firstName", isGreaterThanOrEqualTo: query.capitalized + "\u{f8ff}")
+    //            .whereField("lastName", isGreaterThanOrEqualTo: query.capitalized + "\u{f8ff}")
+    //            .getDocuments { snapshot, error in
+    //                if let error = error {
+    //                    completion(nil, error)
+    //                } else {
+    //                    let users = snapshot?.documents.compactMap { document in
+    //                        try? document.data(as: User.self)
+    //                    }
+    //                    completion(users, nil)
+    //                }
+    //            }
+    //    }
     func fetchFollowerIDs(completion: @escaping ([Post]?) -> Void) {
-
+        
         let currentUser = Auth.auth().currentUser
         guard let userUID = currentUser?.uid else{return}
         var followingUserUID = [String]()
@@ -373,7 +425,7 @@ final class DatabaseManager {
                 completion(posts)
             }
         }
-
+        
     }
     
     
@@ -403,9 +455,9 @@ final class DatabaseManager {
                 completion(users,nil)
             }
     }
-
-
-
-
+    
+    
+    
+    
     
 }

@@ -174,7 +174,7 @@ struct RegisterView: View {
                             .fillView(Color(.systemPurple))
     
                     }
-                    .disableWithOpacity(userName == "" || emailID == "" || password == "")
+                    .disableWithOpacity( userName == "" || emailID == "" || password == "")
                     .padding(.top, 10)
                     
                 }
@@ -231,8 +231,8 @@ struct RegisterView: View {
     
     func registerUser(){
         closeKeyboard()
-        let user = User(firstName: firstName, lastName: lastName, userName: userName, userBio: userBio, userUID: "", userEmail: emailID, password: password, instagramProfileURL: instagramUsername, twitterProfileURL: twitterUsername, snapchatProfileURL: snapchatUsername, tiktokProfileURL: tiktokUsername, youtubeProfileURL: youtubeUsername, userProfileURL: "", userProfilePicData: userProfilePicData, follow: [], follower: [], updatedDate: Date())
-        viewModel.insertUser(user: user)
+//        let user = User(firstName: firstName, lastName: lastName, userName: userName, userBio: userBio, userUID: "", userEmail: emailID, password: password, instagramProfileURL: instagramUsername, twitterProfileURL: twitterUsername, userProfilePicData: userProfilePicData, follow: [], follower: [], updatedDate: Date())
+        //viewModel.insertUser(user: user)
     }
     
 }

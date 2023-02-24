@@ -17,9 +17,10 @@ struct SocialMediaTextView: View {
                 .frame(width: 24, height: 24)
                 .clipShape(Circle())
             
-            TextFieldWrapper(text: $text, placeholder: "\(socialMediaName.imageName.prefix(1).capitalized + socialMediaName.imageName.dropFirst()) Kullanıcı Adı")
-                .textContentType(.emailAddress)
-            .border(1, Color(.systemPurple).opacity(0.5))                    }
+            //            TextFieldWrapper(text: $text, placeholder: "\(socialMediaName.imageName.prefix(1).capitalized + socialMediaName.imageName.dropFirst()) Kullanıcı Adı")
+            //                .textContentType(.emailAddress)
+            //            .border(1, Color(.systemPurple).opacity(0.5))                    }
+        }
     }
 }
 
@@ -33,11 +34,14 @@ struct SocialMediaTextView_Previews: PreviewProvider {
 struct TextFieldWrapper: UIViewRepresentable {
     @Binding var text: String
     var placeholder: String
+    var color: Color
     
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField(frame: .zero)
         textField.delegate = context.coordinator
         textField.placeholder = placeholder
+        textField.textColor = UIColor(color)
+        textField.tintColor = UIColor(color)
         return textField
     }
     

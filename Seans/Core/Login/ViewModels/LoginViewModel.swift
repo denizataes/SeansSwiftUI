@@ -18,8 +18,7 @@ class LoginViewModel: ObservableObject{
     @Published var isLoading = false
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
-    @AppStorage("user_first_name") private var firstName: String = ""
-    @AppStorage("user_last_name") private var lastName: String = ""
+
     @AppStorage("log_status") var logStatus: Bool = false
     @AppStorage("user_profile_url") var profileURL: URL?
     @AppStorage("user_name") var userNameStored: String = ""
@@ -36,8 +35,6 @@ class LoginViewModel: ObservableObject{
 
                 if let user = user{
                     strongSelf.dbManager.getUserProfileImageURL(with: user.userUID) { url in
-                        strongSelf.firstName = user.firstName
-                        strongSelf.lastName = user.lastName
                         strongSelf.logStatus = true
                         strongSelf.userUID = user.userUID
                         strongSelf.userNameStored = user.userName
@@ -91,14 +88,12 @@ class LoginViewModel: ObservableObject{
                                     }
                                     if let data = data {
                                         DispatchQueue.main.async {
-                                            let insertUser = User(firstName: firstName, lastName: lastName, userName: userName, userBio: "", userUID: user.uid, userEmail: email, password: "", instagramProfileURL: "", twitterProfileURL: "", snapchatProfileURL: "", tiktokProfileURL: "", youtubeProfileURL: "", userProfileURL: "", userProfilePicData: data, follow: [], follower: [], updatedDate: Date())
+                                            let insertUser = User(firstName: firstName, lastName: lastName, userName: userName, userBio: "", userUID: user.uid, userEmail: email, password: "", instagramProfileURL: "", twitterProfileURL: "", userProfileURL: "", userProfilePicData: data, follow: [], follower: [], updatedDate: Date())
                                             strongSelf.dbManager.saveUser(with: insertUser) { [weak self] result in
                                                 guard let strongSelf = self else { return }
                                                 switch result {
                                                 case .success(()):
                                                     strongSelf.dbManager.getUserProfileImageURL(with: user.uid) { url in
-                                                        strongSelf.firstName = firstName
-                                                        strongSelf.lastName = lastName
                                                         strongSelf.userUID = user.uid
                                                         strongSelf.userNameStored = userName
                                                         strongSelf.logStatus = true
@@ -116,7 +111,7 @@ class LoginViewModel: ObservableObject{
                                     }
                                 }.resume()
                             } else {
-                                let insertUser = User(firstName: firstName, lastName: lastName, userName: userName, userBio: "", userUID: user.uid, userEmail: email, password: "", instagramProfileURL: "", twitterProfileURL: "", snapchatProfileURL: "", tiktokProfileURL: "", youtubeProfileURL: "", userProfileURL: "", userProfilePicData: nil, follow: [], follower: [], updatedDate: Date())
+                                let insertUser = User(firstName: firstName, lastName: lastName, userName: userName, userBio: "", userUID: user.uid, userEmail: email, password: "", instagramProfileURL: "", twitterProfileURL: "", userProfileURL: "", userProfilePicData: nil, follow: [], follower: [], updatedDate: Date())
                                 strongSelf.dbManager.saveUser(with: insertUser) { [weak self] result in
                                     guard let strongSelf = self else { return }
                                     switch result {
@@ -125,8 +120,6 @@ class LoginViewModel: ObservableObject{
                                             strongSelf.userUID = user.uid
                                             strongSelf.userNameStored = userName
                                             strongSelf.logStatus = true
-                                            strongSelf.firstName = firstName
-                                            strongSelf.lastName = lastName
                                             print(url)
                                             strongSelf.profileURL = URL(string: url)
                                             strongSelf.isLoading = false
@@ -147,8 +140,6 @@ class LoginViewModel: ObservableObject{
                                 strongSelf.userUID = user.uid
                                 strongSelf.userNameStored = userName
                                 strongSelf.logStatus = true
-                                strongSelf.firstName = firstName
-                                strongSelf.lastName = lastName
                                 strongSelf.profileURL = URL(string: url)
                                 strongSelf.isLoading = false
                             }

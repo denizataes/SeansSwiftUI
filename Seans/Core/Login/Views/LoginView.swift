@@ -149,9 +149,14 @@ struct LoginView: View {
         }
         .padding()
         .vAlign(.center)
-        .fullScreenCover(isPresented: $createAccount) {
-            RegisterView()
-        }
+        .sheet(isPresented: $createAccount, content: {
+            NewRegisterView(fromRegister: true)
+                .presentationDetents([.large])
+        })
+        
+//        .fullScreenCover(isPresented: $createAccount) {
+//
+//        }
         .overlay(content: {
             LoadingView(show: $viewModel.isLoading)
         })
@@ -164,6 +169,7 @@ struct LoginView: View {
         //}
     }
     func login(){
+        closeKeyboard()
         viewModel.login(email: emailID, password: password)
     }
     

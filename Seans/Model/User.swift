@@ -13,9 +13,6 @@ struct User: Identifiable,Codable{
     var password: String
     var instagramProfileURL: String
     var twitterProfileURL: String
-    var snapchatProfileURL: String
-    var tiktokProfileURL: String
-    var youtubeProfileURL: String
     var userProfileURL: String
     var userProfilePicData: Data?
     var follow: [String]
@@ -23,7 +20,7 @@ struct User: Identifiable,Codable{
     var createdDate: Date = Date()
     var updatedDate: Date
     
-    init(firstName: String, lastName: String, userName: String, userBio: String, userUID: String, userEmail: String, password: String, instagramProfileURL: String, twitterProfileURL: String, snapchatProfileURL: String, tiktokProfileURL: String, youtubeProfileURL: String, userProfileURL: String, userProfilePicData: Data?, follow: [String], follower: [String], updatedDate: Date) {
+    init(firstName: String, lastName: String, userName: String, userBio: String, userUID: String, userEmail: String, password: String, instagramProfileURL: String, twitterProfileURL: String, userProfileURL: String, userProfilePicData: Data?, follow: [String], follower: [String], updatedDate: Date) {
         self.firstName = firstName
         self.lastName = lastName
         self.userName = userName
@@ -33,9 +30,6 @@ struct User: Identifiable,Codable{
         self.password = password
         self.instagramProfileURL = instagramProfileURL
         self.twitterProfileURL = twitterProfileURL
-        self.snapchatProfileURL = snapchatProfileURL
-        self.tiktokProfileURL = tiktokProfileURL
-        self.youtubeProfileURL = youtubeProfileURL
         self.userProfileURL = userProfileURL
         self.userProfilePicData = userProfilePicData
         self.follow = follow
@@ -55,9 +49,6 @@ struct User: Identifiable,Codable{
         userEmail = try container.decode(String.self, forKey: .userEmail)
         instagramProfileURL = try container.decode(String.self, forKey: .instagramProfileURL)
         twitterProfileURL = try container.decode(String.self, forKey: .twitterProfileURL)
-        snapchatProfileURL = try container.decode(String.self, forKey: .snapchatProfileURL)
-        tiktokProfileURL = try container.decode(String.self, forKey: .tiktokProfileURL)
-        youtubeProfileURL = try container.decode(String.self, forKey: .youtubeProfileURL)
         userProfileURL = try container.decode(String.self, forKey: .userProfileURL)
         follower = try container.decode([String].self, forKey: .follower)
         follow = try container.decode([String].self, forKey: .follow)
@@ -79,9 +70,6 @@ struct User: Identifiable,Codable{
         case userEmail
         case instagramProfileURL
         case twitterProfileURL
-        case snapchatProfileURL
-        case tiktokProfileURL
-        case youtubeProfileURL
         case userProfileURL
         case userProfilePicData
         case follow

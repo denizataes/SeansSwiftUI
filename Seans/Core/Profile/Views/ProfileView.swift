@@ -18,8 +18,7 @@ struct ProfileView: View {
     @Namespace var animation
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
     @State var show = false
-    @AppStorage("user_first_name") var firstName: String = ""
-    @AppStorage("user_last_name") var lastName: String = ""
+
     @AppStorage("log_status") var logStatus: Bool = false
     @AppStorage("user_profile_url") var profileURL: URL?
     @AppStorage("user_name") var userNameStored: String = ""
@@ -106,25 +105,19 @@ struct ProfileView: View {
 
     }
     
-    func editProfile(){
-         
-    }
-    
     func logout(){
-        print(firstName)
-        print(lastName)
+
         print(currentUserUID)
-        print(logStatus)
         //print(profileURL)
         print(userNameStored)
         try? Auth.auth().signOut()
-        firstName = ""
-        lastName = ""
+
         logStatus = false
         currentUserUID = ""
         userNameStored = ""
         profileURL = nil
     }
+    
 
 }
 
