@@ -18,6 +18,7 @@ struct NewProfileView: View {
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
     
     @State var editUser: Bool = false
+    @State var shakeImage: Bool = false
     private var selectedUserUID: String = ""
     let currentDate = Date()
     let formatter = DateFormatter()
@@ -128,7 +129,13 @@ extension NewProfileView{
         VStack(alignment: .center){
             
             Button {
-                editUser.toggle()
+                if viewModel.user?.userUID == currentUserUID {
+                        editUser.toggle()
+                    } else {
+                        withAnimation(Animation.easeInOut(duration: 1).repeatCount(1)) {
+                                shakeImage.toggle()
+                            }
+                    }
             } label: {
                 if let image = URL(string: viewModel.user?.userProfileURL ?? ""){
                     KFImage(image)
@@ -144,6 +151,8 @@ extension NewProfileView{
                         .overlay(Circle().stroke(strokeColor, lineWidth: 2))
                         .padding(.leading)
                         .padding(.trailing)
+                        .rotationEffect(Angle(degrees: shakeImage ? -10 : 10))
+
                 }
                 else{
                     Image(systemName: "person.crop.circle.fill")
