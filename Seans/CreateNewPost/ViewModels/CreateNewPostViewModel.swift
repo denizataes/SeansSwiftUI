@@ -13,7 +13,7 @@ class CreatePostViewModel: ObservableObject{
     let dbManager = DatabaseManager()
     @Published var isLoading = false
 
-    func createPost(post: Post, completion: @escaping (Result<Post, Error>) -> Void) {
+    func createPost(post: NewPost, completion: @escaping (Result<NewPost, Error>) -> Void) {
         isLoading = true
         
         dbManager.createPost(post) {[weak self] result in

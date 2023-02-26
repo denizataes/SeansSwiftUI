@@ -10,7 +10,7 @@ import FirebaseFirestoreSwift
 
 // MARK: Post Model
 
-struct Post: Identifiable, Codable, Equatable{
+struct NewPost: Identifiable, Codable, Equatable{
     
     @DocumentID var id: String?
     var text: String
@@ -23,26 +23,24 @@ struct Post: Identifiable, Codable, Equatable{
     var repliesPost: [Post] = []
     
     // MARK: Basic User Info
-    var userName: String
     var userUID: String
-    var userProfileURL: URL?
-    var userFirstName: String
-    var userLastName: String
-    
+
     enum CodingKeys: CodingKey{
         case id
         case text
         case imageURL
-        case repliesPost
         case movieID
         case movieName
         case moviePhoto
         case publishedDate
         case likedIDs
-        case userName
         case userUID
-        case userProfileURL
-        case userFirstName
-        case userLastName
+        case repliesPost
     }
 }
+
+struct PostWithUID {
+    let post: Post
+    let userUID: String
+}
+

@@ -15,7 +15,7 @@ import Kingfisher
 
 struct CreateNewPost: View {
     /// - CallBacks
-    var onPost: (Post) -> ()
+    var onPost: (() -> ())?
     /// - Post Properties
     ///
     @State private var postText: String = ""
@@ -247,11 +247,15 @@ struct CreateNewPost: View {
             moviePhoto = "\(Statics.URL)\(selectedMovie?.artwork ?? "")"
         }
         
-        let post = Post(text: postText, movieID: selectedMovie?.id ?? 0, movieName: selectedMovie?.movieTitle ?? "", moviePhoto: moviePhoto, userName: userName, userUID: userUID, userProfileURL: profileURL!, userFirstName: firstName ?? "", userLastName: lastName ?? "")
+        guard let movieID = selectedMovie?.id else{return}
+        
+        
+        let post = NewPost(text: postText, movieID: movieID, movieName: selectedMovie?.movieTitle ?? "", moviePhoto: moviePhoto, userUID: userUID)
+        
         viewModel.createPost(post: post) { result in
             switch result{
             case .success(let post):
-                onPost(post)
+                onPost?()
                 dismiss()
             case .failure(let error):
                 errorMessage = error.localizedDescription

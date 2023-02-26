@@ -34,7 +34,7 @@ class ProfileViewModel: ObservableObject{
     
     func fetchPost(userUID: String){
         
-        dbManager.fetchPosts(withUid: userUID) {[weak self] posts in
+        dbManager.fetchAllPosts(userUIDs: [userUID]) {[weak self] posts in
             guard let strongSelf = self else{return}
             let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
             strongSelf.posts = sortedPosts

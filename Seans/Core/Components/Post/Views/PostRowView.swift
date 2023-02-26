@@ -14,7 +14,7 @@ import FirebaseStorage
 
 struct PostRowView: View {
     /// - CallBacks
-    var onUpdate: (Post) -> ()
+    var onUpdate: (NewPost) -> ()
     var onDelete: () -> ()
     
     var post: Post
@@ -25,7 +25,7 @@ struct PostRowView: View {
     @ObservedObject var viewModel = PostRowViewModel()
     @AppStorage("user_UID") var userUID: String = ""
     
-    init(post: Post, onUpdate: @escaping (Post) -> (), onDelete: @escaping () -> ()) {
+    init(post: Post, onUpdate: @escaping (NewPost) -> (), onDelete: @escaping () -> ()) {
         self.post = post
         self.onUpdate = onUpdate
         self.onDelete = onDelete
@@ -103,7 +103,7 @@ struct PostRowView: View {
                         if snapshot.exists{
                             /// - Document
                             /// Fetcihng Updated Document
-                            if let updatedPost = try? snapshot.data(as: Post.self){
+                            if let updatedPost = try? snapshot.data(as: NewPost.self){
                                 onUpdate(updatedPost)
                             }
                         }else{

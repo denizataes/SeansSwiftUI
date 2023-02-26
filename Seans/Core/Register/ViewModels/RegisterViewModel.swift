@@ -26,21 +26,35 @@ class RegisterViewModel: ObservableObject{
     func updateUser(user: User, completion: @escaping (Result<(), Error>) -> Void) {
         isLoading = true
         
-        dbManager.updateUser(with: user) {[weak self] result in
+        dbManager.userExistsWithUserName(user.userName, currentUserUID: userUID) {[weak self] res in
             guard let strongSelf = self else {return}
-        
-            switch result{
-            case .success():
+            if res {
                 strongSelf.isLoading = false
-                completion(.success(()))
-
-            case .failure(let error):
-                strongSelf.isLoading = false
-                strongSelf.errorMessage = error.localizedDescription
+                strongSelf.errorMessage = "Seçtiğiniz kullanıcı adı kullanılıyor. Lütfen başka bir kullanıcı adı deneyin."
                 strongSelf.showError = true
-                completion(.failure(error))
+                return
+            }
+            else{
+                strongSelf.dbManager.updateUser(with: user) {[weak self] result in
+                    guard let strongSelf = self else {return}
+                
+                    switch result{
+                    case .success():
+                        strongSelf.isLoading = false
+                        completion(.success(()))
+
+                    case .failure(let error):
+                        strongSelf.isLoading = false
+                        strongSelf.errorMessage = error.localizedDescription
+                        strongSelf.showError = true
+                        completion(.failure(error))
+                    }
+                }
             }
         }
+        
+        
+        
     }
     
     func insertUser(user: User){

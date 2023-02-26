@@ -63,7 +63,6 @@ struct NewRegisterView: View {
                     CustomTextField(isPassword: false, isRequired: true, name: "Soyadı", imageName: "person", text: $lastName, bigText: false)
                     
                     CustomTextField(isPassword: false, isRequired: true, name: "Kullanıcı Adı", imageName: "person", text: $userName, bigText: false)
-                        .disableWithOpacity(!fromRegister)
                     
                     if fromRegister{ // sadece kayıt ekranından geldiğinde şifreyi göster.
                         CustomTextField(isPassword: true, isRequired: true, name: "Şifre", imageName: "lock", text: $password, bigText: false)
@@ -179,7 +178,7 @@ struct NewRegisterView: View {
         else{
             guard let userUID = Auth.auth().currentUser?.uid else {
                 let error = NSError(domain: "com.example.app", code: 401, userInfo: [NSLocalizedDescriptionKey: "Kullanıcı oturumu açık değil"])
-                return
+                return 
             }
             user.id = userUID
             

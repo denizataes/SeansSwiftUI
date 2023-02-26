@@ -62,8 +62,8 @@ struct FeedView: View {
             
         }
         .fullScreenCover(isPresented: $createNewPost) {
-            CreateNewPost { post in
-                viewModel.posts?.insert(post, at: 0)
+            CreateNewPost {
+                viewModel.fetchPosts()
             }
         }
         

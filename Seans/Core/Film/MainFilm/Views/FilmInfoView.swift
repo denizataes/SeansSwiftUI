@@ -56,9 +56,8 @@ struct FilmInfoView: View {
             .animation(.interpolatingSpring(mass: 3.0,stiffness: 100.0,damping: 120,initialVelocity: 0))
             .navigationBarBackButtonHidden(true)
             .sheet(isPresented: $selectMovie) {
-                CreateNewPost(onPost: { post in
-                    
-                }, selectedMovie: Movie(id: viewModel2.movie.id ?? 0, movieTitle: movie.movieTitle, releaseDate: movie.releaseDate, movieTime: ("\(viewModel2.movie.runtime ?? 0) Dakika"), movieDescription: viewModel2.movie.overview ?? "", artwork: movie.artwork,vote_average: movie.vote_average))
+                CreateNewPost(selectedMovie: Movie(id: viewModel2.movie.id ?? 0, movieTitle: movie.movieTitle, releaseDate: movie.releaseDate, movieTime: ("\(viewModel2.movie.runtime ?? 0) Dakika"), movieDescription: viewModel2.movie.overview ?? "", artwork: movie.artwork,vote_average: movie.vote_average))
+                
             }
 
 
