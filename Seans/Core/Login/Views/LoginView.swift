@@ -158,7 +158,10 @@ struct LoginView: View {
 //
 //        }
         .overlay(content: {
-            LoadingView(show: $viewModel.isLoading)
+            //LoadingView(show: $viewModel.isLoading)
+            if viewModel.isLoading{
+                CustomLoadingView()
+            }
         })
         // MARK: Displaying Alert
         .alert(viewModel.errorMessage, isPresented: $viewModel.showError) {

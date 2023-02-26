@@ -11,7 +11,7 @@ struct FriendsWatchRowView: View {
     var body: some View {
         HStack{
             NavigationLink {
-                ProfileView(userUID: "")
+                NewProfileView(userUID: "")
             } label: {
                 Image("idil")
                     .resizable()
@@ -21,7 +21,7 @@ struct FriendsWatchRowView: View {
             }
             
             NavigationLink {
-                ProfileView(userUID: "")
+                NewProfileView(userUID: "")
             } label: {
                 Image("ugur")
                     .resizable()
@@ -31,7 +31,7 @@ struct FriendsWatchRowView: View {
             }
             
             NavigationLink {
-                ProfileView(userUID: "")
+                NewProfileView(userUID: "")
             } label: {
                 Image("emre")
                     .resizable()

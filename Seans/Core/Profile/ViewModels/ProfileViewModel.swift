@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 class ProfileViewModel: ObservableObject{
+    
+    @Published var isLoading = false
     @Published var posts: [Post]?
     @Published var user: User?
     let dbManager = DatabaseManager()
@@ -19,8 +21,16 @@ class ProfileViewModel: ObservableObject{
         fetchPost(userUID: userUID)
     }
     
-    func followUser(currentUserUID: String, followUserID: String, isFollow: Bool){
-        dbManager.followUser(currentUserID: currentUserUID, followUserID: followUserID, isFollow: isFollow)
+    func followUser(currentUserUID: String, followUserID: String, isFollow: Bool, completion: @escaping (Bool) -> Void) {
+//        dbManager.followUser(currentUserID: currentUserUID, followUserID: followUserID, isFollow: isFollow)
+        dbManager.followUser(currentUserID: currentUserUID, followUserID: followUserID, isFollow: isFollow) { res in
+            if res{
+                completion(true)
+            }
+            else{
+                completion(false)
+            }
+        }
     }
     
     func fetchUser(userUID: String){
@@ -38,6 +48,7 @@ class ProfileViewModel: ObservableObject{
             guard let strongSelf = self else{return}
             let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
             strongSelf.posts = sortedPosts
+            strongSelf.isLoading = false
         }
     }
     

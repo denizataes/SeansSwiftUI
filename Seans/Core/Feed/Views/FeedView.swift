@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-
 struct FeedView: View {
     @State private var createNewPost: Bool = false
     @ObservedObject var viewModel = FeedViewModel()
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            ScrollView{
-                if let posts = viewModel.posts {
+        ZStack {
+            if let posts = viewModel.posts {
+                ScrollView{
                     LazyVStack(spacing: 0){
                         ForEach(posts) { post in
                             PostRowView(post: post) { updatedPost in
@@ -35,7 +34,53 @@ struct FeedView: View {
                         }
                     }
                 }
-                
+                .overlay(
+                    Group {
+                        if viewModel.isLoading {
+                            CustomLoadingView()
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .background(Color(.systemBackground).opacity(0.5))
+                    .opacity(viewModel.isLoading ? 1 : 0)
+                    , alignment: .center
+                )
+                .overlay(
+                    Button(action: {
+                        createNewPost.toggle()
+                    }, label: {
+                        Image(systemName: "plus")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(.white))
+                            .padding(13)
+                            .background(Color(.systemOrange), in: Circle())
+                            .shadow(radius: 5)
+                    })
+                    .padding(15)
+                    , alignment: .bottomTrailing
+                )
+
+            } else {
+            
+                VStack{
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            createNewPost.toggle()
+                        }, label: {
+                            Image(systemName: "plus")
+                                .font(.title)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color(.white))
+                                .padding(13)
+                                .background(Color(.systemOrange), in: Circle())
+                                .shadow(radius: 5)
+                        })
+                        .padding()
+                    }
+                }
             }
         }
         .navigationTitle("Gönderiler")
@@ -45,34 +90,15 @@ struct FeedView: View {
             viewModel.fetchPosts()
         }
         .overlay{
-            LoadingView(show: $viewModel.isLoading)
-        }
-        .overlay(alignment: .bottomTrailing){
-            Button {
-                createNewPost.toggle()
-            } label: {
-                Image(systemName: "plus")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color(.white))
-                    .padding(13)
-                    .background(Color(.systemPurple), in: Circle())
+            //LoadingView(show: $viewModel.isLoading)
+            if viewModel.isLoading{
+                CustomLoadingView()
             }
-            .padding(15)
-            
         }
         .fullScreenCover(isPresented: $createNewPost) {
             CreateNewPost {
                 viewModel.fetchPosts()
             }
         }
-        
-    }
-
-}
-
-struct FeedView_Previews: PreviewProvider {
-    static var previews: some View {
-        FeedView()
     }
 }

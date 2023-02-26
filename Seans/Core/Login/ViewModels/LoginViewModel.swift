@@ -60,6 +60,7 @@ class LoginViewModel: ObservableObject{
         GIDSignIn.sharedInstance.signIn(with: config, presenting: ApplicationUtility.rootViewController) { [weak self] user, error in
             guard self != nil else { return }
             if let error = error {
+                self!.isLoading = false
                 print("Google ile giriş yapılırken hata oluştu -> \(error.localizedDescription)")
                 return
             }

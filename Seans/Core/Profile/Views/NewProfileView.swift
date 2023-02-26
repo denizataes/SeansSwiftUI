@@ -16,9 +16,10 @@ import FirebaseFirestore
 struct NewProfileView: View {
     @Namespace var animation
     @State private var selectedFilter: TweetFilterViewModel  = .feeds
-    
+    @State private var docListener: ListenerRegistration?
     @State var editUser: Bool = false
     @State var shakeImage: Bool = false
+
     private var selectedUserUID: String = ""
     let currentDate = Date()
     let formatter = DateFormatter()
@@ -69,7 +70,12 @@ struct NewProfileView: View {
                 
             }
         })
-        
+        .overlay(content: {
+           // LoadingView(show: $viewModel.isLoading)
+            if viewModel.isLoading{
+                CustomLoadingView()
+            }
+        })
         .navigationTitle("\(viewModel.user?.userName ?? "")")
         .toolbar {
             Menu {
@@ -90,9 +96,40 @@ struct NewProfileView: View {
             
         }
         .refreshable {
+            viewModel.user = nil
+            viewModel.posts = nil
+            viewModel.isLoading = true
             viewModel.fetchUser(userUID: selectedUserUID)
             viewModel.fetchPost(userUID: selectedUserUID)
         }
+//        .onAppear {
+//            /// - Adding Only once
+//            if docListener == nil {
+//                let docRef = Firestore.firestore().collection("Users").document(selectedUserUID)
+//                docListener = docRef.addSnapshotListener { snapshot, error in
+//                    if let snapshot = snapshot {
+//                        if snapshot.exists {
+//                            /// - Document
+//                            /// Fetching Updated Document
+////                            if let updatedUser = try? snapshot.data(as: User.self) {
+////                                print("Güncellendi. \( viewModel.user?.follower.contains(currentUserUID))")
+////                                viewModel.fetchUser(userUID: selectedUserUID)
+////                            }
+//
+//                            if let updatedUser = try? snapshot.data(as: User.self) {
+//                                viewModel.user?.follower = updatedUser.follower
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        .onDisappear {
+//            docListener?.remove()
+//            docListener = nil
+//        }
+
         
         
         
@@ -318,7 +355,19 @@ extension NewProfileView{
                 if user.follower.contains(currentUserUID){
                     isFollow = true
                 }
-                viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow)
+                viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow) { res in
+                    if res {
+//                                if isFollow {
+//                                    viewModel.user?.follower.append(currentUserUID)
+//                                } else {
+//                                    if let index = viewModel.user?.follower.firstIndex(of: currentUserUID) {
+//                                        viewModel.user?.follower.remove(at: index)
+//                                    }
+//                                }
+                        viewModel.fetchUser(userUID: selectedUserUID)
+                    }
+                }
+//                viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow)
             } label: {
                 
                 if viewModel.user?.userUID != currentUserUID{
@@ -333,7 +382,19 @@ extension NewProfileView{
                         if user.follower.contains(currentUserUID){
                             isFollow = true
                         }
-                        viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow)
+                        viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow) { res in
+                            if res {
+//                                if isFollow {
+//                                    viewModel.user?.follower.append(currentUserUID)
+//                                } else {
+//                                    if let index = viewModel.user?.follower.firstIndex(of: currentUserUID) {
+//                                        viewModel.user?.follower.remove(at: index)
+//                                    }
+//                                }
+                                viewModel.fetchUser(userUID: selectedUserUID)
+                            }
+
+                        }
                         
                     } label: {
                         
@@ -349,6 +410,7 @@ extension NewProfileView{
                     .buttonBorderShape(.roundedRectangle)
                     .buttonStyle(.bordered)
                     .tint(.purple)
+                    .animation(.easeInOut, value: viewModel.user?.follower)
                     
                 }
                 else{

@@ -232,7 +232,10 @@ struct CreateNewPost: View {
         .alert(errorMessage, isPresented: $showError, actions: {})
         /// - Loading View
         .overlay{
-            LoadingView(show: $viewModel.isLoading)
+            //LoadingView(show: $viewModel.isLoading)
+            if viewModel.isLoading{
+                CustomLoadingView()
+            }
         }
 
     }

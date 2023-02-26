@@ -383,17 +383,56 @@ final class DatabaseManager {
         }
     }
     
-    func followUser(currentUserID: String, followUserID: String, isFollow: Bool) {
+//    func followUser(currentUserID: String, followUserID: String, isFollow: Bool) {
+//        let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
+//        let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
+//        if isFollow {
+//            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])])
+//            followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])])
+//        } else {
+//            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])])
+//            currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])])
+//        }
+//    }
+    func followUser(currentUserID: String, followUserID: String, isFollow: Bool, completion: @escaping (Bool) -> Void) {
         let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
         let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
         if isFollow {
-            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])])
-            followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])])
+            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])]) { error in
+                if let error = error {
+                    print("Error unfollowing user: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])]) { error in
+                        if let error = error {
+                            print("Error removing follower: \(error.localizedDescription)")
+                            completion(false)
+                        } else {
+                            completion(true)
+                        }
+                    }
+                }
+            }
         } else {
-            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])])
-            currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])])
+            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])]) { error in
+                if let error = error {
+                    print("Error adding follower: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])]) { error in
+                        if let error = error {
+                            print("Error following user: \(error.localizedDescription)")
+                            completion(false)
+                        } else {
+                            completion(true)
+                        }
+                    }
+                }
+            }
         }
     }
+
+    
     
     func fetchUsers(userUIDs: [String], completion: @escaping ([String: User]?) -> Void) {
         Firestore.firestore().collection("Users")
