@@ -9,6 +9,10 @@ import Foundation
 import TMDBSwift
 
 class ActorSearchViewModel: ObservableObject{
+    @Published var output: String = ""
+    @Published var input: String = ""
+    @Published var typing = false
+    
     let service = ActorService()
     @Published var actors = [Actor]()
     @Published var popularActors = [Actor]()

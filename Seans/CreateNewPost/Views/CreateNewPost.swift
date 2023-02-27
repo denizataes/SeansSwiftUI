@@ -34,10 +34,12 @@ struct CreateNewPost: View {
     @State private var showError: Bool = false
     @State private var showImagePicker: Bool = false
     @State private var showMoviePicker: Bool = false
+    @State private var showActorPicker: Bool = false
     @State private var photoItem: PhotosPickerItem?
     @FocusState private var showKeyboard: Bool
     
     @State var selectedMovie: Movie?
+    @State var selectedActor: Actor?
     
     @ObservedObject var viewModel = CreatePostViewModel()
 
@@ -82,6 +84,7 @@ struct CreateNewPost: View {
                     
                     KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
                         .resizable()
+                        .scaledToFill()
                         .frame(width: 64,height: 80)
                         .cornerRadius(10)
                         .shadow(radius: 10)
@@ -119,6 +122,43 @@ struct CreateNewPost: View {
                     Button {
                         withAnimation(.easeInOut(duration: 0.25)){
                             self.selectedMovie = nil
+                        }
+                    } label: {
+                        Image(systemName: "trash")
+                            .fontWeight(.bold
+                            )
+                            .tint(.red)
+                    }
+                    .padding(10)
+                    
+                }
+                .padding()
+            }
+            else if selectedActor != nil {
+                HStack(spacing: 12){
+                    
+                    KFImage(URL(string: "\(Statics.URL)\(selectedActor!.profile_path)" ))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 64,height: 80)
+                        .cornerRadius(10)
+                        .shadow(radius: 10)
+                    
+                    VStack(alignment: .leading, spacing: 8){
+                        Text(selectedActor?.name ?? "")
+                            .font(.title2)
+                    
+                    }
+                    
+                    
+                    Spacer()
+                    
+                    
+                }
+                .overlay(alignment: .topTrailing){
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.25)){
+                            self.selectedActor = nil
                         }
                     } label: {
                         Image(systemName: "trash")
@@ -172,29 +212,62 @@ struct CreateNewPost: View {
             Divider()
             
             HStack{
-                HStack(spacing: 20){
+                HStack(spacing: 30){
                     Button {
                         showImagePicker.toggle()
                     } label: {
-                        Image(systemName: "photo.on.rectangle")
-                            .font(.title2)
-                            .foregroundColor(Color(.systemPurple))
+                        VStack(spacing: 4){
+                            Image(systemName: "photo.on.rectangle")
+                                .font(.title2)
+                                .foregroundColor(Color(.systemPurple))
+                            Text("Resim Ekle")
+                                .font(.system(size: 10))
+                                .foregroundColor(Color(.systemPurple))
+                        }
+                        
                     }
                     
                     Button {
                         showMoviePicker.toggle()
                     } label: {
-                        Image(systemName: "film")
-                            .font(.title2)
-                            .foregroundColor(Color(.systemPurple))
+                        VStack(spacing: 4){
+                            Image(systemName: "film")
+                                .font(.title2)
+                                .foregroundColor(Color(.systemPurple))
+                            Text("Film Ekle")
+                                .font(.system(size: 10))
+                                .foregroundColor(Color(.systemPurple))
+                        }
                     }
-                    .hAlign(.leading)
                     .sheet(isPresented: $showMoviePicker) {
                         FilmSelectorView(onFilmSelected: { selectedMovie in
                             // Handle the selected movie here, e.g. pass it to CreateNewPost
                             self.selectedMovie = selectedMovie
                         })
                     }
+                    .disableWithOpacity(selectedActor != nil)
+                    
+                    Button {
+                        showActorPicker.toggle()
+                    } label: {
+                        VStack(spacing: 4){
+                            Image(systemName: "person")
+                                .font(.title2)
+                                .foregroundColor(Color(.systemPurple))
+                            Text("Aktör Ekle")
+                                .font(.system(size: 10))
+                                .foregroundColor(Color(.systemPurple))
+                        }
+                    }
+                    .hAlign(.leading)
+                    .sheet(isPresented: $showActorPicker) {
+                        ActorSelectorView { actor in
+                            self.selectedActor = actor
+                            print(actor.name)
+                        }
+                    }
+                    .disableWithOpacity(selectedMovie != nil)
+                    
                 }
                 Spacer()
                 
@@ -276,10 +349,8 @@ struct CreateNewPost: View {
     }
 }
 
-//struct CreateNewPost_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CreateNewPost{_ in
-//
-//        }
-//    }
-//}
+struct CreateNewPost_Previews: PreviewProvider {
+    static var previews: some View {
+       CreateNewPost()
+    }
+}
