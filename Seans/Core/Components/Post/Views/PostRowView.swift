@@ -181,45 +181,32 @@ extension PostRowView{
     var leftSide: some View{
             VStack(alignment: .leading){
                 NavigationLink {
-                   // FilmInfoView()
+                    if post.movieID > 0{
+                        FilmInfoView(movie: .init(id: post.movieID, movieTitle: post.movieName, releaseDate: "", movieTime: "", movieDescription: "", artwork: post.moviePhoto))
+                    }
+                    else if post.actorID > 0 {
+                        NewActorView(id: post.actorID)
+                    }
+                    
                     
                 } label: {
-                    KFImage(URL(string: "\(post.moviePhoto)" ))
+                    KFImage(URL(string: post.movieID > 0 ? "\(post.moviePhoto)" : "\(post.actorPhoto)" ))
                         .resizable()
                         .frame(width:110 ,height: 150)
-                        .cornerRadius(10)
+                        .cornerRadius(20)
                         .shadow(radius: 15)
                         
                 }
                 
-                VStack(alignment: .leading,spacing: 4){
-                    Text(post.movieName)
-                        .font(.headline)
-                        
-//                    Text("4 Ekim 2019")
-//                        .font(.system(size: 12))
-//                        .foregroundColor(.gray)
-//                    Text("2 Saat 2 dakika")
-//                        .font(.system(size: 10))
-//                        .foregroundColor(.gray)
-//                    ScrollView(.vertical,showsIndicators: false){
-//                        VStack(alignment: .leading){
-//                            //ForEach(0..<8) { index in
-//                            Text("4 Ekim 2019")
-//                                .font(.footnote)
-//                                .foregroundColor(Color(.systemGray2))
-//                            Divider()
-//
-//                            Text("2 Saat 2 Dakika")
-//                                .font(.footnote)
-//                                .foregroundColor(Color(.systemGray2))
-//
-//                            //}
-//                        }
-//                    }
-//
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(post.movieID > 0 ? post.movieName : post.actorName)
+                        .font(.subheadline)
+                        .lineLimit(nil)
+                        .bold()
                 }
                 .frame(maxWidth: 100)
+                .fixedSize(horizontal: false, vertical: true)
+
 
                 
                 

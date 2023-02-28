@@ -29,6 +29,11 @@ struct Post: Identifiable, Codable, Equatable{
     var userFirstName: String
     var userLastName: String
     
+    //MARK: Actor
+    var actorName: String
+    var actorID: Int
+    var actorPhoto: String
+    
     enum CodingKeys: CodingKey{
         case id
         case text
@@ -44,5 +49,8 @@ struct Post: Identifiable, Codable, Equatable{
         case userProfileURL
         case userFirstName
         case userLastName
+        case actorName
+        case actorID
+        case actorPhoto
     }
 }

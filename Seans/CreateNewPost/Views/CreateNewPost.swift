@@ -315,22 +315,41 @@ struct CreateNewPost: View {
     
     // MARK: Post Content to Firebase
     
-    func createPost(){
+    func createPost() {
         showKeyboard = false
         
-        var moviePhoto  = ""
-        if selectedMovie?.artwork != ""{
-            moviePhoto = "\(Statics.URL)\(selectedMovie?.artwork ?? "")"
+        var moviePhoto = ""
+        var movieID = 0
+        var movieName = ""
+        
+        var actorID = 0
+        var actorName = ""
+        var actorPhoto = ""
+        
+        if let selectedMovie = selectedMovie {
+            if !selectedMovie.artwork.isEmpty {
+                moviePhoto = "\(Statics.URL)\(selectedMovie.artwork)"
+            }
+            
+            movieID = selectedMovie.id
+            movieName = selectedMovie.movieTitle
         }
         
-        guard let movieID = selectedMovie?.id else{return}
+        if let selectedActor = selectedActor {
+            if !selectedActor.profile_path.isEmpty {
+                actorPhoto = "\(Statics.URL)\(selectedActor.profile_path)"
+            }
+            
+            actorID = selectedActor.id
+            actorName = selectedActor.name ?? ""
+            
+        }
         
-        
-        let post = NewPost(text: postText, movieID: movieID, movieName: selectedMovie?.movieTitle ?? "", moviePhoto: moviePhoto, userUID: userUID)
+        let post = NewPost(text: postText, movieID: movieID, movieName: movieName, moviePhoto: moviePhoto, actorID: actorID, actorName: actorName,actorPhoto: actorPhoto, userUID: userUID)
         
         viewModel.createPost(post: post) { result in
-            switch result{
-            case .success(let post):
+            switch result {
+            case .success:
                 onPost?()
                 dismiss()
             case .failure(let error):
@@ -339,6 +358,7 @@ struct CreateNewPost: View {
             }
         }
     }
+
 
     // MARK: Displayin Errors as Alert
     func setError(_ error: Error)async{

@@ -21,6 +21,9 @@ struct NewPost: Identifiable, Codable, Equatable{
     var publishedDate: Date = Date()
     var likedIDs: [String] = []
     var repliesPost: [Post] = []
+    var actorID: Int
+    var actorName: String
+    var actorPhoto: String
     
     // MARK: Basic User Info
     var userUID: String
@@ -36,6 +39,9 @@ struct NewPost: Identifiable, Codable, Equatable{
         case likedIDs
         case userUID
         case repliesPost
+        case actorID
+        case actorName
+        case actorPhoto
     }
 }
 

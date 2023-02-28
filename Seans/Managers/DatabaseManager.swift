@@ -509,7 +509,9 @@ final class DatabaseManager {
                         for currentPost in responsePosts {
                             let currentUser = users.first(where: { $0.userUID == currentPost.userUID })
                             if let user = currentUser{
-                                let newPost = Post(id: currentPost.id, text: currentPost.text, imageURL: currentPost.imageURL, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: user.userName, userUID: user.userUID, userProfileURL: URL(string: user.userProfileURL ?? ""), userFirstName: user.firstName, userLastName: user.lastName)
+                                let newPost = Post(id: currentPost.id, text: currentPost.text, imageURL: currentPost.imageURL, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: user.userName, userUID: user.userUID, userProfileURL: URL(string: user.userProfileURL ?? ""), userFirstName: user.firstName, userLastName: user.lastName, actorName: currentPost.actorName, actorID: currentPost.actorID, actorPhoto: currentPost.actorPhoto)
+
+                                
                                 
                                 posts.append(newPost)
                             }
