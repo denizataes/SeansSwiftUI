@@ -19,7 +19,11 @@ struct NewProfileView: View {
     @State private var docListener: ListenerRegistration?
     @State var editUser: Bool = false
     @State var shakeImage: Bool = false
-
+    
+    //MARK: Open New Screen States
+    @State var openFollowerView: Bool = false
+    @State var openFollowView: Bool = false
+    
     private var selectedUserUID: String = ""
     let currentDate = Date()
     let formatter = DateFormatter()
@@ -71,7 +75,7 @@ struct NewProfileView: View {
             }
         })
         .overlay(content: {
-           // LoadingView(show: $viewModel.isLoading)
+            // LoadingView(show: $viewModel.isLoading)
             if viewModel.isLoading{
                 CustomLoadingView()
             }
@@ -102,34 +106,48 @@ struct NewProfileView: View {
             viewModel.fetchUser(userUID: selectedUserUID)
             viewModel.fetchPost(userUID: selectedUserUID)
         }
-//        .onAppear {
-//            /// - Adding Only once
-//            if docListener == nil {
-//                let docRef = Firestore.firestore().collection("Users").document(selectedUserUID)
-//                docListener = docRef.addSnapshotListener { snapshot, error in
-//                    if let snapshot = snapshot {
-//                        if snapshot.exists {
-//                            /// - Document
-//                            /// Fetching Updated Document
-////                            if let updatedUser = try? snapshot.data(as: User.self) {
-////                                print("Güncellendi. \( viewModel.user?.follower.contains(currentUserUID))")
-////                                viewModel.fetchUser(userUID: selectedUserUID)
-////                            }
-//
-//                            if let updatedUser = try? snapshot.data(as: User.self) {
-//                                viewModel.user?.follower = updatedUser.follower
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        .onDisappear {
-//            docListener?.remove()
-//            docListener = nil
-//        }
-
+        .sheet(isPresented: $openFollowView) {
+            if let followUserUIDs = viewModel.user?.follow{
+                UserListView(userUIDs: followUserUIDs)
+                    .presentationDetents([.medium,.large])
+            }
+                
+        }
+        .sheet(isPresented: $openFollowerView) {
+            if let followerUserUIDs = viewModel.user?.follower{
+                UserListView(userUIDs: followerUserUIDs)
+                    .presentationDetents([.medium,.large])
+            }
+                
+        }
+        //        .onAppear {
+        //            /// - Adding Only once
+        //            if docListener == nil {
+        //                let docRef = Firestore.firestore().collection("Users").document(selectedUserUID)
+        //                docListener = docRef.addSnapshotListener { snapshot, error in
+        //                    if let snapshot = snapshot {
+        //                        if snapshot.exists {
+        //                            /// - Document
+        //                            /// Fetching Updated Document
+        ////                            if let updatedUser = try? snapshot.data(as: User.self) {
+        ////                                print("Güncellendi. \( viewModel.user?.follower.contains(currentUserUID))")
+        ////                                viewModel.fetchUser(userUID: selectedUserUID)
+        ////                            }
+        //
+        //                            if let updatedUser = try? snapshot.data(as: User.self) {
+        //                                viewModel.user?.follower = updatedUser.follower
+        //                            }
+        //
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        .onDisappear {
+        //            docListener?.remove()
+        //            docListener = nil
+        //        }
+        
         
         
         
@@ -167,12 +185,12 @@ extension NewProfileView{
             
             Button {
                 if viewModel.user?.userUID == currentUserUID {
-                        editUser.toggle()
-                    } else {
-                        withAnimation(Animation.easeInOut(duration: 1).repeatCount(1)) {
-                                shakeImage.toggle()
-                            }
+                    editUser.toggle()
+                } else {
+                    withAnimation(Animation.easeInOut(duration: 1).repeatCount(1)) {
+                        shakeImage.toggle()
                     }
+                }
             } label: {
                 if let image = URL(string: viewModel.user?.userProfileURL ?? ""){
                     KFImage(image)
@@ -189,7 +207,7 @@ extension NewProfileView{
                         .padding(.leading)
                         .padding(.trailing)
                         .rotationEffect(Angle(degrees: shakeImage ? -10 : 10))
-
+                    
                 }
                 else{
                     Image(systemName: "person.crop.circle.fill")
@@ -292,7 +310,7 @@ extension NewProfileView{
     }
     
     var followerSection: some View{
-        HStack(spacing: 52){
+        HStack(spacing: 48){
             
             VStack(spacing: 6){
                 Text("\(viewModel.posts?.count ?? 0)")
@@ -303,23 +321,39 @@ extension NewProfileView{
                     .foregroundColor(Color(.darkGray))
             }
             
-            VStack(spacing: 6){
-                Text("\(viewModel.user?.follow.count ?? 0)")
-                    .bold()
-                    .font(.system(size: 16))
-                Text("Takip")
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(.darkGray))
+            
+            Button {
+                openFollowView.toggle()
+            } label: {
+                VStack(spacing: 6){
+                    Text("\(viewModel.user?.follow.count ?? 0)")
+                        .bold()
+                        .font(.system(size: 16))
+                        .foregroundColor(.primary)
+                    Text("Takip")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(.darkGray))
+                    
+                }
             }
             
-            VStack(spacing: 6){
-                Text("\(viewModel.user?.follower.count ?? 0)")
-                    .bold()
-                    .font(.system(size: 16))
-                Text("Takipçi")
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(.darkGray))
+            Button {
+                openFollowerView.toggle()
+            } label: {
+                VStack(spacing: 6){
+                    Text("\(viewModel.user?.follower.count ?? 0)")
+                        .bold()
+                        .font(.system(size: 16))
+                        .foregroundColor(.primary)
+                    Text("Takipçi")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(.darkGray))
+                    
+                }
             }
+            
+            
+            
             
             VStack(spacing: 6){
                 if let posts = viewModel.posts {
@@ -334,6 +368,23 @@ extension NewProfileView{
                         .font(.system(size: 16))
                 }
                 Text("Film")
+                    .font(.system(size: 12))
+                    .foregroundColor(Color(.darkGray))
+            }
+            
+            VStack(spacing: 6){
+                if let posts = viewModel.posts {
+                    let actorIDs = Set(posts.map { $0.actorID })
+                    Text("\(actorIDs.count)")
+                        .bold()
+                        .font(.system(size: 16))
+                }
+                else{
+                    Text("0")
+                        .bold()
+                        .font(.system(size: 16))
+                }
+                Text("Aktör")
                     .font(.system(size: 12))
                     .foregroundColor(Color(.darkGray))
             }
@@ -357,17 +408,17 @@ extension NewProfileView{
                 }
                 viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow) { res in
                     if res {
-//                                if isFollow {
-//                                    viewModel.user?.follower.append(currentUserUID)
-//                                } else {
-//                                    if let index = viewModel.user?.follower.firstIndex(of: currentUserUID) {
-//                                        viewModel.user?.follower.remove(at: index)
-//                                    }
-//                                }
+                        //                                if isFollow {
+                        //                                    viewModel.user?.follower.append(currentUserUID)
+                        //                                } else {
+                        //                                    if let index = viewModel.user?.follower.firstIndex(of: currentUserUID) {
+                        //                                        viewModel.user?.follower.remove(at: index)
+                        //                                    }
+                        //                                }
                         viewModel.fetchUser(userUID: selectedUserUID)
                     }
                 }
-//                viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow)
+                //                viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow)
             } label: {
                 
                 if viewModel.user?.userUID != currentUserUID{
@@ -384,16 +435,16 @@ extension NewProfileView{
                         }
                         viewModel.followUser(currentUserUID: currentUserUID, followUserID: selectedUserUID, isFollow: isFollow) { res in
                             if res {
-//                                if isFollow {
-//                                    viewModel.user?.follower.append(currentUserUID)
-//                                } else {
-//                                    if let index = viewModel.user?.follower.firstIndex(of: currentUserUID) {
-//                                        viewModel.user?.follower.remove(at: index)
-//                                    }
-//                                }
+                                //                                if isFollow {
+                                //                                    viewModel.user?.follower.append(currentUserUID)
+                                //                                } else {
+                                //                                    if let index = viewModel.user?.follower.firstIndex(of: currentUserUID) {
+                                //                                        viewModel.user?.follower.remove(at: index)
+                                //                                    }
+                                //                                }
                                 viewModel.fetchUser(userUID: selectedUserUID)
                             }
-
+                            
                         }
                         
                     } label: {

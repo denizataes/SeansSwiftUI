@@ -454,6 +454,32 @@ final class DatabaseManager {
             }
     }
     
+    func fetchUsers(userUIDs: [String], completion: @escaping ([User]?) -> Void) {
+        let usersCollection = Firestore.firestore().collection("Users")
+        usersCollection
+            .whereField("userUID", in: userUIDs)
+            .getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("Error fetching users: \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
+                
+                guard let documents = querySnapshot?.documents else {
+                    completion(nil)
+                    return
+                }
+                
+                let users = documents.compactMap { document in
+                    try? document.data(as: User.self)
+                }
+                
+                completion(users)
+            }
+    }
+
+
+    
     
     
     
