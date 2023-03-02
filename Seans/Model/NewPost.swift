@@ -14,7 +14,6 @@ struct NewPost: Identifiable, Codable, Equatable{
     
     @DocumentID var id: String?
     var text: String
-    var imageURL: URL?
     var movieID: Int
     var movieName: String
     var moviePhoto: String
@@ -27,11 +26,13 @@ struct NewPost: Identifiable, Codable, Equatable{
     
     // MARK: Basic User Info
     var userUID: String
+    
+    var postImageData: Data?
+    var postPhoto: String
 
     enum CodingKeys: CodingKey{
         case id
         case text
-        case imageURL
         case movieID
         case movieName
         case moviePhoto
@@ -42,6 +43,8 @@ struct NewPost: Identifiable, Codable, Equatable{
         case actorID
         case actorName
         case actorPhoto
+        case postImageData // veri tabanına kaydetmemeli
+        case postPhoto
     }
 }
 

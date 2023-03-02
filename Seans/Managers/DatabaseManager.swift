@@ -145,6 +145,14 @@ final class DatabaseManager {
         }
     }
     
+    func updatePostPhoto(with url: String, uid: String, completion: ((Error?) -> Void)? = nil) {
+        Firestore.firestore().collection("Posts").document(uid).updateData(["postPhoto": url]) { error in
+            if let completion = completion {
+                completion(error)
+            }
+        }
+    }
+    
     func deleteUser(){
         Auth.auth().currentUser?.delete(completion: { error in
             if let error = error{
@@ -315,23 +323,50 @@ final class DatabaseManager {
     
     
     func createPost(_ post: NewPost, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            let collection = Firestore.firestore().collection("Posts")
-            var newPost = post
-            newPost.id = nil // Ignore the id field if it's set
-            try collection.addDocument(from: newPost) { error in
-                if let error = error {
+        if let postImageData = post.postImageData {
+            StorageManager.shared.uploadPostPhoto(with: postImageData, userUID: post.userUID) { result in
+                switch result {
+                case .success(let url):
+                    var newPost = post
+                    newPost.postPhoto = url
+                    newPost.postImageData = nil // Ignore the postImageData field if it's set
+                    newPost.id = nil // Ignore the id field if it's set
+                    do {
+                        let collection = Firestore.firestore().collection("Posts")
+                        try collection.addDocument(from: newPost) { error in
+                            if let error = error {
+                                completion(.failure(error))
+                            } else {
+                                completion(.success(()))
+                            }
+                        }
+                    } catch {
+                        completion(.failure(error))
+                    }
+                case .failure(let error):
                     completion(.failure(error))
-                } else {
-                    completion(.success(()))
                 }
             }
-        } catch {
-            completion(.failure(error))
+        } else {
+            do {
+                let collection = Firestore.firestore().collection("Posts")
+                var newPost = post
+                newPost.postImageData = nil // Ignore the postImageData field if it's set
+                newPost.id = nil // Ignore the id field if it's set
+                try collection.addDocument(from: newPost) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(()))
+                    }
+                }
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
-    
-    
+
+
     
     func fetchPosts(withUid uid: String, completion: @escaping ([Post]?) -> Void) {
         let query = Firestore.firestore().collection("Posts").whereField("userUID", isEqualTo: uid)
@@ -535,8 +570,7 @@ final class DatabaseManager {
                         for currentPost in responsePosts {
                             let currentUser = users.first(where: { $0.userUID == currentPost.userUID })
                             if let user = currentUser{
-                                let newPost = Post(id: currentPost.id, text: currentPost.text, imageURL: currentPost.imageURL, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: user.userName, userUID: user.userUID, userProfileURL: URL(string: user.userProfileURL ?? ""), userFirstName: user.firstName, userLastName: user.lastName, actorName: currentPost.actorName, actorID: currentPost.actorID, actorPhoto: currentPost.actorPhoto)
-
+                                let newPost = Post(id: currentPost.id, text: currentPost.text, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: user.userName, userUID: user.userUID, userProfileURL: URL(string: user.userProfileURL ?? ""), userFirstName: user.firstName, userLastName: user.lastName, actorName: currentPost.actorName, actorID: currentPost.actorID, actorPhoto: currentPost.actorPhoto, postPhoto: currentPost.postPhoto)
                                 
                                 
                                 posts.append(newPost)

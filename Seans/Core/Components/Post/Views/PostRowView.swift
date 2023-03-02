@@ -31,53 +31,41 @@ struct PostRowView: View {
         self.onDelete = onDelete
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         formatter.timeZone = TimeZone.current
+        print(post.postPhoto)
     }
     
-
+    
     
     var body: some View {
-     //   ZStack{
-           // background
+        //   ZStack{
+        // background
         
-        GeometryReader{proxy in
-            let size = proxy.size
-
-
-
-//            KFImage(URL(string: "\(post.moviePhoto)" ))
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .frame(width: size.width, height: size.height)
-//                .clipped()
-//                .shadow(radius: 10)
-//                .cornerRadius(10)
-//               // .tag(index)
-//
-//            // Custom Gradient
-//            LinearGradient(colors: [
-//
-//                .black.opacity(0.4)
-//            ], startPoint: .leading, endPoint: .trailing)
-//
-//            // Blurred Overlay
-//            Rectangle()
-//                .fill(.ultraThinMaterial.opacity(0.9))
-//                .cornerRadius(10)
-
-
-            VStack(alignment: .leading){
-                HStack{
+        
+        
+        VStack(alignment: .leading){
+            HStack{
+                if post.actorID > 0||post.movieID > 0{
                     leftSide
-                    profilSection
                 }
-                buttons
+                profilSection
             }
-            .padding()
-
-
-        
+            if !post.postPhoto.isEmpty{
+                GeometryReader{
+                    let size = $0.size
+                    KFImage(URL(string: post.postPhoto))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: size.width, height: size.height)
+                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                }
+                .clipped()
+                .frame(height: 220)
+            }
+            buttons
         }
-        .frame(height: 250)
+        .padding()
+        
+        //.frame(height: 250)
         .overlay(alignment: .topTrailing){
             /// Displaying Delete Button ( if it's Author of that post)
             if post.userUID == userUID{
@@ -124,7 +112,7 @@ struct PostRowView: View {
         }
         
         Divider()
-
+        
     }
     
     func deletePost(){
@@ -161,14 +149,14 @@ extension PostRowView{
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size.width, height: size.height)
                 .clipped()
-               // .tag(index)
+            // .tag(index)
             
             
             let color: Color = .black
             // Custom Gradient
             LinearGradient(colors: [
                 .black.opacity(0.1)
-      
+                
             ], startPoint: .top, endPoint: .bottom)
             
             // Blurred Overlay
@@ -179,38 +167,38 @@ extension PostRowView{
     }
     
     var leftSide: some View{
-            VStack(alignment: .leading){
-                NavigationLink {
-                    if post.movieID > 0{
-                        FilmInfoView(movie: .init(id: post.movieID, movieTitle: post.movieName, releaseDate: "", movieTime: "", movieDescription: "", artwork: post.moviePhoto))
-                    }
-                    else if post.actorID > 0 {
-                        NewActorView(id: post.actorID)
-                    }
-                    
-                    
-                } label: {
-                    KFImage(URL(string: post.movieID > 0 ? "\(post.moviePhoto)" : "\(post.actorPhoto)" ))
-                        .resizable()
-                        .frame(width:110 ,height: 150)
-                        .cornerRadius(20)
-                        .shadow(radius: 15)
-                        
+        VStack(alignment: .leading){
+            NavigationLink {
+                if post.movieID > 0{
+                    FilmInfoView(movie: .init(id: post.movieID, movieTitle: post.movieName, releaseDate: "", movieTime: "", movieDescription: "", artwork: post.moviePhoto))
+                }
+                else if post.actorID > 0 {
+                    NewActorView(id: post.actorID)
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(post.movieID > 0 ? post.movieName : post.actorName)
-                        .font(.subheadline)
-                        .lineLimit(nil)
-                        .bold()
-                }
-                .frame(maxWidth: 100)
-                .fixedSize(horizontal: false, vertical: true)
-
-
                 
+            } label: {
+                KFImage(URL(string: post.movieID > 0 ? "\(post.moviePhoto)" : "\(post.actorPhoto)" ))
+                    .resizable()
+                    .frame(width:110 ,height: 150)
+                    .cornerRadius(20)
+                    .shadow(radius: 15)
                 
             }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(post.movieID > 0 ? post.movieName : post.actorName)
+                    .font(.subheadline)
+                    .lineLimit(nil)
+                    .bold()
+            }
+            .frame(maxWidth: 100)
+            .fixedSize(horizontal: false, vertical: true)
+            
+            
+            
+            
+        }
     }
     
     var profilSection: some View{
@@ -220,16 +208,16 @@ extension PostRowView{
                 
                 NavigationLink {
                     NewProfileView(userUID: post.userUID)
-                        
+                    
                 } label: {
                     KFImage(post.userProfileURL)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 32,height: 32)
+                        .frame(width: post.actorID > 0||post.movieID > 0 ? 32 : 48,height: post.actorID > 0||post.movieID > 0 ? 32 : 48)
                         .clipShape(Circle())
                     VStack(alignment: .leading){
                         Text("\(post.userFirstName) \(post.userLastName)")
-                            .font(.system(size: 12))
+                            .font(.system(size: post.actorID > 0||post.movieID > 0 ? 12 : 16))
                             .bold()
                             .foregroundColor(Color("mode"))
                         
@@ -241,7 +229,7 @@ extension PostRowView{
                 }
                 .frame(maxWidth: .infinity)
                 
-
+                
                 Spacer()
                 
                 if let date = formatter.date(from: post.publishedDate.description) {
@@ -273,8 +261,8 @@ extension PostRowView{
                         .foregroundColor(.gray)
                         .font(.caption)
                 }
-
-
+                
+                
             }
             
             Text(post.text)
@@ -287,7 +275,7 @@ extension PostRowView{
     
     var buttons: some View{
         HStack(spacing: 10){
-     
+            
             
             Button {
                 
@@ -314,9 +302,9 @@ extension PostRowView{
                     Text(post.likedIDs.count.description)
                         .font(.caption2)
                         .foregroundColor(.gray)
-
-                }
                     
+                }
+                
                 
             }
             Spacer()
@@ -331,11 +319,11 @@ extension PostRowView{
                     Text("1")
                         .font(.caption2)
                         .foregroundColor(.gray)
-
+                    
                 }
             }
             
-
+            
         }
         .foregroundColor(.gray)
         .padding(.leading)

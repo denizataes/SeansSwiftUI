@@ -345,7 +345,7 @@ struct CreateNewPost: View {
             
         }
         
-        let post = NewPost(text: postText, movieID: movieID, movieName: movieName, moviePhoto: moviePhoto, actorID: actorID, actorName: actorName,actorPhoto: actorPhoto, userUID: userUID)
+        let post = NewPost(text: postText, movieID: movieID, movieName: movieName, moviePhoto: moviePhoto, actorID: actorID, actorName: actorName,actorPhoto: actorPhoto, userUID: userUID, postImageData: postImageData, postPhoto: "")
         
         viewModel.createPost(post: post) { result in
             switch result {
