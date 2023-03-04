@@ -102,9 +102,11 @@ struct NewProfileView: View {
         .refreshable {
             viewModel.user = nil
             viewModel.posts = nil
+            viewModel.likedPosts = nil
             viewModel.isLoading = true
             viewModel.fetchUser(userUID: selectedUserUID)
             viewModel.fetchPost(userUID: selectedUserUID)
+            viewModel.fetchLikedPost(userUID: selectedUserUID)
         }
         .sheet(isPresented: $openFollowView) {
             if let followUserUIDs = viewModel.user?.follow{
@@ -280,30 +282,70 @@ extension NewProfileView{
     
     var postsView: some View{
         VStack{
-            if let posts = viewModel.posts, posts.count > 0{
-                LazyVStack(spacing: 0){
-                    ForEach(posts) { post in
-                        PostRowView(post: post) { updatedPost in
-                            if let index = posts.firstIndex(where: { post
-                                in
-                                post.id == updatedPost.id
-                            }){
-                                viewModel.posts?[index].likedIDs = updatedPost.likedIDs
-                            }
-                            
-                        } onDelete: {
-                            /// Removing Post From The array
-                            withAnimation(.easeInOut(duration: 0.25)){
-                                viewModel.posts?.removeAll { post.id == $0.id }
+            if selectedFilter == .feeds{
+                if let posts = viewModel.posts, posts.count > 0{
+                    LazyVStack(spacing: 0){
+                        ForEach(posts) { post in
+                            PostRowView(post: post) { updatedPost in
+                                if let index = posts.firstIndex(where: { post
+                                    in
+                                    post.id == updatedPost.id
+                                }){
+                                    viewModel.posts?[index].likedIDs = updatedPost.likedIDs
+                                }
+                                
+                            } onDelete: {
+                                /// Removing Post From The array
+                                withAnimation(.easeInOut(duration: 0.25)){
+                                    viewModel.posts?.removeAll { post.id == $0.id }
+                                }
                             }
                         }
                     }
                 }
+                else{
+                    if !viewModel.isLoading{
+                        Text("Henüz gönderisi yok 😞")
+                            .font(.caption)
+                            .padding(.top)
+                    }
+                    else{
+                        EmptyView()
+                    }
+                }
             }
-            else{
-                Text("Henüz gönderisi yok 😞")
-                    .font(.caption)
-                    .padding(.top)
+            else {
+                if let posts = viewModel.likedPosts, posts.count > 0{
+                    LazyVStack(spacing: 0){
+                        ForEach(posts) { post in
+                            PostRowView(post: post) { updatedPost in
+                                if let index = posts.firstIndex(where: { post
+                                    in
+                                    post.id == updatedPost.id
+                                }){
+                                    viewModel.likedPosts?[index].likedIDs = updatedPost.likedIDs
+                                }
+                                
+                            } onDelete: {
+                                /// Removing Post From The array
+                                withAnimation(.easeInOut(duration: 0.25)){
+                                    viewModel.likedPosts?.removeAll { post.id == $0.id }
+                                }
+                            }
+                        }
+                    }
+                }
+                else{
+                    if !viewModel.isLoading{
+                        Text("Henüz beğendiği gönderi yok 😞")
+                            .font(.caption)
+                            .padding(.top)
+                    }
+                    else{
+                        EmptyView()
+                    }
+                }
+                
             }
             
         }

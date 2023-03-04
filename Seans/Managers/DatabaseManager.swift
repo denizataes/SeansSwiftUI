@@ -228,7 +228,7 @@ final class DatabaseManager {
                 }
             }
     }
-
+    
     
     
     public func getUserProfileImageURL(with uid: String, completion: @escaping ((String) -> Void)) {
@@ -365,8 +365,8 @@ final class DatabaseManager {
             }
         }
     }
-
-
+    
+    
     
     func fetchPosts(withUid uid: String, completion: @escaping ([Post]?) -> Void) {
         let query = Firestore.firestore().collection("Posts").whereField("userUID", isEqualTo: uid)
@@ -418,17 +418,17 @@ final class DatabaseManager {
         }
     }
     
-//    func followUser(currentUserID: String, followUserID: String, isFollow: Bool) {
-//        let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
-//        let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
-//        if isFollow {
-//            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])])
-//            followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])])
-//        } else {
-//            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])])
-//            currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])])
-//        }
-//    }
+    //    func followUser(currentUserID: String, followUserID: String, isFollow: Bool) {
+    //        let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
+    //        let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
+    //        if isFollow {
+    //            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])])
+    //            followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])])
+    //        } else {
+    //            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])])
+    //            currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])])
+    //        }
+    //    }
     func followUser(currentUserID: String, followUserID: String, isFollow: Bool, completion: @escaping (Bool) -> Void) {
         let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
         let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
@@ -466,7 +466,7 @@ final class DatabaseManager {
             }
         }
     }
-
+    
     
     
     func fetchUsers(userUIDs: [String], completion: @escaping ([String: User]?) -> Void) {
@@ -512,8 +512,8 @@ final class DatabaseManager {
                 completion(users)
             }
     }
-
-
+    
+    
     
     
     
@@ -539,7 +539,7 @@ final class DatabaseManager {
     func fetchAllPosts(userUIDs: [String], completion: @escaping ([Post]?) -> Void) {
         var posts: [Post] = []
         var users: [User] = []
-
+        
         // 1. İlk olarak, belirtilen kullanıcı UID'lerine ait kullanıcıları alalım
         Firestore.firestore().collection("Users")
             .whereField("userUID", in: userUIDs)
@@ -552,7 +552,7 @@ final class DatabaseManager {
                 users = snapshot.documents.compactMap { document -> User? in
                     try? document.data(as: User.self)
                 }
-
+                
                 // 2. Daha sonra, belirtilen kullanıcı UID'lerine ait postları alalım ve kullanıcı bilgilerini de ekleyelim
                 Firestore.firestore().collection("Posts")
                     .whereField("userUID", in: userUIDs)
@@ -562,11 +562,11 @@ final class DatabaseManager {
                             completion(nil)
                             return
                         }
-
+                        
                         let responsePosts = snapshot.documents.compactMap { document -> NewPost? in
                             try? document.data(as: NewPost.self)
                         }
-
+                        
                         for currentPost in responsePosts {
                             let currentUser = users.first(where: { $0.userUID == currentPost.userUID })
                             if let user = currentUser{
@@ -576,13 +576,123 @@ final class DatabaseManager {
                                 posts.append(newPost)
                             }
                         }
-
-
+                        
+                        
+                        completion(posts)
+                    }
+            }
+    }
+    
+    func fetchLikedPosts(userUID: String, completion: @escaping ([Post]?) -> Void) {
+        
+        var posts: [Post] = []
+        var users: [User] = []
+        
+        // 1. İlk olarak, belirtilen kullanıcı UID'lerine ait beğenilen postları alalım
+        Firestore.firestore().collection("Posts")
+            .whereField("likedIDs", arrayContains: userUID)
+            .getDocuments { querySnapshot, error in
+                guard let snapshot = querySnapshot else {
+                    print("Error getting liked posts: \(error?.localizedDescription ?? "unknown error")")
+                    completion(nil)
+                    return
+                }
+                
+                let likedPosts = snapshot.documents.compactMap { document -> NewPost? in
+                    try? document.data(as: NewPost.self)
+                }
+                
+                // 2. Beğenilen postların UID'lerini bir dizi olarak toplayalım
+                let postUserUIDs = Set(likedPosts.compactMap { $0.userUID })
+                
+                guard postUserUIDs.count > 0 else {
+                    completion(nil)
+                    return
+                }
+                
+                // 3. Beğenilen postların kullanıcılarını Firestore'dan alalım
+                Firestore.firestore().collection("Users")
+                    .whereField("userUID", in: Array(postUserUIDs))
+                    .getDocuments { querySnapshot, error in
+                        guard let snapshot = querySnapshot else {
+                            print("Error getting users: \(error?.localizedDescription ?? "unknown error")")
+                            completion(nil)
+                            return
+                        }
+                        
+                        users = snapshot.documents.compactMap { document -> User? in
+                            try? document.data(as: User.self)
+                        }
+                        
+                        for currentPost in likedPosts {
+                            if let currentUser = users.first(where: { $0.userUID == currentPost.userUID }) {
+                                
+                                let newPost = Post(id: currentPost.id, text: currentPost.text, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: currentUser.userName, userUID: currentUser.userUID, userProfileURL: URL(string: currentUser.userProfileURL ?? ""), userFirstName: currentUser.firstName, userLastName: currentUser.lastName, actorName: currentPost.actorName, actorID: currentPost.actorID, actorPhoto: currentPost.actorPhoto, postPhoto: currentPost.postPhoto)
+                                
+                                posts.append(newPost)
+                            }
+                        }
+                        
                         completion(posts)
                     }
             }
     }
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        //------------------
+
+        // 1. Belirtilen kullanıcı UID'sine ait beğenileri alalım
+//        Firestore.firestore().collection("Users")
+//            .document(userUID)
+//            .getDocument { userSnapshot, error in
+//                guard let user = try? userSnapshot?.data(as: User.self), error == nil else {
+//                    print("Error getting user: \(error?.localizedDescription ?? "unknown error")")
+//                    completion(nil)
+//                    return
+//                }
+//
+//                print("Kullanıcı Bilgisi: \(userUID)")
+//                // 2. Belirtilen kullanıcının beğendiği postları alalım
+//                Firestore.firestore().collection("Posts")
+//                    .whereField("likedIDs", arrayContains: userUID)
+//                    .getDocuments { querySnapshot, error in
+//                        guard let snapshot = querySnapshot, error == nil else {
+//                            print("Error getting posts: \(error?.localizedDescription ?? "unknown error")")
+//                            completion(nil)
+//                            return
+//                        }
+//
+//                        let responsePosts = snapshot.documents.compactMap { document -> NewPost? in
+//                            try? document.data(as: NewPost.self)
+//                        }
+//
+//                        for currentPost in responsePosts {
+//
+//                            let newPost = Post(id: currentPost.id, text: currentPost.text, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: user.userName, userUID: user.userUID, userProfileURL: URL(string: user.userProfileURL ?? ""), userFirstName: user.firstName, userLastName: user.lastName, actorName: currentPost.actorName, actorID: currentPost.actorID, actorPhoto: currentPost.actorPhoto, postPhoto: currentPost.postPhoto)
+//
+//                            posts.append(newPost)
+//
+//                        }
+//
+//                        completion(posts)
+//                    }
+//            }
+
+    
+    
+    
     
     
     

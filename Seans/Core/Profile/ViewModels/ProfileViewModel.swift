@@ -13,12 +13,15 @@ class ProfileViewModel: ObservableObject{
     @Published var isLoading = false
     @Published var posts: [Post]?
     @Published var user: User?
+    @Published var likedPosts: [Post]?
+    
     let dbManager = DatabaseManager()
     @AppStorage("user_UID") var userUID: String = ""
     
     init(userUID: String){
         fetchUser(userUID: userUID)
         fetchPost(userUID: userUID)
+        fetchLikedPost(userUID: userUID)
     }
     
     func followUser(currentUserUID: String, followUserID: String, isFollow: Bool, completion: @escaping (Bool) -> Void) {
@@ -48,6 +51,16 @@ class ProfileViewModel: ObservableObject{
             guard let strongSelf = self else{return}
             let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
             strongSelf.posts = sortedPosts
+            strongSelf.isLoading = false
+        }
+    }
+    
+    func fetchLikedPost(userUID: String){
+        
+        dbManager.fetchLikedPosts(userUID: userUID) {[weak self] posts in
+            guard let strongSelf = self else{return}
+            let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
+            strongSelf.likedPosts = sortedPosts
             strongSelf.isLoading = false
         }
     }

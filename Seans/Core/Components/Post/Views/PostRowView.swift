@@ -22,6 +22,9 @@ struct PostRowView: View {
     let currentDate = Date()
     let formatter = DateFormatter()
     @State private var docListener: ListenerRegistration?
+    @State private var showFullScreenImage = false
+    @State private var openLikedView = false
+    
     @ObservedObject var viewModel = PostRowViewModel()
     @AppStorage("user_UID") var userUID: String = ""
     
@@ -49,18 +52,40 @@ struct PostRowView: View {
                 }
                 profilSection
             }
-            if !post.postPhoto.isEmpty{
-                GeometryReader{
-                    let size = $0.size
+            
+            
+            if !post.postPhoto.isEmpty {
+                ZStack {
                     KFImage(URL(string: post.postPhoto))
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: size.width, height: size.height)
-                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                        .scaledToFill()
+                        .frame(maxHeight: 220)
+                        .background(Color.black)
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.1)) {
+                                showFullScreenImage.toggle()
+                            }
+                        }
+                        .clipped()
+                        .animation(.easeInOut(duration: 0.1))
+                    
+                    if showFullScreenImage {
+                        KFImage(URL(string: post.postPhoto))
+                            .resizable()
+                            .scaledToFit()
+                            .edgesIgnoringSafeArea(.all)
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.1)) {
+                                    showFullScreenImage.toggle()
+                                }
+                            }
+                    }
                 }
-                .clipped()
-                .frame(height: 220)
+                .cornerRadius(10)
+                .shadow(color: Color(.systemPurple), radius: 2)
+                
             }
+            
             buttons
         }
         .padding()
@@ -110,6 +135,14 @@ struct PostRowView: View {
                 self.docListener = nil
             }
         }
+        .sheet(isPresented: $openLikedView) {
+            if let likedIDs = post.likedIDs{
+                UserListView(userUIDs: likedIDs)
+                    .presentationDetents([.medium,.large])
+            }
+            
+        }
+        
         
         Divider()
         
@@ -276,57 +309,106 @@ extension PostRowView{
     var buttons: some View{
         HStack(spacing: 10){
             
-            
-            Button {
-                
-            } label: {
-                HStack{
-                    Image(systemName: "message")
-                        .font(.subheadline)
-                        .foregroundColor(.green)
-                    Text(post.repliesPost.count.description)
-                        .font(.caption2)
-                        .foregroundColor(.gray)
+            HStack{
+                Button {
+                    
+                } label: {
+                    HStack{
+                        Image(systemName: "message")
+                            .font(.subheadline)
+                            .foregroundColor(.green)
+                        
+                    }
                 }
-            }
-            
-            Spacer()
-            
-            Button {
-                likePost()
-            } label: {
-                HStack{
-                    Image(systemName: post.likedIDs.contains(userUID)  ? "heart.fill" : "heart")
-                        .foregroundColor(.red)
-                        .font(.subheadline)
-                    Text(post.likedIDs.count.description)
-                        .font(.caption2)
-                        .foregroundColor(.gray)
+                
+                Button {
+                    
+                } label: {
+                    HStack(spacing: 4){
+                        Text(post.repliesPost.count.description)
+                            .font(.caption)
+                            .foregroundColor(Color(.systemGreen))
+                            .bold()
+                        Text("yanıt")
+                            .font(.caption2)
+                            .foregroundColor(Color(.systemGreen))
+                    }
                     
                 }
-                
-                
+
             }
+            
             Spacer()
             
-            Button {
+            HStack{
+                Button {
+                    likePost()
+                } label: {
+                        Image(systemName: post.likedIDs.contains(userUID)  ? "heart.fill" : "heart")
+                            .foregroundColor(.red)
+                            .font(.subheadline)
+                }
                 
-            } label: {
-                HStack{
+                Button {
+                    openLikedView.toggle()
+                } label: {
+                    
+                    HStack(spacing: 4){
+                        Text(post.likedIDs.count.description)
+                            .font(.caption)
+                            .foregroundColor(Color(.systemRed))
+                            .bold()
+                        Text("beğeni")
+                            .font(.caption2)
+                            .foregroundColor(Color(.systemRed))
+                    }
+            
+                }
+            }
+            
+            Spacer()
+            
+            HStack{
+                Button {
+                    
+                } label: {
                     Image(systemName: "popcorn")
                         .font(.subheadline)
                         .foregroundColor(.purple)
-                    Text("1")
-                        .font(.caption2)
-                        .foregroundColor(.gray)
+                }
+                
+                Button {
+                    //openLikedView.toggle()
+                } label: {
                     
+                    HStack(spacing: 4){
+                        //Text(post.likedIDs.count.description)
+                        Text("1")
+                            .font(.caption)
+                            .foregroundColor(Color(.systemPurple))
+                            .bold()
+                        Text("seans")
+                            .font(.caption2)
+                            .foregroundColor(Color(.systemPurple))
+                    }
+            
                 }
             }
-            
             
         }
         .foregroundColor(.gray)
         .padding(.leading)
         .padding(.trailing)
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func `if`<Transform: View>(_ condition: Bool, transform: (Self) -> Transform) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
     }
 }
