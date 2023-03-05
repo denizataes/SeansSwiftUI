@@ -316,6 +316,7 @@ struct CreateNewPost: View {
     // MARK: Post Content to Firebase
     
     func createPost() {
+        closeKeyboard()
         showKeyboard = false
         
         var moviePhoto = ""

@@ -84,7 +84,7 @@ struct ExploreView: View {
                         LazyVStack(spacing: 0){
                             ForEach(viewmodel.searchableFilms){ movie in
                                 NavigationLink {
-                                    FilmInfoView(movie: movie)
+                                    NewFilmInfoView(movieID: movie.id)
                                     
                                 } label: {
                                     FilmSearchRowView(movie: movie)

@@ -18,14 +18,11 @@ struct SimilarMoviesView: View {
     }
     
     var body: some View {
-        
-        
-        
         if viewModel.similarMovies.count > 0{
             VStack(alignment: .leading){
                 Text("Benzer Filmler")
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundColor(.primary)
                     .bold()
                     .padding(.bottom)
                 
@@ -36,7 +33,7 @@ struct SimilarMoviesView: View {
                         
                         ForEach(viewModel.similarMovies){movie in
                             NavigationLink {
-                                FilmInfoView(movie: movie)
+                                NewFilmInfoView(movieID: movie.id)
                                 
                             } label: {
                                 
@@ -51,63 +48,10 @@ struct SimilarMoviesView: View {
                 }
             }
             .animation(.easeOut(duration: 1))
-
         }
+            
         
-        
-        
-        
-        
-        //
-        //            ScrollView {
-        //                LazyVGrid(columns: gridLayout, alignment: .center, spacing: 10) {
-        //
-        ////                    ForEach(samplePhotos., id: \.self) { index in
-        //                    ForEach(viewModel.similarMovies){movie in
-        //
-        //                        NavigationLink{
-        //                            FilmInfoView(movie: movie)                     }label: {
-        //                            KFImage(URL(string: "\(Statics.URL)\(movie.artwork)" ))
-        //                                .resizable()
-        //                                .scaledToFill()
-        //                                .frame(minWidth: 0, maxWidth: .infinity)
-        //                                .frame(height: gridLayout.count == 1 ? 200 : 100)
-        //                                .cornerRadius(10)
-        //                                .shadow(color: Color.primary.opacity(0.3), radius: 1)
-        //
-        //                        }
-        //
-        //
-        //
-        //                    }
-        //                }
-        //                .padding(.all, 10)
-        //                .animation(.interactiveSpring(), value: gridLayout.count)
-        //            }
-        //            .background(.gray.opacity(0.5))
-        //            .navigationTitle("Benzer filmler")
-        //            .toolbar {
-        //                ToolbarItem(placement: .navigationBarTrailing) {
-        //                    Button {
-        //                        self.gridLayout = Array(repeating: .init(.flexible()), count: self.gridLayout.count % 4 + 1)
-        //                    } label: {
-        //                        VStack{
-        //                            Image(systemName: "square.grid.2x2")
-        //                                .resizable()
-        //                                .frame(width: 24,height: 24)
-        //                                .font(.title)
-        //                                .foregroundColor(.primary)
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //    }
-        //}
     }
     
-    //struct SimilarMoviesView_Previews: PreviewProvider {
-    //    static var previews: some View {
-    //        SimilarMoviesView()
-    //    }
-    //}
+ 
 }

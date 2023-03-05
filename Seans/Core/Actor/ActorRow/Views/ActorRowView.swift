@@ -24,7 +24,7 @@ struct ActorRowView: View {
         VStack(alignment: .leading){
             Text("Oyuncular")
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
                 .bold()
                 .padding(.bottom)
             if viewModel.actors.count == 0{
@@ -56,7 +56,7 @@ struct ActorRowView: View {
                                     Spacer()
                                     
                                     Text(actorItem.name ?? "")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.primary)
                                         .font(.largeTitle)
                                         .scaledToFit()
                                         .minimumScaleFactor(0.01)
@@ -64,7 +64,7 @@ struct ActorRowView: View {
                                     
                                     
                                     Text(actorItem.character ?? "")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.primary)
                                         .font(.largeTitle)
                                         .scaledToFit()
                                         .minimumScaleFactor(0.01)

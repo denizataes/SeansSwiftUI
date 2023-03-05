@@ -1,75 +1,58 @@
-// This file was generated from JSON Schema using quicktype, do not modify it directly.
-// To parse the JSON, add this file to your project and do:
-//
-//   var MovieDetail = try? newJSONDecoder().decode(MovieDetail.self, from: jsonData)
-
 import Foundation
 
-
-// MARK: - MovieDetail
-struct MovieDetail {
-    var adult: Bool?
-    var backdropPath: String?
-  //  var belongsToCollection: JSONNull?
-    var budget: Int?
-    var genres: [Genre]?
-    var homepage: String?
-    var id: Int?
-    var imdbID: String?
-    var originalLanguage, originalTitle, overview: String?
-    var popularity: Double?
-    var posterPath: String?
- //   var productionCompanies: [ProductionCompany]?
-//    var productionCountries: [ProductionCountry]?
-    var releaseDate: String?
-    var revenue, runtime: Int?
-//    var spokenLanguages: [SpokenLanguage]?
-    var status, tagline, title: String?
-    var video: Bool?
-    var voteAverage: Double?
-    var voteCount: Double?
-
+struct MovieDetail: Codable {
+    let adult: Bool
+    let backdropPath: String?
+    let belongsToCollection: BelongsToCollection?
+    let budget: Int
+    let genres: [Genre]
+    let homepage: String?
+    let id: Int
+    let imdbId: String?
+    let originalLanguage: String
+    let originalTitle: String
+    let overview: String?
+    let popularity: Double
+    let posterPath: String?
+    let productionCompanies: [ProductionCompany]
+    let productionCountries: [ProductionCountry]
+    let releaseDate: String
+    let revenue: Int
+    let runtime: Int?
+    let spokenLanguages: [SpokenLanguage]
+    let status: String
+    let tagline: String?
+    let title: String
+    let video: Bool
+    let voteAverage: Double
+    let voteCount: Int
 }
 
-// MARK: - Genre
-struct Genre: Codable, Identifiable {
-    var id: Int?
-    var name: String?
+struct BelongsToCollection: Codable {
+    let id: Int?
+    let name: String?
+    let posterPath: String?
+    let backdropPath: String?
 }
 
-// MARK: - ProductionCompany
+struct Genre: Codable {
+    let id: Int
+    let name: String
+}
+
 struct ProductionCompany: Codable {
-    var id: Int?
-    var logoPath: String?
-    var name, originCountry: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case logoPath = "logo_path"
-        case name
-        case originCountry = "origin_country"
-    }
+    let id: Int
+    let logoPath: String?
+    let name: String
+    let originCountry: String
 }
 
-// MARK: - ProductionCountry
 struct ProductionCountry: Codable {
-    var iso3166_1, name: String?
-
-    enum CodingKeys: String, CodingKey {
-        case iso3166_1 = "iso_3166_1"
-        case name
-    }
+    let iso31661: String
+    let name: String
 }
 
-// MARK: - SpokenLanguage
 struct SpokenLanguage: Codable {
-    var englishName, iso639_1, name: String?
-
-    enum CodingKeys: String, CodingKey {
-        case englishName = "english_name"
-        case iso639_1 = "iso_639_1"
-        case name
-    }
+    let iso6391: String
+    let name: String
 }
-
-

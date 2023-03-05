@@ -33,7 +33,7 @@ struct ActorMoviesView: View {
                         
                         ForEach(viewModel.actorMovies){movie in
                             NavigationLink {
-                                FilmInfoView(movie: movie)
+                                NewFilmInfoView(movieID: movie.id)
 
                             } label: {
                                 

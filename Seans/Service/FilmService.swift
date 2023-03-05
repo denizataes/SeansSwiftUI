@@ -146,6 +146,51 @@ struct FilmService{
         }
     }
     
+//    func getMovieDetail(with movieID: Int, completion: @escaping (MovieDetail) -> Void){
+//        var movieDetail = MovieDetail()
+//        MovieMDB.movie(movieID: movieID, language: "tr") { clientReturn, data in
+//            movieDetail.id = movieID
+//            movieDetail.posterPath = data?.poster_path
+//            movieDetail.overview = data?.overview
+//            movieDetail.runtime = data?.runtime
+//            movieDetail.title = data?.title
+//            movieDetail.imdbID = data?.imdb_id
+//            completion(movieDetail)
+//        }
+//    }
+    
+    func fetchMovieDetail(movieID: Int, completion: @escaping (Result<MovieDetail, Error>) -> Void) {
+        
+        let urlString = "https://api.themoviedb.org/3/movie/\(movieID)?api_key=\(TMDBConfig.apikey!)&language=tr"
+        guard let url = URL(string: urlString) else {
+            let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+            completion(.failure(error))
+            return
+        }
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else {
+                let error = NSError(domain: "Empty response", code: 0, userInfo: nil)
+                completion(.failure(error))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                let movieDetail = try decoder.decode(MovieDetail.self, from: data)
+                completion(.success(movieDetail))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+    }
+
+    
+    
     func getSimilarWithMovieID(with id: Int, completion: @escaping ([Movie]) -> Void){
         var movieList = [Movie]()
         

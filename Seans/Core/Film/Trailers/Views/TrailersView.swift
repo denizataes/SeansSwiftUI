@@ -18,19 +18,27 @@ struct TrailersView: View {
     var body: some View {
         
         if(viewModel.trailers.count > 0){
-            ScrollView(.horizontal,showsIndicators: false){
-                HStack(spacing: 10){
-                    ForEach(viewModel.trailers) { trailer in
-                        
-                        VideoView(videoID: trailer.key ?? "")
-                            .frame(width: viewModel.trailers.count == 1 ? 320 : 200,height: 150)
-                            .cornerRadius(12)
-                            .shadow(radius: 10)
-                    }
-                }
+            VStack(alignment: .leading){
+                Text(viewModel.trailers.count > 1 ? "Fragmanlar(\(viewModel.trailers.count))" : "Fragman")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .bold()
+                    .padding(.bottom)
                 
+                ScrollView(.horizontal,showsIndicators: false){
+                    HStack(spacing: 10){
+                        ForEach(viewModel.trailers) { trailer in
+                            
+                            VideoView(videoID: trailer.key ?? "")
+                                .frame(width: viewModel.trailers.count == 1 ? 360 : 200,height: 150)
+                                .cornerRadius(12)
+                                .shadow(radius: 10)
+                        }
+                    }
+                    
+                }
+             
             }
-            .padding()
         }
     }
 }

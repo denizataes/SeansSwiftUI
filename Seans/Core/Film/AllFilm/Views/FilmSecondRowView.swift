@@ -25,7 +25,7 @@ struct FilmSecondRowView: View {
                         
                         ForEach(films.nowPlayingMovies){movie in
                             NavigationLink {
-                                FilmInfoView(movie: movie)
+                                NewFilmInfoView(movieID: movie.id)
 
                                 
                             } label: {
@@ -42,7 +42,7 @@ struct FilmSecondRowView: View {
                         
                         ForEach(films.popularMovies){movie in
                             NavigationLink {
-                                FilmInfoView(movie: movie)
+                                NewFilmInfoView(movieID: movie.id)
 
                                 
                             } label: {
@@ -58,7 +58,7 @@ struct FilmSecondRowView: View {
                         
                         ForEach(films.topRatedMovies){movie in
                             NavigationLink {
-                                FilmInfoView(movie: movie)
+                                NewFilmInfoView(movieID: movie.id)
 
                                 
                             } label: {
@@ -74,7 +74,7 @@ struct FilmSecondRowView: View {
                         
                         ForEach(films.upComingMovies){movie in
                             NavigationLink {
-                                FilmInfoView(movie: movie)
+                                NewFilmInfoView(movieID: movie.id)
 
                                 
                             } label: {

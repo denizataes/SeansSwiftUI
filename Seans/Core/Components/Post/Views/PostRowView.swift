@@ -203,7 +203,8 @@ extension PostRowView{
         VStack(alignment: .leading){
             NavigationLink {
                 if post.movieID > 0{
-                    FilmInfoView(movie: .init(id: post.movieID, movieTitle: post.movieName, releaseDate: "", movieTime: "", movieDescription: "", artwork: post.moviePhoto))
+//                    FilmInfoView(movie: .init(id: post.movieID, movieTitle: post.movieName, releaseDate: "", movieTime: "", movieDescription: "", artwork: post.moviePhoto))
+                    NewFilmInfoView(movieID: post.movieID)
                 }
                 else if post.actorID > 0 {
                     NewActorView(id: post.actorID)
@@ -350,7 +351,9 @@ extension PostRowView{
                 }
                 
                 Button {
-                    openLikedView.toggle()
+                    if post.likedIDs.count > 0{
+                        openLikedView.toggle()
+                    }
                 } label: {
                     
                     HStack(spacing: 4){
