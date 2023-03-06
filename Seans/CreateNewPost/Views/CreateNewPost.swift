@@ -41,6 +41,7 @@ struct CreateNewPost: View {
     @State var selectedMovie: Movie?
     @State var selectedActor: Actor?
     
+    
     @ObservedObject var viewModel = CreatePostViewModel()
 
 
@@ -79,6 +80,7 @@ struct CreateNewPost: View {
                     .fill(.gray.opacity(0.05))
                     .ignoresSafeArea()
             }
+            
             if let movie = selectedMovie{
                 HStack(spacing: 12){
                     

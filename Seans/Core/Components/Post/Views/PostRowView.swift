@@ -24,6 +24,7 @@ struct PostRowView: View {
     @State private var docListener: ListenerRegistration?
     @State private var showFullScreenImage = false
     @State private var openLikedView = false
+    @State private var openReplyView = false
     
     @ObservedObject var viewModel = PostRowViewModel()
     @AppStorage("user_UID") var userUID: String = ""
@@ -34,114 +35,118 @@ struct PostRowView: View {
         self.onDelete = onDelete
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         formatter.timeZone = TimeZone.current
-        print(post.postPhoto)
     }
     
     
     
     var body: some View {
-        //   ZStack{
-        // background
-        
-        
-        
-        VStack(alignment: .leading){
-            HStack{
-                if post.actorID > 0||post.movieID > 0{
-                    leftSide
-                }
-                profilSection
-            }
-            
-            
-            if !post.postPhoto.isEmpty {
-                ZStack {
-                    KFImage(URL(string: post.postPhoto))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxHeight: 220)
-                        .background(Color.black)
-                        .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.1)) {
-                                showFullScreenImage.toggle()
+
+            NavigationLink {
+                ReplyPostView(post: post)
+            } label: {
+                
+                
+                VStack(alignment: .leading){
+                    HStack{
+                        if post.actorID > 0||post.movieID > 0{
+                            leftSide
+                        }
+                        profilSection
+                    }
+                    
+                    
+                    if !post.postPhoto.isEmpty {
+                        ZStack {
+                            KFImage(URL(string: post.postPhoto))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxHeight: 220)
+                                .background(Color.black)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.1)) {
+                                        showFullScreenImage.toggle()
+                                    }
+                                }
+                                .clipped()
+                                .animation(.easeInOut(duration: 0.1))
+                            
+                            if showFullScreenImage {
+                                KFImage(URL(string: post.postPhoto))
+                                    .resizable()
+                                    .scaledToFit()
+                                    .edgesIgnoringSafeArea(.all)
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.1)) {
+                                            showFullScreenImage.toggle()
+                                        }
+                                    }
                             }
                         }
-                        .clipped()
-                        .animation(.easeInOut(duration: 0.1))
+                        .cornerRadius(10)
+                        .shadow(color: Color(.systemPurple), radius: 2)
+                        
+                    }
                     
-                    if showFullScreenImage {
-                        KFImage(URL(string: post.postPhoto))
-                            .resizable()
-                            .scaledToFit()
-                            .edgesIgnoringSafeArea(.all)
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.1)) {
-                                    showFullScreenImage.toggle()
+                    buttons
+                }
+                .padding()
+                
+                //.frame(height: 250)
+                .overlay(alignment: .topTrailing){
+                    /// Displaying Delete Button ( if it's Author of that post)
+                    if post.userUID == userUID{
+                        Menu{
+                            Button("Gönderiyi Sil", role: .destructive, action: deletePost)
+                        }label: {
+                            Image(systemName: "ellipsis")
+                                .font(.caption)
+                                .rotationEffect(.init(degrees: -90))
+                                .foregroundColor(Color(.systemPurple))
+                                .padding(8)
+                                .contentShape(Rectangle())
+                        }
+                        .offset(x: 8)
+                    }
+                }
+                .onAppear{
+                    /// - Adding Only once
+                    if docListener == nil{
+                        guard let postID = post.id else{return}
+                        docListener = Firestore.firestore().collection("Posts").document(postID).addSnapshotListener({ snapshot, error in
+                            if let snapshot{
+                                if snapshot.exists{
+                                    /// - Document
+                                    /// Fetcihng Updated Document
+                                    if let updatedPost = try? snapshot.data(as: NewPost.self){
+                                        onUpdate(updatedPost)
+                                    }
+                                }else{
+                                    ///- Document Deleted
+                                    onDelete()
                                 }
                             }
+                        })
                     }
                 }
-                .cornerRadius(10)
-                .shadow(color: Color(.systemPurple), radius: 2)
-                
-            }
-            
-            buttons
-        }
-        .padding()
-        
-        //.frame(height: 250)
-        .overlay(alignment: .topTrailing){
-            /// Displaying Delete Button ( if it's Author of that post)
-            if post.userUID == userUID{
-                Menu{
-                    Button("Gönderiyi Sil", role: .destructive, action: deletePost)
-                }label: {
-                    Image(systemName: "ellipsis")
-                        .font(.caption)
-                        .rotationEffect(.init(degrees: -90))
-                        .foregroundColor(Color(.systemPurple))
-                        .padding(8)
-                        .contentShape(Rectangle())
-                }
-                .offset(x: 8)
-            }
-        }
-        .onAppear{
-            /// - Adding Only once
-            if docListener == nil{
-                guard let postID = post.id else{return}
-                docListener = Firestore.firestore().collection("Posts").document(postID).addSnapshotListener({ snapshot, error in
-                    if let snapshot{
-                        if snapshot.exists{
-                            /// - Document
-                            /// Fetcihng Updated Document
-                            if let updatedPost = try? snapshot.data(as: NewPost.self){
-                                onUpdate(updatedPost)
-                            }
-                        }else{
-                            ///- Document Deleted
-                            onDelete()
-                        }
+                .onDisappear{
+                    // MARK: Applying SnapShot Listener only when the post is available on the screen
+                    // Else removing the listener(it saves unwanted live eupdates from the posts which has swiped away screen)
+                    if let docListener{
+                        docListener.remove()
+                        self.docListener = nil
                     }
-                })
+                }
+                .sheet(isPresented: $openLikedView) {
+                    if let likedIDs = post.likedIDs{
+                        UserListView(userUIDs: likedIDs)
+                            .presentationDetents([.medium,.large])
+                    }
+                    
+                }
+                .sheet(isPresented: $openReplyView) {
+                    ReplyPostView(post: post)
+                }
             }
-        }
-        .onDisappear{
-            // MARK: Applying SnapShot Listener only when the post is available on the screen
-            // Else removing the listener(it saves unwanted live eupdates from the posts which has swiped away screen)
-            if let docListener{
-                docListener.remove()
-                self.docListener = nil
-            }
-        }
-        .sheet(isPresented: $openLikedView) {
-            if let likedIDs = post.likedIDs{
-                UserListView(userUIDs: likedIDs)
-                    .presentationDetents([.medium,.large])
-            }
-            
-        }
         
         
         Divider()
@@ -224,6 +229,7 @@ extension PostRowView{
                 Text(post.movieID > 0 ? post.movieName : post.actorName)
                     .font(.subheadline)
                     .lineLimit(nil)
+                    .foregroundColor(.primary)
                     .bold()
             }
             .frame(maxWidth: 100)
@@ -301,6 +307,7 @@ extension PostRowView{
             
             Text(post.text)
                 .font(.footnote)
+                .foregroundColor(.primary)
             Spacer()
         }
         .padding(.top,10)
@@ -311,21 +318,14 @@ extension PostRowView{
         HStack(spacing: 10){
             
             HStack{
-                Button {
-                    
+                NavigationLink {
+                    ReplyPostView(post: post)
                 } label: {
-                    HStack{
+                    HStack(spacing: 4){
                         Image(systemName: "message")
                             .font(.subheadline)
                             .foregroundColor(.green)
                         
-                    }
-                }
-                
-                Button {
-                    
-                } label: {
-                    HStack(spacing: 4){
                         Text(post.repliesPost.count.description)
                             .font(.caption)
                             .foregroundColor(Color(.systemGreen))
@@ -334,9 +334,7 @@ extension PostRowView{
                             .font(.caption2)
                             .foregroundColor(Color(.systemGreen))
                     }
-                    
                 }
-
             }
             
             Spacer()
