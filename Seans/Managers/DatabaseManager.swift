@@ -417,18 +417,7 @@ final class DatabaseManager {
             }
         }
     }
-    
-    //    func followUser(currentUserID: String, followUserID: String, isFollow: Bool) {
-    //        let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
-    //        let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
-    //        if isFollow {
-    //            currentUserPostRef.updateData(["follow": FieldValue.arrayRemove([followUserID])])
-    //            followUserPostRef.updateData(["follower": FieldValue.arrayRemove([currentUserID])])
-    //        } else {
-    //            followUserPostRef.updateData(["follower": FieldValue.arrayUnion([currentUserID])])
-    //            currentUserPostRef.updateData(["follow": FieldValue.arrayUnion([followUserID])])
-    //        }
-    //    }
+
     func followUser(currentUserID: String, followUserID: String, isFollow: Bool, completion: @escaping (Bool) -> Void) {
         let currentUserPostRef = Firestore.firestore().collection("Users").document(currentUserID)
         let followUserPostRef = Firestore.firestore().collection("Users").document(followUserID)
@@ -489,53 +478,6 @@ final class DatabaseManager {
             }
     }
     
-    func fetchUsers(userUIDs: [String], completion: @escaping ([User]?) -> Void) {
-        let usersCollection = Firestore.firestore().collection("Users")
-        usersCollection
-            .whereField("userUID", in: userUIDs)
-            .getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("Error fetching users: \(error.localizedDescription)")
-                    completion(nil)
-                    return
-                }
-                
-                guard let documents = querySnapshot?.documents else {
-                    completion(nil)
-                    return
-                }
-                
-                let users = documents.compactMap { document in
-                    try? document.data(as: User.self)
-                }
-                
-                completion(users)
-            }
-    }
-    
-    
-    
-    
-    
-    
-    //    func fetchAllPosts(userUIDs: [String], completion: @escaping ([Post]?) -> Void) {
-    //        Firestore.firestore().collection("Posts")
-    //            .whereField("userUID", in: userUIDs)
-    //            .getDocuments { querySnapshot, error in
-    //                guard let snapshot = querySnapshot else {
-    //                    completion(nil)
-    //                    return
-    //                }
-    //
-    //                let posts = snapshot.documents.compactMap { document -> Post? in
-    //                    try? document.data(as: Post.self)
-    //                }
-    //
-    //                completion(posts)
-    //            }
-    //    }
-    
-    
     func fetchAllPosts(userUIDs: [String], completion: @escaping ([Post]?) -> Void) {
         var posts: [Post] = []
         var users: [User] = []
@@ -582,6 +524,100 @@ final class DatabaseManager {
                     }
             }
     }
+    
+    
+    func fetchUsers(userUIDs: [String], completion: @escaping ([User]?) -> Void) {
+        let usersCollection = Firestore.firestore().collection("Users")
+        usersCollection
+            .whereField("userUID", in: userUIDs)
+            .getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("Error fetching users: \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
+                
+                guard let documents = querySnapshot?.documents else {
+                    completion(nil)
+                    return
+                }
+                
+                let users = documents.compactMap { document in
+                    try? document.data(as: User.self)
+                }
+                
+                completion(users)
+            }
+    }
+
+    func fetchReplyPosts(postID: String, completion: @escaping ([Post]?) -> Void) {
+        Firestore.firestore().collection("Posts").document(postID).getDocument { document, error in
+            guard let document = document, document.exists else {
+                print("Error fetching parent post: \(error?.localizedDescription ?? "unknown error")")
+                completion(nil)
+                return
+            }
+            
+            guard let parentPost = try? document.data(as: NewPost.self) else {
+                print("Error decoding parent post")
+                completion(nil)
+                return
+            }
+            
+            let responsePosts = parentPost.repliesPost
+            guard responsePosts.count > 0 else {return}
+            
+            // get the user info for each post
+            var userUIDs: [String] = []
+            for post in responsePosts {
+                if !userUIDs.contains(post.userUID) {
+                    userUIDs.append(post.userUID)
+                }
+            }
+
+            Firestore.firestore().collection("Users")
+                .whereField("userUID", in: userUIDs)
+                .getDocuments { querySnapshot, error in
+                    guard let snapshot = querySnapshot else {
+                        print("Error getting reply post users: \(error?.localizedDescription ?? "unknown error")")
+                        completion(nil)
+                        return
+                    }
+                    let users = snapshot.documents.compactMap { document -> User? in
+                        try? document.data(as: User.self)
+                    }
+
+                    // map each post to a new `Post` object with user info
+                    let posts = responsePosts.compactMap { currentPost -> Post? in
+                        guard let currentUser = users.first(where: { $0.userUID == currentPost.userUID }) else {
+                            return nil
+                        }
+                        return Post(
+                            id: currentPost.id,
+                            text: currentPost.text,
+                            movieID: currentPost.movieID,
+                            movieName: currentPost.movieName,
+                            moviePhoto: currentPost.moviePhoto,
+                            publishedDate: currentPost.publishedDate,
+                            likedIDs: currentPost.likedIDs,
+                            repliesPost: currentPost.repliesPost,
+                            userName: currentUser.userName,
+                            userUID: currentUser.userUID,
+                            userProfileURL: URL(string: currentUser.userProfileURL ?? ""),
+                            userFirstName: currentUser.firstName,
+                            userLastName: currentUser.lastName,
+                            actorName: currentPost.actorName,
+                            actorID: currentPost.actorID,
+                            actorPhoto: currentPost.actorPhoto,
+                            postPhoto: currentPost.postPhoto
+                        )
+                    }
+                    completion(posts)
+            }
+        }
+    }
+
+
     
     func fetchLikedPosts(userUID: String, completion: @escaping ([Post]?) -> Void) {
         
@@ -638,66 +674,34 @@ final class DatabaseManager {
             }
     }
 
+    func replyPost(postID: String, post: NewPost, completion: @escaping (Result<Void, Error>) -> Void) {
+        let postRef = Firestore.firestore().collection("Posts").document(postID)
         
+        // create a new instance of the NewPost struct with a new document ID
+        var newPost = post // make a copy of the original post parameter
+        newPost.id = UUID().uuidString // set the new post's document ID
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        //------------------
+        postRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                do {
+                    var postDict = try document.data(as: NewPost.self)
+                    postDict.repliesPost.append(newPost)
+                    try postRef.setData(from: postDict)
+                    completion(.success(()))
+                } catch {
+                    completion(.failure(error))
+                }
+            } else {
+                completion(.failure(error ?? NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Document does not exist"])))
+            }
+        }
+    }
 
-        // 1. Belirtilen kullanıcı UID'sine ait beğenileri alalım
-//        Firestore.firestore().collection("Users")
-//            .document(userUID)
-//            .getDocument { userSnapshot, error in
-//                guard let user = try? userSnapshot?.data(as: User.self), error == nil else {
-//                    print("Error getting user: \(error?.localizedDescription ?? "unknown error")")
-//                    completion(nil)
-//                    return
-//                }
-//
-//                print("Kullanıcı Bilgisi: \(userUID)")
-//                // 2. Belirtilen kullanıcının beğendiği postları alalım
-//                Firestore.firestore().collection("Posts")
-//                    .whereField("likedIDs", arrayContains: userUID)
-//                    .getDocuments { querySnapshot, error in
-//                        guard let snapshot = querySnapshot, error == nil else {
-//                            print("Error getting posts: \(error?.localizedDescription ?? "unknown error")")
-//                            completion(nil)
-//                            return
-//                        }
-//
-//                        let responsePosts = snapshot.documents.compactMap { document -> NewPost? in
-//                            try? document.data(as: NewPost.self)
-//                        }
-//
-//                        for currentPost in responsePosts {
-//
-//                            let newPost = Post(id: currentPost.id, text: currentPost.text, movieID: currentPost.movieID, movieName: currentPost.movieName, moviePhoto: currentPost.moviePhoto, publishedDate: currentPost.publishedDate, likedIDs: currentPost.likedIDs, repliesPost: currentPost.repliesPost, userName: user.userName, userUID: user.userUID, userProfileURL: URL(string: user.userProfileURL ?? ""), userFirstName: user.firstName, userLastName: user.lastName, actorName: currentPost.actorName, actorID: currentPost.actorID, actorPhoto: currentPost.actorPhoto, postPhoto: currentPost.postPhoto)
-//
-//                            posts.append(newPost)
-//
-//                        }
-//
-//                        completion(posts)
-//                    }
-//            }
 
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
     
     func fetchFollowerIDs(completion: @escaping ([Post]?) -> Void) {
         

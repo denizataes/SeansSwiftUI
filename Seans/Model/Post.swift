@@ -20,7 +20,7 @@ struct Post: Identifiable, Codable, Equatable{
     var moviePhoto: String
     var publishedDate: Date = Date()
     var likedIDs: [String] = []
-    var repliesPost: [Post] = []
+    var repliesPost: [NewPost] = []
     
     // MARK: Basic User Info
     var userName: String
