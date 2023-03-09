@@ -20,10 +20,6 @@ struct NewProfileView: View {
     @State var editUser: Bool = false
     @State var shakeImage: Bool = false
     
-    //MARK: Open New Screen States
-    @State var openFollowerView: Bool = false
-    @State var openFollowView: Bool = false
-    
     private var selectedUserUID: String = ""
     let currentDate = Date()
     let formatter = DateFormatter()
@@ -61,6 +57,7 @@ struct NewProfileView: View {
             tweetFilterBar
             
             postsView
+            
             
         }
         .sheet(isPresented: $editUser, content: {
@@ -108,51 +105,7 @@ struct NewProfileView: View {
             viewModel.fetchPost(userUID: selectedUserUID)
             viewModel.fetchLikedPost(userUID: selectedUserUID)
         }
-        .sheet(isPresented: $openFollowView) {
-            if let followUserUIDs = viewModel.user?.follow{
-                UserListView(userUIDs: followUserUIDs)
-                    .presentationDetents([.medium,.large])
-            }
-                
-        }
-        .sheet(isPresented: $openFollowerView) {
-            if let followerUserUIDs = viewModel.user?.follower{
-                UserListView(userUIDs: followerUserUIDs)
-                    .presentationDetents([.medium,.large])
-            }
-                
-        }
-        //        .onAppear {
-        //            /// - Adding Only once
-        //            if docListener == nil {
-        //                let docRef = Firestore.firestore().collection("Users").document(selectedUserUID)
-        //                docListener = docRef.addSnapshotListener { snapshot, error in
-        //                    if let snapshot = snapshot {
-        //                        if snapshot.exists {
-        //                            /// - Document
-        //                            /// Fetching Updated Document
-        ////                            if let updatedUser = try? snapshot.data(as: User.self) {
-        ////                                print("Güncellendi. \( viewModel.user?.follower.contains(currentUserUID))")
-        ////                                viewModel.fetchUser(userUID: selectedUserUID)
-        ////                            }
-        //
-        //                            if let updatedUser = try? snapshot.data(as: User.self) {
-        //                                viewModel.user?.follower = updatedUser.follower
-        //                            }
-        //
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        .onDisappear {
-        //            docListener?.remove()
-        //            docListener = nil
-        //        }
-        
-        
-        
-        
+
     }
     
     func logout(){
@@ -281,26 +234,25 @@ extension NewProfileView{
     }
     
     var postsView: some View{
-        VStack{
+        VStack(alignment: .leading){
             if selectedFilter == .feeds{
                 if let posts = viewModel.posts, posts.count > 0{
-                    LazyVStack(spacing: 0){
-                        ForEach(posts) { post in
-                            PostRowView(post: post) { updatedPost in
-                                if let index = posts.firstIndex(where: { post
-                                    in
-                                    post.id == updatedPost.id
-                                }){
-                                    viewModel.posts?[index].likedIDs = updatedPost.likedIDs
-                                }
-                                
-                            } onDelete: {
-                                /// Removing Post From The array
-                                withAnimation(.easeInOut(duration: 0.25)){
-                                    viewModel.posts?.removeAll { post.id == $0.id }
-                                }
+                    ForEach(posts) { post in
+                        
+                        PostRowView(post: post, onUpdate: { updated in
+                            if let index = posts.firstIndex(where: { post
+                                in
+                                post.id == updated.id
+                            }){
+                                viewModel.posts?[index].likedIDs = updated.likedIDs
                             }
-                        }
+                        }, onDelete: {
+                            /// Removing Post From The array
+                            withAnimation(.easeInOut(duration: 0.25)){
+                                viewModel.posts?.removeAll { post.id == $0.id }
+                            }
+                        }, isSecond: false)
+                        
                     }
                 }
                 else{
@@ -318,20 +270,21 @@ extension NewProfileView{
                 if let posts = viewModel.likedPosts, posts.count > 0{
                     LazyVStack(spacing: 0){
                         ForEach(posts) { post in
-                            PostRowView(post: post) { updatedPost in
+                            
+                            PostRowView(post: post, onUpdate: { updatedPost in
                                 if let index = posts.firstIndex(where: { post
                                     in
                                     post.id == updatedPost.id
                                 }){
                                     viewModel.likedPosts?[index].likedIDs = updatedPost.likedIDs
                                 }
-                                
-                            } onDelete: {
+                            }, onDelete: {
                                 /// Removing Post From The array
                                 withAnimation(.easeInOut(duration: 0.25)){
                                     viewModel.likedPosts?.removeAll { post.id == $0.id }
                                 }
-                            }
+                            }, isSecond: false)
+                         
                         }
                     }
                 }
@@ -363,36 +316,65 @@ extension NewProfileView{
                     .foregroundColor(Color(.darkGray))
             }
             
-            
-            Button {
-                openFollowView.toggle()
-            } label: {
+            if let followUserUIDs = viewModel.user?.follow, followUserUIDs.count > 0{
+                NavigationLink {
+                    UserListView(userUIDs: followUserUIDs, title: "Takip Ettikleri")
+                } label: {
+                    VStack(spacing: 6){
+                        Text("\(followUserUIDs.count)")
+                            .bold()
+                            .font(.system(size: 16))
+                            .foregroundColor(.primary)
+                        Text("Takip")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(.darkGray))
+                    }
+                }
+            }
+            else{
                 VStack(spacing: 6){
-                    Text("\(viewModel.user?.follow.count ?? 0)")
+                    Text("0")
                         .bold()
                         .font(.system(size: 16))
                         .foregroundColor(.primary)
                     Text("Takip")
                         .font(.system(size: 12))
                         .foregroundColor(Color(.darkGray))
-                    
                 }
             }
             
-            Button {
-                openFollowerView.toggle()
-            } label: {
+            
+            
+            
+            if let followerUserUIDs = viewModel.user?.follower, followerUserUIDs.count > 0{
+                NavigationLink {
+                    UserListView(userUIDs: followerUserUIDs, title: "Takipçileri")
+                } label: {
+                    VStack(spacing: 6){
+                        Text("\(followerUserUIDs.count)")
+                            .bold()
+                            .font(.system(size: 16))
+                            .foregroundColor(.primary)
+                        Text("Takipçi")
+                            .font(.system(size: 12))
+                            .foregroundColor(Color(.darkGray))
+                    }
+                }
+            }
+            else{
                 VStack(spacing: 6){
-                    Text("\(viewModel.user?.follower.count ?? 0)")
+                    Text("0")
                         .bold()
                         .font(.system(size: 16))
                         .foregroundColor(.primary)
                     Text("Takipçi")
                         .font(.system(size: 12))
                         .foregroundColor(Color(.darkGray))
-                    
                 }
             }
+            
+            
+
             
             
             

@@ -17,8 +17,9 @@ struct ReplyPostView: View {
     
     let formatter = DateFormatter()
     var post: Post?
+
     @ObservedObject var viewModel: ReplyPostViewModel
-    
+
     init(post: Post) {
         self.post = post
         self.viewModel = ReplyPostViewModel(postID: post.id ?? "")
@@ -29,29 +30,34 @@ struct ReplyPostView: View {
     var body: some View {
         
         VStack{
-            ScrollView{
-                VStack(alignment: .leading){
-                    postHeader
+            ScrollView(showsIndicators: false){
+                ScrollViewReader { proxy in
                     
-                    postText
+                    VStack(alignment: .leading){
+                        postHeader
+                        
+                        postText
+                        
+                        postFooter
+                    }
                     
-                    postFooter
-                }
-                
-                Divider()
-                if !viewModel.replyPosts.isEmpty {
-                    ForEach(viewModel.replyPosts, id: \.publishedDate){ post in
-                        NavigationLink {
-                            ReplyPostView(post: post)
-                        } label: {
-                            PostRowView(post: post) { p in
+                    Divider()
+                    
+                    if !viewModel.replyPosts.isEmpty {
+                        ForEach(viewModel.replyPosts, id: \.publishedDate){ post in
+                            PostRowView(post: post, onUpdate: { n in
                                 
-                            } onDelete: {
-                                    
-                            }
+                            }, onDelete: {
+                                
+                            }, isSecond: true)
+                            .padding(.leading)
+                            .padding(.trailing)
+                            
                         }
+                        
                     }
                 }
+
             }
             
             Spacer()
@@ -133,7 +139,6 @@ struct ReplyPostView: View {
             }
         }
         .overlay{
-            //LoadingView(show: $viewModel.isLoading)
             if viewModel.isLoading{
                 CustomLoadingView()
             }
@@ -149,7 +154,7 @@ struct ReplyPostView: View {
         let post = NewPost(id: UUID().uuidString, text: replyText, movieID: 0, movieName: "", moviePhoto: "", actorID: 0, actorName: "", actorPhoto: "", userUID: userUID, postPhoto: "")
         viewModel.replyPost(postID: postID, post: post) { result in
             switch result{
-            case .success(let post):
+            case .success(_):
                 replyText = ""
                 viewModel.fetchReplyPosts(postID: postID)
             case .failure(let error):
@@ -176,30 +181,35 @@ struct ReplyPostView_Previews: PreviewProvider {
 extension ReplyPostView{
     
     var postHeader: some View{
-        HStack(spacing: 8){
-            KFImage(post?.userProfileURL)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 48, height: 48)
-                .clipShape(Circle())
-                .shadow(radius: 1)
-            
-            VStack(alignment: .leading, spacing:4){
-                Text("\(post?.userFirstName ?? "") \(post?.userLastName ?? "")")
-                    .font(.system(size: 16))
-                    .bold()
-                
-                Text("@\(post?.userName ?? "")")
-                    .font(.system(size: 12))
-                    .foregroundColor(Color(.systemGray))
+        NavigationLink {
+            if let userUID = post?.userUID{
+                NewProfileView(userUID: userUID)
             }
-            
-            Spacer()
-            
-            
-            
+        } label: {
+            HStack(spacing: 8){
+                KFImage(post?.userProfileURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 48, height: 48)
+                    .clipShape(Circle())
+                    .shadow(radius: 1)
+                
+                VStack(alignment: .leading, spacing:4){
+                    Text("\(post?.userFirstName ?? "") \(post?.userLastName ?? "")")
+                        .font(.system(size: 16))
+                        .bold()
+                        .foregroundColor(.primary)
+                    
+                    Text("@\(post?.userName ?? "")")
+                        .font(.system(size: 12))
+                        .foregroundColor(Color(.systemGray))
+                }
+                
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
+ 
     }
     
     var postText: some View {
@@ -224,16 +234,32 @@ extension ReplyPostView{
                 
                 Divider()
             }
-            
-            
-            
+
             HStack(spacing: 12){
-                HStack(spacing: 4){
-                    Text(post?.likedIDs.count.description ?? "0")
-                        .bold()
-                    Text("Beğeni")
-                        .foregroundColor(Color(.systemGray))
+                
+                if let likedUserIDs = post?.likedIDs, likedUserIDs.count > 0 {
+                    NavigationLink {
+                        UserListView(userUIDs: likedUserIDs, title: "Beğeniler")
+                    } label: {
+                        HStack(spacing: 4){
+                            Text(post?.likedIDs.count.description ?? "0")
+                                .bold()
+                                .foregroundColor(.primary)
+                            Text("Beğeni")
+                                .foregroundColor(Color(.systemGray))
+                        }
+                    }
                 }
+                else{
+                    HStack(spacing: 4){
+                        Text("0")
+                            .bold()
+                            .foregroundColor(.primary)
+                        Text("Beğeni")
+                            .foregroundColor(Color(.systemGray))
+                    }
+                }
+                
                 
                 HStack(spacing: 4){
                     Text(post?.repliesPost.count.description ?? "0")
@@ -241,19 +267,9 @@ extension ReplyPostView{
                     Text("Yanıt")
                         .foregroundColor(Color(.systemGray))
                 }
+                
+
                 Spacer()
-                HStack(spacing: 20){
-                    Image(systemName: post?.likedIDs.contains(userUID) ?? false  ? "heart.fill" : "heart")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                        .foregroundColor(Color(.systemRed))
-                    
-                    Image(systemName: "popcorn")
-                        .resizable()
-                        .frame(width: 16, height: 21)
-                        .foregroundColor(Color(.systemPurple))
-                }
-                .padding(.trailing)
             }
             .padding(.leading)
             .font(.system(size: 12))

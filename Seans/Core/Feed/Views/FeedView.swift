@@ -16,21 +16,20 @@ struct FeedView: View {
                 ScrollView{
                     LazyVStack(spacing: 0){
                         ForEach(posts) { post in
-                            PostRowView(post: post) { updatedPost in
+                            
+                            PostRowView(post: post, onUpdate: { updatedPost in
                                 if let index = posts.firstIndex(where: { post
                                     in
                                     post.id == updatedPost.id
                                 }){
                                     viewModel.posts?[index].likedIDs = updatedPost.likedIDs
                                 }
-                                
-                            } onDelete: {
+                            }, onDelete: {
                                 /// Removing Post From The array
                                 withAnimation(.easeInOut(duration: 0.25)){
                                     viewModel.posts?.removeAll { post.id == $0.id }
                                 }
-                            }
-                            
+                            }, isSecond: false)
                         }
                     }
                 }

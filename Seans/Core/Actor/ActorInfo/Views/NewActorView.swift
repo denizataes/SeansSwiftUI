@@ -11,6 +11,7 @@ import Kingfisher
 struct NewActorView: View {
     @ObservedObject var viewModel: ActorViewModel
     @Environment(\.presentationMode) var mode
+    @State private var selectActor: Bool = false
     
     init(id: Int){
         self.viewModel = ActorViewModel(id: id)
@@ -160,6 +161,24 @@ struct NewActorView: View {
                 }
                 
             }
+            .sheet(isPresented: $selectActor) {
+                CreateNewPost(selectedActor: Actor(id: viewModel.actor.id ?? 0, profile_path: viewModel.actor.profile_path ?? "", name: viewModel.actor.name ?? ""))
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        selectActor.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                            .foregroundColor(Color(.systemPurple))
+                            .shadow(radius: 4)
+                    }
+                }
+            }
+            .navigationTitle(viewModel.actor.name ?? "")
+            .navigationBarTitleDisplayMode(.inline)
         }
         
         

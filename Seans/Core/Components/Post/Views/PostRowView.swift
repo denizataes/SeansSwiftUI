@@ -18,21 +18,22 @@ struct PostRowView: View {
     var onDelete: () -> ()
     
     var post: Post
+    var isSecond: Bool = false
     @State private var isLiked = false
     let currentDate = Date()
     let formatter = DateFormatter()
     @State private var docListener: ListenerRegistration?
     @State private var showFullScreenImage = false
-    @State private var openLikedView = false
     @State private var openReplyView = false
     
     @ObservedObject var viewModel = PostRowViewModel()
     @AppStorage("user_UID") var userUID: String = ""
     
-    init(post: Post, onUpdate: @escaping (NewPost) -> (), onDelete: @escaping () -> ()) {
+    init(post: Post, onUpdate: @escaping (NewPost) -> (), onDelete: @escaping () -> (), isSecond: Bool) {
         self.post = post
         self.onUpdate = onUpdate
         self.onDelete = onDelete
+        self.isSecond = isSecond
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         formatter.timeZone = TimeZone.current
     }
@@ -41,11 +42,10 @@ struct PostRowView: View {
     
     var body: some View {
 
+        if !isSecond{
             NavigationLink {
                 ReplyPostView(post: post)
             } label: {
-                
-                
                 VStack(alignment: .leading){
                     HStack{
                         if post.actorID > 0||post.movieID > 0{
@@ -88,6 +88,7 @@ struct PostRowView: View {
                     }
                     
                     buttons
+                    
                 }
                 .padding()
                 
@@ -136,17 +137,107 @@ struct PostRowView: View {
                         self.docListener = nil
                     }
                 }
-                .sheet(isPresented: $openLikedView) {
-                    if let likedIDs = post.likedIDs{
-                        UserListView(userUIDs: likedIDs)
-                            .presentationDetents([.medium,.large])
-                    }
-                    
-                }
                 .sheet(isPresented: $openReplyView) {
                     ReplyPostView(post: post)
                 }
             }
+        }
+        else{
+            VStack(alignment: .leading){
+                HStack{
+                    if post.actorID > 0||post.movieID > 0{
+                        leftSide
+                    }
+                    profilSection
+                }
+                
+                
+                if !post.postPhoto.isEmpty {
+                    ZStack {
+                        KFImage(URL(string: post.postPhoto))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxHeight: 220)
+                            .background(Color.black)
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: 0.1)) {
+                                    showFullScreenImage.toggle()
+                                }
+                            }
+                            .clipped()
+                            .animation(.easeInOut(duration: 0.1))
+                        
+                        if showFullScreenImage {
+                            KFImage(URL(string: post.postPhoto))
+                                .resizable()
+                                .scaledToFit()
+                                .edgesIgnoringSafeArea(.all)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.1)) {
+                                        showFullScreenImage.toggle()
+                                    }
+                                }
+                        }
+                    }
+                    .cornerRadius(10)
+                    .shadow(color: Color(.systemPurple), radius: 2)
+                    
+                }
+                
+                
+            }
+            .padding()
+            
+            //.frame(height: 250)
+            .overlay(alignment: .topTrailing){
+                /// Displaying Delete Button ( if it's Author of that post)
+                if post.userUID == userUID{
+                    Menu{
+                        Button("Gönderiyi Sil", role: .destructive, action: deletePost)
+                    }label: {
+                        Image(systemName: "ellipsis")
+                            .font(.caption)
+                            .rotationEffect(.init(degrees: -90))
+                            .foregroundColor(Color(.systemPurple))
+                            .padding(8)
+                            .contentShape(Rectangle())
+                    }
+                    .offset(x: 8)
+                }
+            }
+            .onAppear{
+                /// - Adding Only once
+                if docListener == nil{
+                    guard let postID = post.id else{return}
+                    docListener = Firestore.firestore().collection("Posts").document(postID).addSnapshotListener({ snapshot, error in
+                        if let snapshot{
+                            if snapshot.exists{
+                                /// - Document
+                                /// Fetcihng Updated Document
+                                if let updatedPost = try? snapshot.data(as: NewPost.self){
+                                    onUpdate(updatedPost)
+                                }
+                            }else{
+                                ///- Document Deleted
+                                onDelete()
+                            }
+                        }
+                    })
+                }
+            }
+            .onDisappear{
+                // MARK: Applying SnapShot Listener only when the post is available on the screen
+                // Else removing the listener(it saves unwanted live eupdates from the posts which has swiped away screen)
+                if let docListener{
+                    docListener.remove()
+                    self.docListener = nil
+                }
+            }
+            .sheet(isPresented: $openReplyView) {
+                ReplyPostView(post: post)
+            }
+        }
+            
         
         
         Divider()
@@ -250,25 +341,26 @@ extension PostRowView{
                     NewProfileView(userUID: post.userUID)
                     
                 } label: {
-                    KFImage(post.userProfileURL)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: post.actorID > 0||post.movieID > 0 ? 32 : 48,height: post.actorID > 0||post.movieID > 0 ? 32 : 48)
-                        .clipShape(Circle())
-                    VStack(alignment: .leading){
-                        Text("\(post.userFirstName) \(post.userLastName)")
-                            .font(.system(size: post.actorID > 0||post.movieID > 0 ? 12 : 16))
-                            .bold()
-                            .foregroundColor(Color("mode"))
-                        
-                        Text(post.userName)
-                            .foregroundColor(.gray)
-                            .font(.caption)
+                    HStack{
+                        KFImage(post.userProfileURL)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: post.actorID > 0||post.movieID > 0 ? 32 : 48,height: post.actorID > 0||post.movieID > 0 ? 32 : 48)
+                            .clipShape(Circle())
+                        VStack(alignment: .leading){
+                            Text("\(post.userFirstName) \(post.userLastName)")
+                                .font(.system(size: post.actorID > 0||post.movieID > 0 ? 12 : 16))
+                                .bold()
+                                .foregroundColor(Color("mode"))
+                            
+                            Text(post.userName)
+                                .foregroundColor(.gray)
+                                .font(.caption)
+                        }
                     }
-                    Spacer()
+                    
                 }
-                .frame(maxWidth: .infinity)
-                
+                //.frame(maxWidth: .infinity)
                 
                 Spacer()
                 
@@ -308,6 +400,7 @@ extension PostRowView{
             Text(post.text)
                 .font(.footnote)
                 .foregroundColor(.primary)
+                .multilineTextAlignment(.leading)
             Spacer()
         }
         .padding(.top,10)
@@ -315,31 +408,39 @@ extension PostRowView{
     }
     
     var buttons: some View{
+        
         HStack(spacing: 10){
             
-            HStack{
-                NavigationLink {
-                    ReplyPostView(post: post)
-                } label: {
-                    HStack(spacing: 4){
-                        Image(systemName: "message")
-                            .font(.subheadline)
-                            .foregroundColor(.green)
-                        
-                        Text(post.repliesPost.count.description)
-                            .font(.caption)
-                            .foregroundColor(Color(.systemGreen))
-                            .bold()
-                        Text("yanıt")
-                            .font(.caption2)
-                            .foregroundColor(Color(.systemGreen))
+          
+                HStack{
+                    NavigationLink {
+                            ReplyPostView(post: post)
+                    } label: {
+                        HStack(spacing: 4){
+                            Image(systemName: "message")
+                                .font(.subheadline)
+                                .foregroundColor(.green)
+                            
+                            Text(post.repliesPost.count.description)
+                                .font(.caption)
+                                .foregroundColor(Color(.systemGreen))
+                                .bold()
+                            
+                            Text("yanıt")
+                                .font(.caption2)
+                                .foregroundColor(Color(.systemGreen))
+                            
+                        }
                     }
                 }
-            }
             
+            
+           
             Spacer()
             
+            
             HStack{
+                
                 Button {
                     likePost()
                 } label: {
@@ -348,53 +449,73 @@ extension PostRowView{
                             .font(.subheadline)
                 }
                 
-                Button {
-                    if post.likedIDs.count > 0{
-                        openLikedView.toggle()
+                if let likedIDs = post.likedIDs, likedIDs.count > 0{
+                    NavigationLink {
+                        UserListView(userUIDs: likedIDs, title: "Beğeniler")
+                    } label: {
+                        HStack(spacing: 4){
+                            Text(post.likedIDs.count.description)
+                                .font(.caption)
+                                .foregroundColor(Color(.systemRed))
+                                .bold()
+                            Text("beğeni")
+                                .font(.caption2)
+                                .foregroundColor(Color(.systemRed))
+                        }
                     }
-                } label: {
-                    
-                    HStack(spacing: 4){
-                        Text(post.likedIDs.count.description)
-                            .font(.caption)
-                            .foregroundColor(Color(.systemRed))
-                            .bold()
-                        Text("beğeni")
-                            .font(.caption2)
-                            .foregroundColor(Color(.systemRed))
-                    }
-            
                 }
+                else{
+                    Button {
+                        
+                    } label: {
+                        HStack(spacing: 4){
+                            Text(post.likedIDs.count.description)
+                                .font(.caption)
+                                .foregroundColor(Color(.systemRed))
+                                .bold()
+                            Text("beğeni")
+                                .font(.caption2)
+                                .foregroundColor(Color(.systemRed))
+                        }
+                    }
+
+                }
+                
             }
+            
             
             Spacer()
             
-            HStack{
-                Button {
-                    
-                } label: {
-                    Image(systemName: "popcorn")
-                        .font(.subheadline)
-                        .foregroundColor(.purple)
-                }
+        
                 
-                Button {
-                    //openLikedView.toggle()
-                } label: {
-                    
-                    HStack(spacing: 4){
-                        //Text(post.likedIDs.count.description)
-                        Text("1")
-                            .font(.caption)
-                            .foregroundColor(Color(.systemPurple))
-                            .bold()
-                        Text("seans")
-                            .font(.caption2)
-                            .foregroundColor(Color(.systemPurple))
+                HStack{
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "popcorn")
+                            .font(.subheadline)
+                            .foregroundColor(.purple)
                     }
-            
+                    
+                    Button {
+                        //openLikedView.toggle()
+                    } label: {
+                        
+                        HStack(spacing: 4){
+                            //Text(post.likedIDs.count.description)
+                            Text("1")
+                                .font(.caption)
+                                .foregroundColor(Color(.systemPurple))
+                                .bold()
+                            Text("seans")
+                                .font(.caption2)
+                                .foregroundColor(Color(.systemPurple))
+                        }
+                        
+                    }
                 }
-            }
+            
+            
             
         }
         .foregroundColor(.gray)
