@@ -129,16 +129,40 @@ extension NewFilmInfoView{
                     if let movie = viewModel.movie {
                         let runtimeInMinutes = (movie.runtime ?? 0) % 60
                         let runtimeInHours = (movie.runtime ?? 0) / 60
-                        let runtimeString = "\(runtimeInHours)sa \(runtimeInMinutes)dk"
+                        let runtimeString = "\(runtimeInHours) saat \(runtimeInMinutes) dakika"
                         
                         let genres = movie.genres.map({ $0.name }).joined(separator: ", ")
                         
-                        let releaseYear = String(movie.releaseDate.prefix(4))
                         
-                        Text("\(runtimeString) • \(genres) • \(releaseYear)")
-                            .font(.system(size: 16))
-                            .bold()
-                            .foregroundColor(Color(.gray))
+                        
+                        VStack(alignment: .leading, spacing: 8){
+                            HStack{
+                                Image(systemName: "calendar")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(Color(.systemPurple))
+                                Text("\(movie.releaseDate)")
+                            }
+                            HStack{
+                                Image(systemName: "clock")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(Color(.systemPurple))
+                                Text("\(runtimeString)")
+                            }
+                            HStack{
+                                Image(systemName: "info.circle")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(Color(.systemPurple))
+                                Text("\(genres)")
+                            }
+                                
+                            
+                        }
+                        .font(.system(size: 16))
+                        .bold()
+                        .foregroundColor(Color(.gray))
                     }
 
                     

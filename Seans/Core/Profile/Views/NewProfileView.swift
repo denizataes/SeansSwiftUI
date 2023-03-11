@@ -87,14 +87,30 @@ struct NewProfileView: View {
             }
         }
         .toolbar {
-            Button {
-                
-            } label: {
-                Image(systemName: "square.and.arrow.up")
-                    .foregroundColor(Color(.systemOrange))
+            if let twitterStr = viewModel.user?.twitterProfileURL,
+               twitterStr != "",
+               let twitterURL = URL(string: "\(Statics.twitterURL)\(twitterStr)"){
+                Link(destination: twitterURL) {
+                    Image("twitter")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .cornerRadius(10)
+                }
             }
-            
-            
+        }
+        .toolbar {
+            if let instagramStr = viewModel.user?.instagramProfileURL,
+               instagramStr != "",
+               let instagramURL = URL(string: "\(Statics.instagramURL)\(instagramStr)"){
+                Link(destination: instagramURL) {
+                    Image("instagram")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .cornerRadius(10)
+                }
+            }
         }
         .refreshable {
             viewModel.user = nil
@@ -105,7 +121,8 @@ struct NewProfileView: View {
             viewModel.fetchPost(userUID: selectedUserUID)
             viewModel.fetchLikedPost(userUID: selectedUserUID)
         }
-
+        
+        
     }
     
     func logout(){
@@ -284,7 +301,7 @@ extension NewProfileView{
                                     viewModel.likedPosts?.removeAll { post.id == $0.id }
                                 }
                             }, isSecond: false)
-                         
+                            
                         }
                     }
                 }
@@ -374,7 +391,7 @@ extension NewProfileView{
             }
             
             
-
+            
             
             
             

@@ -14,6 +14,7 @@ class ProfileViewModel: ObservableObject{
     @Published var posts: [Post]?
     @Published var user: User?
     @Published var likedPosts: [Post]?
+    @Published var fetched: Int = 0
     
     let dbManager = DatabaseManager()
     @AppStorage("user_UID") var userUID: String = ""
@@ -41,7 +42,7 @@ class ProfileViewModel: ObservableObject{
             guard let strongSelf = self else{return}
             guard let user = user else{return}
             strongSelf.user = user
-            print(user.follower)
+            strongSelf.fetched += 1
         }
     }
     
@@ -51,7 +52,7 @@ class ProfileViewModel: ObservableObject{
             guard let strongSelf = self else{return}
             let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
             strongSelf.posts = sortedPosts
-            strongSelf.isLoading = false
+            strongSelf.fetched += 1
         }
     }
     
@@ -61,7 +62,7 @@ class ProfileViewModel: ObservableObject{
             guard let strongSelf = self else{return}
             let sortedPosts = posts?.sorted(by: { $0.publishedDate > $1.publishedDate })
             strongSelf.likedPosts = sortedPosts
-            strongSelf.isLoading = false
+            strongSelf.fetched += 1
         }
     }
     

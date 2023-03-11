@@ -20,8 +20,18 @@ class FilmInfoViewModel: ObservableObject {
             guard let strongSelf = self else { return }
             switch result {
             case .success(let movie):
+                var movieDetail = movie
                 DispatchQueue.main.async {
-                    strongSelf.movie = movie
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-DD"
+                    
+                    if let releaseDate = formatter.date(from: movie.releaseDate) {
+                        formatter.dateFormat = "dd MMMM yyyy" // Burada, tarihi dd MMMM yyyy formatında biçimlendiriyoruz.
+                        let formattedDate = formatter.string(from: releaseDate)
+                        movieDetail.releaseDate = formattedDate
+                    }
+                    
+                    strongSelf.movie = movieDetail
                 }
             case .failure(let error):
                 print(error)

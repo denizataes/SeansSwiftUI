@@ -124,12 +124,13 @@ struct Home: View {
                         
                         
                     }
-                    .overlay {
-                        if let movie = detailMovie,showDetailView{
-                            DetailView(movie: movie, showDetailView: $showDetailView, detailMovie: $detailMovie, currentCardSize: $currentCardSize, animation: animation)
-                        }
+                   
+                } .sheet(isPresented: $showDetailView, content: {
+                    if let movie = detailMovie{
+                        NewFilmInfoView(movieID: movie.id)
+                            .presentationDetents([.large, .medium])
                     }
-                }
+                })
             }
         
     }
