@@ -1,4 +1,6 @@
-# Seans App with SwiftUI 🎧
+# Seans App with SwiftUI 🍿
+
+The application is still under development.⚙️‼️
 
 Thanks to the SEANS application, you can meet people through movies and share posts. Not only that, you can instantly access very detailed information about the movie or the actors.
 
