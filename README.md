@@ -7,6 +7,16 @@ Thanks to the SEANS application, you can meet people through movies and share po
 While developing the "SEANS" application, I tried to combine instagram, twitter and imdb applications into a single application.
 Enjoy.🥳
 
+## Implemented Using 🔥
+
+* MVVM with SwiftUI
+* Firebase
+* Kingfisher
+* MovieDB
+* GoogleSignIn
+* ...
+
+
 ## App Features🔩
 * Unlimited movies and artists
 * You can create posts that are linked to a picture or linked to an actor or a movie or simply share your thoughts in a post.
